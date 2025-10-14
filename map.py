@@ -18,7 +18,7 @@ class Map:
         self.height = height
         self.grid = [[Room() for x in range(width)] for y in range(height)]
 
-    def random_map(self, start_pos:Optional[tuple[int, int]] = None, end_pos:Optional[tuple[int, int]] = None):
+    def random_map(self, start_pos:Optional[tuple] = None, end_pos:Optional[tuple] = None):
         if start_pos is None:
             start_pos = (0, self.height//2)
         if end_pos is None:
@@ -29,19 +29,31 @@ class Map:
         self.grid[end_pos[1]][end_pos[0]].type = "end"
         self.random_path(start_pos, end_pos)
 
-    def random_path(self, start_pos:tuple[int, int], end_pos:tuple[int, int]):
+    def random_path(self, start_pos:tuple, end_pos:tuple):
         diff_x, diff_y = end_pos[0] - start_pos[0], end_pos[1] - start_pos[1]
-        variations = [0 for _ in range(diff_x // 3 + 1)] + [1 for _ in range(diff_x // 3)] + [-1 for _ in range(diff_x // 3)]
+        variations = [0 for _ in range(diff_x // 3 - 1)] + [1 for _ in range(diff_x // 3)] + [-1 for _ in range(diff_x // 3)]
         random.shuffle(variations)
+        variations += [0]
 
         cur_y = start_pos[1]
-        for x, y_variation in zip(range(start_pos[0]+1, end_pos[0]), variations):
-            self.grid[cur_y][x].type = "path"
+        for x, y_variation in zip(range(start_pos[0] + 1, end_pos[0]), variations):
+            cell_base = self.grid[cur_y][x]
+            cell_base.type = "path"
+            cell_base.walls["left"] = False
+
+            if y_variation == 0:
+                continue
+
             cur_y += y_variation
-            self.grid[cur_y][x].type = "path"
+            var_cell = self.grid[cur_y][x]
+            var_cell.type = "path"
+            var_cell.walls["bottom" if y_variation == -1 else "top"] = False
+            cell_base.walls["top" if y_variation == -1 else "bottom"] = False
+        
+        self.grid[end_pos[1]][end_pos[0]].walls["left"] = False
 
     def draw(self):
-        cell_size = 15
+        cell_size = 30
         screen = pygame.display.set_mode((cell_size * self.width, cell_size * self.height))
         running = True
         while running:
@@ -53,13 +65,14 @@ class Map:
                     self.draw_cell(x, y, cell_size, screen)
             pygame.display.flip()
         pygame.quit()
-    
+
     def draw_cell(self, x, y, cell_size, surface):
-        room_type = self.grid[y][x].type
-        rect = pygame.Rect(x * cell_size, y * cell_size, cell_size, cell_size)
-        border = pygame.Rect(x * cell_size, y * cell_size, cell_size, cell_size)
+        room = self.grid[y][x]
+        room_type = room.type
+
         if room_type == "none":
             color = (0, 0, 0)
+            return
         elif room_type == "start":
             color = (0, 255, 0)
         elif room_type == "end":
@@ -68,9 +81,24 @@ class Map:
             color = (0, 0, 255)
         else:
             color = (128, 128, 128)
-        pygame.draw.rect(surface, color, rect, 0)
-        pygame.draw.rect(surface, (255,255,255), border, 1)
 
-a = Map(50, 50)
+        px = x * cell_size
+        py = y * cell_size
+
+        pygame.draw.rect(surface, color, (px, py, cell_size, cell_size))
+
+        wall_thickness = 2
+        wall_color = (255, 255, 255)
+
+        if room.walls["top"]:
+            pygame.draw.line(surface, wall_color, (px, py), (px + cell_size, py), wall_thickness)
+        if room.walls["bottom"]:
+            pygame.draw.line(surface, wall_color, (px, py + cell_size), (px + cell_size, py + cell_size), wall_thickness)
+        if room.walls["left"]:
+            pygame.draw.line(surface, wall_color, (px, py), (px, py + cell_size), wall_thickness)
+        if room.walls["right"]:
+            pygame.draw.line(surface, wall_color, (px + cell_size, py), (px + cell_size, py + cell_size), wall_thickness)
+
+a = Map(25, 25)
 a.random_map()
 a.draw()
