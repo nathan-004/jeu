@@ -17,12 +17,25 @@ class Room:
         self.items = []
 
 class Map:
-    def __init__(self, width, height):
+    """Objet représentant la carte sous forme de matrice de Salles"""
+
+    def __init__(self, width:int, height:int):
+        """Initie la matrice de salle totalement vide"""
         self.width = width
         self.height = height
         self.grid = [[Room() for x in range(width)] for y in range(height)]
 
     def random_map(self, start_pos:Optional[tuple] = None, end_pos:Optional[tuple] = None):
+        """
+        Modifie `grid` pour générer le labyrinthe, les portes verrouillées et les clés
+
+        Parameters
+        ----------
+        start_pos:tuple
+            Position (x, y) de la salle de départ par défaut (0, self.height // 2)
+        end_pos:tuple
+            Position (x, y) de la salle de fin par défaut (self.width, self.height // 2)
+        """
         if start_pos is None:
             start_pos = (0, self.height//2)
         if end_pos is None:
@@ -37,6 +50,13 @@ class Map:
         self.create_locked_rooms()
 
     def random_path(self, start_pos:tuple, end_pos:tuple):
+        """
+        Modifie `grid` pour créer un chemin aléatoire de la salle de départ vers la salle de fin
+        
+        Notes
+        -----
+        Conserve une direction globale vers la droite
+        """
         diff_x, diff_y = end_pos[0] - start_pos[0], end_pos[1] - start_pos[1]
         variations = [0 for _ in range(diff_x // 3 - 1)] + [1 for _ in range(diff_x // 3)] + [-1 for _ in range(diff_x // 3)]
         random.shuffle(variations)
@@ -60,6 +80,15 @@ class Map:
         self.grid[end_pos[1]][end_pos[0]].walls["left"] = False
 
     def create_maze(self, start_pos:tuple):
+        """
+        Créé le labyrinthe autour du chemin principale (`random_path`)
+
+        Algorithme :
+        1. Initier une Pile des cellules à observer
+        2. Tant que toutes les cellules n'ont pas été visitées
+        3.     Prendre la dernière cellule de la Pile ou une cellule active aléatoire
+        4.     Sélectionner une direction aléatoire puis ajouter à la Pile si visitable
+        """
         visited = set()
         stack = Stack([start_pos])
 
@@ -95,7 +124,15 @@ class Map:
                     stack.empiler((nx, ny))
                     break
         
-    def create_locked_rooms(self, n:int = 4):
+    def create_locked_rooms(self, n:int = 3):
+        """
+        Créé `n` rangées de salles vérouillées réparties sur la largeur
+        Place les clés dans les salles pour pouvoir dévérouiller les portes
+
+        To Do
+        -----
+        - Clés par forcément accessibles
+        """
         for idx in range(1, n + 1):
             for row in self.grid:
                 row[idx * (self.width // (n+1))].type = "locked"
@@ -109,9 +146,11 @@ class Map:
             self.grid[self.height//2 + diff_y][idx * (self.width // (n+1)) - random.randint(1, self.width // (n+1) - 1) ].type = 'key'
 
     def _is_complete(self):
+        """Retourne `True` si toutes les cellules de la Grille ont été initiées"""
         return all([cell.type != "none" for row in self.grid for cell in row])
 
     def _random_path_cell(self, visited:Optional[set] = set()):
+        """Renvoie une cellule aléatoire parmi les cellules qui sont <actives> (!= none)"""
         valid_cells = []
         for y, row in enumerate(self.grid):
             for x, cell in enumerate(row):
@@ -120,6 +159,7 @@ class Map:
         return random.choice(valid_cells)
 
     def draw(self):
+        """Affichage de la map pour le débogage"""
         cell_size = 30
         screen = pygame.display.set_mode((cell_size * self.width, cell_size * self.height))
         running = True
@@ -134,6 +174,7 @@ class Map:
         pygame.quit()
 
     def draw_cell(self, x, y, cell_size, surface):
+        """Affiche la salle correspondante | Composant de `draw`"""
         room = self.grid[y][x]
         room_type = room.type
 
