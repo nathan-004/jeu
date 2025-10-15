@@ -43,8 +43,7 @@ class Map:
             end_pos = (self.width-1, self.height//2)
 
         self.grid = [[Room() for x in range(self.width)] for y in range(self.height)]
-        self.grid[start_pos[1]][start_pos[0]].type = "start"
-        self.grid[end_pos[1]][end_pos[0]].type = "end"
+        self.grid[end_pos[1]][end_pos[0]].type = "locked"
 
         self.random_path(start_pos, end_pos)
         self.create_maze(start_pos)
@@ -64,7 +63,7 @@ class Map:
         variations += [0]
 
         cur_y = start_pos[1]
-        for x, y_variation in zip(range(start_pos[0] + 1, end_pos[0]), variations):
+        for x, y_variation in zip(range(start_pos[0]+1, end_pos[0]), variations):
             cell_base = self.grid[cur_y][x]
             cell_base.type = "path_original"
             cell_base.walls["left"] = False
@@ -226,7 +225,6 @@ class Map:
         else:
             raise NotImplementedError
 
-
 def create_one_solution_map(width, height, n = 4) -> Map:
     """
     Créé `n` instance de Map pour garantir qu'il n'y a qu'une solution possible au labyrinthe
@@ -243,6 +241,8 @@ def create_one_solution_map(width, height, n = 4) -> Map:
         part_map = Map(w, height)
         part_map.random_map()
         result += part_map
+    
+    result.grid[result.height // 2][0].type = "start"
     
     return result
 
