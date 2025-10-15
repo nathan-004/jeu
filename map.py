@@ -12,7 +12,7 @@ class Room:
             "right": True,
             "top": True,
             "bottom": True,
-        }
+        } 
 
 class Map:
     def __init__(self, width, height):
@@ -42,7 +42,7 @@ class Map:
         cur_y = start_pos[1]
         for x, y_variation in zip(range(start_pos[0] + 1, end_pos[0]), variations):
             cell_base = self.grid[cur_y][x]
-            cell_base.type = "path"
+            cell_base.type = "path_original"
             cell_base.walls["left"] = False
 
             if y_variation == 0:
@@ -50,7 +50,7 @@ class Map:
 
             cur_y += y_variation
             var_cell = self.grid[cur_y][x]
-            var_cell.type = "path"
+            var_cell.type = "path_original"
             var_cell.walls["bottom" if y_variation == -1 else "top"] = False
             cell_base.walls["top" if y_variation == -1 else "bottom"] = False
         
@@ -129,7 +129,9 @@ class Map:
         elif room_type == "end":
             color = (255, 0, 0)
         elif room_type == "path":
-            color = (0, 0, 255)
+            color = (0, 0, 0)
+        elif room_type == "path_original":
+            color = (0, 125, 125)
         else:
             color = (128, 128, 128)
 
