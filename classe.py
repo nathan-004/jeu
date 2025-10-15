@@ -14,8 +14,6 @@ class Personnage:
         self.degats = degats
         self.resistance = resistance
 
-
-
 class Monstre(Personnage):
     pass
 

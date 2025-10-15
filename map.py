@@ -3,6 +3,7 @@ import pygame
 import random
 
 from utils import Stack
+from classe import Objet
 
 class Room:
     def __init__(self, type = "none"):
@@ -13,6 +14,7 @@ class Room:
             "top": True,
             "bottom": True,
         }
+        self.items = []
 
 class Map:
     def __init__(self, width, height):
@@ -98,6 +100,14 @@ class Map:
             for row in self.grid:
                 row[idx * (self.width // (n+1))].type = "locked"
 
+        # Ajouter clés
+        for idx in range(1, n+1):
+            sigma = (self.height // 2) // 4 # Plus petit -> moins de dispersion
+            diff_y = int(random.normalvariate(self.height // 4, sigma))
+            diff_y = min(max(2, diff_y), self.height // 2)
+            diff_y *= random.choice([-1, 1])
+            self.grid[self.height//2 + diff_y][idx * (self.width // (n+1)) - random.randint(1, self.width // (n+1) - 1) ].type = 'key'
+
     def _is_complete(self):
         return all([cell.type != "none" for row in self.grid for cell in row])
 
@@ -138,7 +148,9 @@ class Map:
         elif room_type == "path_original":
             color = (0, 125, 125)
         elif room_type == "locked":
-            color = (255, 255, 0)
+            color = (125, 125, 0)
+        elif room_type == "key":
+            color = (165, 42, 42)
         else:
             color = (128, 128, 128)
 
