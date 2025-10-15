@@ -2,6 +2,8 @@ from typing import Optional
 import pygame
 import random
 
+from utils import Stack
+
 class Room:
     def __init__(self, type = "none"):
         self.type = type
@@ -28,6 +30,8 @@ class Map:
         self.grid[start_pos[1]][start_pos[0]].type = "start"
         self.grid[end_pos[1]][end_pos[0]].type = "end"
         self.random_path(start_pos, end_pos)
+        self.draw()
+        self.create_maze(start_pos)
 
     def random_path(self, start_pos:tuple, end_pos:tuple):
         diff_x, diff_y = end_pos[0] - start_pos[0], end_pos[1] - start_pos[1]
@@ -51,6 +55,53 @@ class Map:
             cell_base.walls["top" if y_variation == -1 else "bottom"] = False
         
         self.grid[end_pos[1]][end_pos[0]].walls["left"] = False
+
+    def create_maze(self, start_pos:tuple):
+        visited = set()
+        stack = Stack([start_pos])
+
+        while not self._is_complete():
+            if stack.empty():
+                stack.empiler(self._random_path_cell())
+            current_pos = stack.depiler()
+            x, y = current_pos
+            visited.add(current_pos)
+            current_cell = self.grid[y][x]
+            if current_cell.type == "none":
+                current_cell.type = "path"
+
+            directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+            random.shuffle(directions)
+
+            for dx, dy in directions:
+                nx, ny = x + dx, y + dy
+                if 0 <= nx < self.width and 0 <= ny < self.height and (nx, ny) not in visited:
+                    if dx == 1:
+                        self.grid[y][x].walls["right"] = False
+                        self.grid[ny][nx].walls["left"] = False
+                    elif dx == -1:
+                        self.grid[y][x].walls["left"] = False
+                        self.grid[ny][nx].walls["right"] = False
+                    elif dy == 1:
+                        self.grid[y][x].walls["bottom"] = False
+                        self.grid[ny][nx].walls["top"] = False
+                    elif dy == -1:
+                        self.grid[y][x].walls["top"] = False
+                        self.grid[ny][nx].walls["bottom"] = False
+
+                    stack.empiler((nx, ny))
+                    break
+
+    def _is_complete(self):
+        return all([cell.type != "none" for row in self.grid for cell in row])
+
+    def _random_path_cell(self, visited:Optional[set] = set()):
+        valid_cells = []
+        for y, row in enumerate(self.grid):
+            for x, cell in enumerate(row):
+                if cell.type != "none" and (x,y) not in visited:
+                    valid_cells.append((x, y))
+        return random.choice(valid_cells)
 
     def draw(self):
         cell_size = 30
@@ -99,6 +150,7 @@ class Map:
         if room.walls["right"]:
             pygame.draw.line(surface, wall_color, (px + cell_size, py), (px + cell_size, py + cell_size), wall_thickness)
 
-a = Map(25, 25)
-a.random_map()
-a.draw()
+if __name__ == "__main__":
+    a = Map(25, 25)
+    a.random_map()
+    a.draw()
