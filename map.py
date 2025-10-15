@@ -1,6 +1,7 @@
 from typing import Optional
 import pygame
 import random
+from copy import deepcopy
 
 from utils import Stack
 from classe import Objet
@@ -47,7 +48,7 @@ class Map:
 
         self.random_path(start_pos, end_pos)
         self.create_maze(start_pos)
-        self.create_locked_rooms()
+        #self.create_locked_rooms()
 
     def random_path(self, start_pos:tuple, end_pos:tuple):
         """
@@ -138,12 +139,12 @@ class Map:
                 row[idx * (self.width // (n+1))].type = "locked"
 
         # Ajouter clés
-        for idx in range(1, n+1):
-            sigma = (self.height // 2) // 4 # Plus petit -> moins de dispersion
-            diff_y = int(random.normalvariate(self.height // 4, sigma))
-            diff_y = min(max(2, diff_y), self.height // 2)
-            diff_y *= random.choice([-1, 1])
-            self.grid[self.height//2 + diff_y][idx * (self.width // (n+1)) - random.randint(1, self.width // (n+1) - 1) ].type = 'key'
+        # for idx in range(1, n+1):
+        #     sigma = (self.height // 2) // 4 # Plus petit -> moins de dispersion
+        #     diff_y = int(random.normalvariate(self.height // 4, sigma))
+        #     diff_y = min(max(2, diff_y), self.height // 2)
+        #     diff_y *= random.choice([-1, 1])
+        #     self.grid[self.height//2 + diff_y][idx * (self.width // (n+1)) - random.randint(1, self.width // (n+1) - 1) ].type = 'key'
 
     def _is_complete(self):
         """Retourne `True` si toutes les cellules de la Grille ont été initiées"""
@@ -212,7 +213,39 @@ class Map:
         if room.walls["right"]:
             pygame.draw.line(surface, wall_color, (px + cell_size, py), (px + cell_size, py + cell_size), wall_thickness)
 
+    def __add__(self, other):
+        if isinstance(other, Map):
+            result = Map(self.width + other.width, other.height)
+            if self.grid == []:
+                result.grid = deepcopy(other.grid)
+                return result
+            for idx, (cur_row, other_row) in enumerate(zip(self.grid, other.grid)):
+                result.grid[idx] = cur_row + other_row
+            print(idx)
+            return result
+        else:
+            raise NotImplementedError
+
+
+def create_one_solution_map(width, height, n = 4) -> Map:
+    """
+    Créé `n` instance de Map pour garantir qu'il n'y a qu'une solution possible au labyrinthe
+    !!Ne pas mettre une width trop petite pour un `n` trop grand!!
+    
+    Returns
+    -------
+    Assemblage des `n` instances de Map
+    """
+    w = width // n
+    result = Map(0,0)
+
+    for _ in range(n):
+        part_map = Map(w, height)
+        part_map.random_map()
+        result += part_map
+    
+    return result
+
 if __name__ == "__main__":
-    a = Map(25, 25)
-    a.random_map()
+    a = create_one_solution_map(25, 25, 3)
     a.draw()
