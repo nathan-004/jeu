@@ -12,7 +12,7 @@ class Room:
             "right": True,
             "top": True,
             "bottom": True,
-        } 
+        }
 
 class Map:
     def __init__(self, width, height):
@@ -29,9 +29,10 @@ class Map:
         self.grid = [[Room() for x in range(self.width)] for y in range(self.height)]
         self.grid[start_pos[1]][start_pos[0]].type = "start"
         self.grid[end_pos[1]][end_pos[0]].type = "end"
+
         self.random_path(start_pos, end_pos)
-        self.draw()
         self.create_maze(start_pos)
+        self.create_locked_rooms()
 
     def random_path(self, start_pos:tuple, end_pos:tuple):
         diff_x, diff_y = end_pos[0] - start_pos[0], end_pos[1] - start_pos[1]
@@ -91,6 +92,11 @@ class Map:
 
                     stack.empiler((nx, ny))
                     break
+        
+    def create_locked_rooms(self, n:int = 4):
+        for idx in range(1, n + 1):
+            for row in self.grid:
+                row[idx * (self.width // (n+1))].type = "locked"
 
     def _is_complete(self):
         return all([cell.type != "none" for row in self.grid for cell in row])
@@ -122,7 +128,6 @@ class Map:
         room_type = room.type
 
         if room_type == "none":
-            color = (0, 0, 0)
             return
         elif room_type == "start":
             color = (0, 255, 0)
@@ -132,6 +137,8 @@ class Map:
             color = (0, 0, 0)
         elif room_type == "path_original":
             color = (0, 125, 125)
+        elif room_type == "locked":
+            color = (255, 255, 0)
         else:
             color = (128, 128, 128)
 
