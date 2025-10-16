@@ -34,6 +34,10 @@ class Map:
         """
         Modifie `grid` pour générer le labyrinthe, les portes verrouillées et les clés
 
+        Warnings
+        --------
+        Faire en sorte que l'on puisse passer au travers d'une salle verrouillée mais pas passer la porte
+
         Parameters
         ----------
         start_pos:tuple
@@ -229,7 +233,7 @@ class Map:
         else:
             raise NotImplementedError
 
-def create_one_solution_map(width, height, n = 4) -> Map:
+def create_one_solution_map(width, height, n = 3) -> Map:
     """
     Créé `n` instance de Map pour garantir qu'il n'y a qu'une solution possible au labyrinthe
     !!Ne pas mettre une width trop petite pour un `n` trop grand!!
@@ -252,5 +256,6 @@ def create_one_solution_map(width, height, n = 4) -> Map:
     return result
 
 if __name__ == "__main__":
-    a = create_one_solution_map(25, 25, )
+    a = create_one_solution_map(25, 25, 3)
     a.draw()
+    
