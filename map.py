@@ -26,6 +26,10 @@ class Map:
         self.height = height
         self.grid = [[Room() for x in range(width)] for y in range(height)]
 
+    # --------------------------------------------------------------------------------------------
+    # Génération aléatoire du labyrinthe --------------------------------------------------------|
+    # --------------------------------------------------------------------------------------------
+
     def random_map(self, start_pos:Optional[tuple] = None, end_pos:Optional[tuple] = None):
         """
         Modifie `grid` pour générer le labyrinthe, les portes verrouillées et les clés
@@ -67,7 +71,7 @@ class Map:
         cur_y = start_pos[1]
         for x, y_variation in zip(range(start_pos[0]+1, end_pos[0]), variations):
             cell_base = self.grid[cur_y][x]
-            cell_base.type = "path_original"
+            cell_base.type = "path"
             cell_base.walls["left"] = False
 
             if y_variation == 0:
@@ -75,7 +79,7 @@ class Map:
 
             cur_y += y_variation
             var_cell = self.grid[cur_y][x]
-            var_cell.type = "path_original"
+            var_cell.type = "path"
             var_cell.walls["bottom" if y_variation == -1 else "top"] = False
             cell_base.walls["top" if y_variation == -1 else "bottom"] = False
         
@@ -150,6 +154,10 @@ class Map:
                     valid_cells.append((x, y))
         return random.choice(valid_cells)
 
+    # --------------------------------------------------------------------------------------------
+    # Affichage de débogage du labyrinthe -------------------------------------------------------|
+    # --------------------------------------------------------------------------------------------
+
     def draw(self):
         """Affichage de la map pour le débogage"""
         cell_size = 30
@@ -204,6 +212,10 @@ class Map:
         if room.walls["right"]:
             pygame.draw.line(surface, wall_color, (px + cell_size, py), (px + cell_size, py + cell_size), wall_thickness)
 
+    # --------------------------------------------------------------------------------------------
+    # Fonction spéciales de la map --------------------------------------------------------------|
+    # --------------------------------------------------------------------------------------------
+
     def __add__(self, other):
         if isinstance(other, Map):
             result = Map(self.width + other.width, other.height)
@@ -240,5 +252,5 @@ def create_one_solution_map(width, height, n = 4) -> Map:
     return result
 
 if __name__ == "__main__":
-    a = create_one_solution_map(50, 25, 10)
+    a = create_one_solution_map(25, 25, )
     a.draw()
