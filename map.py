@@ -44,6 +44,8 @@ class Map:
 
         self.grid = [[Room() for x in range(self.width)] for y in range(self.height)]
         self.grid[end_pos[1]][end_pos[0]].type = "locked"
+        self.grid[end_pos[1]][end_pos[0]].walls["right"] = False
+        self.grid[start_pos[1]][start_pos[0]].walls["left"] = False
 
         self.random_path(start_pos, end_pos)
         self.create_maze(start_pos)
@@ -124,26 +126,16 @@ class Map:
                     stack.empiler((nx, ny))
                     break
         
-    def create_locked_rooms(self, n:int = 3):
+    def generate_keys(self, n:int = 1):
         """
-        Créé `n` rangées de salles vérouillées réparties sur la largeur
         Place les clés dans les salles pour pouvoir dévérouiller les portes
-
-        To Do
-        -----
-        - Clés par forcément accessibles
         """
-        for idx in range(1, n + 1):
-            for row in self.grid:
-                row[idx * (self.width // (n+1))].type = "locked"
-
-        # Ajouter clés
-        # for idx in range(1, n+1):
-        #     sigma = (self.height // 2) // 4 # Plus petit -> moins de dispersion
-        #     diff_y = int(random.normalvariate(self.height // 4, sigma))
-        #     diff_y = min(max(2, diff_y), self.height // 2)
-        #     diff_y *= random.choice([-1, 1])
-        #     self.grid[self.height//2 + diff_y][idx * (self.width // (n+1)) - random.randint(1, self.width // (n+1) - 1) ].type = 'key'
+        for idx in range(1, n+1):
+            sigma = (self.height // 2) // 4 # Plus petit -> moins de dispersion
+            diff_y = int(random.normalvariate(self.height // 4, sigma))
+            diff_y = min(max(2, diff_y), self.height // 2)
+            diff_y *= random.choice([-1, 1])
+            self.grid[self.height//2 + diff_y][idx * (self.width // (n)) - random.randint(1, self.width // n) ].type = 'key'
 
     def _is_complete(self):
         """Retourne `True` si toutes les cellules de la Grille ont été initiées"""
@@ -220,7 +212,7 @@ class Map:
                 return result
             for idx, (cur_row, other_row) in enumerate(zip(self.grid, other.grid)):
                 result.grid[idx] = cur_row + other_row
-            print(idx)
+
             return result
         else:
             raise NotImplementedError
@@ -243,9 +235,10 @@ def create_one_solution_map(width, height, n = 4) -> Map:
         result += part_map
     
     result.grid[result.height // 2][0].type = "start"
+    result.generate_keys(n)
     
     return result
 
 if __name__ == "__main__":
-    a = create_one_solution_map(25, 25, 3)
+    a = create_one_solution_map(50, 25, 10)
     a.draw()
