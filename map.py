@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Union
 import pygame
 import random
 from copy import deepcopy
@@ -7,6 +7,14 @@ from utils import Stack
 
 
 class Room:
+    DIRECTIONS = {
+        (0, -1): "top",
+        (0, 1): "bottom",
+        (1, 0): "right",
+        (-1, 0): "left"
+    }
+    INVERTED_DIRECTION = {str_dir: tuple_dir for tuple_dir, str_dir in DIRECTIONS.items()}
+
     def __init__(self, type = "none"):
         self.type = type
         self.walls = {
@@ -159,6 +167,36 @@ class Map:
         return random.choice(valid_cells)
 
     # --------------------------------------------------------------------------------------------
+    # Utilitaires -------------------------------------------------------------------------------|
+    # --------------------------------------------------------------------------------------------
+
+    def can_move(self, initial_pos:tuple, direction:Union[tuple, str]):
+        """
+        Renvoie True si le joueur peut se déplacer de la position initial à la position + direction
+        
+        Parameters
+        ----------
+        initial_pos:tuple
+            Position (x,y) du joueur
+        direction:tuple ou string
+            Direction (x,y)
+            Si string, transformé en tuple (x,y)
+        """
+        if type(direction) is str:
+            direction = Room.INVERTED_DIRECTION[direction]
+
+        if direction not in Room.DIRECTIONS:
+            return False
+        if not (0 <= initial_pos[0] + direction[0] < self.width and 0 <= initial_pos[1] + direction[1] < self.height):
+            return False
+
+        initial_cell = self.grid[initial_pos[1]][initial_pos[0]]
+        if not initial_cell.walls[Room.DIRECTIONS[direction]]:
+            return True
+        
+        return False
+
+    # --------------------------------------------------------------------------------------------
     # Affichage de débogage du labyrinthe -------------------------------------------------------|
     # --------------------------------------------------------------------------------------------
 
@@ -257,5 +295,6 @@ def create_one_solution_map(width, height, n = 3) -> Map:
 
 if __name__ == "__main__":
     a = create_one_solution_map(25, 25, 3)
+    print(a.can_move((0, 0), "top"))
+    print(a.can_move((0, 0), "bottom"))
     a.draw()
-    
