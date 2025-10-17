@@ -133,11 +133,7 @@ class Map:
 
                     stack.empiler((nx, ny))
                     break
-<<<<<<< HEAD
         
-=======
-
->>>>>>> 1242fc7 (amélioration classes de bases)
     def generate_keys(self, n:int = 1):
         """
         Place les clés dans les salles pour pouvoir dévérouiller les portes
@@ -256,7 +252,6 @@ def create_one_solution_map(width, height, n = 3) -> Map:
 
     result.grid[result.height // 2][0].type = "start"
     result.generate_keys(n)
-<<<<<<< HEAD
     
     return result
 
@@ -264,11 +259,3 @@ if __name__ == "__main__":
     a = create_one_solution_map(25, 25, 3)
     a.draw()
     
-=======
-
-    return result
-
-if __name__ == "__main__":
-    a = create_one_solution_map(10, 10, 2)
-    a.draw()
->>>>>>> 1242fc7 (amélioration classes de bases)
