@@ -4,7 +4,7 @@ import random
 from copy import deepcopy
 
 from utils import Stack
-from classe import Objet
+
 
 class Room:
     def __init__(self, type = "none"):
@@ -62,7 +62,7 @@ class Map:
     def random_path(self, start_pos:tuple, end_pos:tuple):
         """
         Modifie `grid` pour créer un chemin aléatoire de la salle de départ vers la salle de fin
-        
+
         Notes
         -----
         Conserve une direction globale vers la droite
@@ -86,7 +86,7 @@ class Map:
             var_cell.type = "path"
             var_cell.walls["bottom" if y_variation == -1 else "top"] = False
             cell_base.walls["top" if y_variation == -1 else "bottom"] = False
-        
+
         self.grid[end_pos[1]][end_pos[0]].walls["left"] = False
 
     def create_maze(self, start_pos:tuple):
@@ -133,7 +133,11 @@ class Map:
 
                     stack.empiler((nx, ny))
                     break
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 1242fc7 (amélioration classes de bases)
     def generate_keys(self, n:int = 1):
         """
         Place les clés dans les salles pour pouvoir dévérouiller les portes
@@ -237,7 +241,7 @@ def create_one_solution_map(width, height, n = 3) -> Map:
     """
     Créé `n` instance de Map pour garantir qu'il n'y a qu'une solution possible au labyrinthe
     !!Ne pas mettre une width trop petite pour un `n` trop grand!!
-    
+
     Returns
     -------
     Assemblage des `n` instances de Map
@@ -249,9 +253,10 @@ def create_one_solution_map(width, height, n = 3) -> Map:
         part_map = Map(w, height)
         part_map.random_map()
         result += part_map
-    
+
     result.grid[result.height // 2][0].type = "start"
     result.generate_keys(n)
+<<<<<<< HEAD
     
     return result
 
@@ -259,3 +264,11 @@ if __name__ == "__main__":
     a = create_one_solution_map(25, 25, 3)
     a.draw()
     
+=======
+
+    return result
+
+if __name__ == "__main__":
+    a = create_one_solution_map(10, 10, 2)
+    a.draw()
+>>>>>>> 1242fc7 (amélioration classes de bases)
