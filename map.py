@@ -82,17 +82,19 @@ class Map:
         cur_y = start_pos[1]
         for x, y_variation in zip(range(start_pos[0]+1, end_pos[0]), variations):
             cell_base = self.grid[cur_y][x]
-            cell_base.type = "path"
+            cell_base.type = "path_original"
             cell_base.walls["left"] = False
 
             if y_variation == 0:
+                cell_base.walls["right"] = False
                 continue
 
             cur_y += y_variation
             var_cell = self.grid[cur_y][x]
-            var_cell.type = "path"
+            var_cell.type = "path_original"
             var_cell.walls["bottom" if y_variation == -1 else "top"] = False
             cell_base.walls["top" if y_variation == -1 else "bottom"] = False
+            var_cell.walls["right"] = False
 
         self.grid[end_pos[1]][end_pos[0]].walls["left"] = False
 
@@ -334,6 +336,7 @@ def create_one_solution_map(width, height, n = 3) -> Map:
         result += part_map
 
     result.grid[result.height // 2][0].type = "start"
+    result.grid[result.height // 2][0].walls["right"] = False
     result.generate_keys(n)
     
     return result

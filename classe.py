@@ -58,7 +58,6 @@ class Joueur(Personnage):
     
     def move(self, direction:tuple):
         self.position = (self.position[0] + direction[0], self.position[1] + direction[1])
-        print(self.position)
 
 class Game:
     def __init__(self):
@@ -78,9 +77,9 @@ class Game:
                     elif event.key == pygame.K_RIGHT:
                         self.move((1, 0))
                     elif event.key == pygame.K_UP:
-                        self.move((0, 1))
-                    elif event.key == pygame.K_DOWN:
                         self.move((0, -1))
+                    elif event.key == pygame.K_DOWN:
+                        self.move((0, 1))
                     elif event.key == pygame.K_LEFT:
                         self.move((-1, 0))
             
@@ -91,10 +90,9 @@ class Game:
         pygame.quit()
 
     def move(self, direction:tuple):
-        print(direction)
         if self.map.can_move(self.personnage.position, direction):
-            print("test")
             self.personnage.move(direction)
+        #if self.personnage.
 
 if __name__ == "__main__":
     g = Game()
