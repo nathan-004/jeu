@@ -1,4 +1,6 @@
-from map import create_one_solution_map
+import pygame
+
+from map import create_one_solution_map, Map
 
 class Objet:
     def __init__(self, nom, soin=0, degat=0, resistance=0):
@@ -46,7 +48,7 @@ class Monstre(Personnage):
     pass
 
 class Joueur(Personnage):
-    def __init__(self, nom, pv, degats, resistance, position, inventaire:Inventaire = Inventaire() ):
+    def __init__(self, nom, pv, degats, resistance, position:tuple, inventaire:Inventaire = Inventaire() ):
         super().__init__(nom, pv, degats, resistance)
         self.position = position
         self.inventaire = inventaire
@@ -56,15 +58,44 @@ class Joueur(Personnage):
     
     def move(self, direction:tuple):
         self.position = (self.position[0] + direction[0], self.position[1] + direction[1])
+        print(self.position)
 
 class Game:
     def __init__(self):
         self.map = create_one_solution_map(15, 15, 2)
-        self.personnage = Joueur(self,"Nom",50,50,1, (0, 15 // 2))
+        self.personnage = Joueur("Nom",50,50,1, (0, 15 // 2))
 
     def main(self):
-        pass
+        screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        running = False
+                    elif event.key == pygame.K_RIGHT:
+                        self.move((1, 0))
+                    elif event.key == pygame.K_UP:
+                        self.move((0, 1))
+                    elif event.key == pygame.K_DOWN:
+                        self.move((0, -1))
+                    elif event.key == pygame.K_LEFT:
+                        self.move((-1, 0))
+            
+            self.map.draw(surface=screen, player_pos = self.personnage.position)
+
+            pygame.display.flip()
+
+        pygame.quit()
 
     def move(self, direction:tuple):
+        print(direction)
         if self.map.can_move(self.personnage.position, direction):
+            print("test")
             self.personnage.move(direction)
+
+if __name__ == "__main__":
+    g = Game()
+    g.main()

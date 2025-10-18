@@ -190,6 +190,9 @@ class Map:
             return False
 
         initial_cell = self.grid[initial_pos[1]][initial_pos[0]]
+        if initial_cell.type == "locked":
+            if Room.DIRECTIONS[direction] == "right":
+                return False
         if not initial_cell.walls[Room.DIRECTIONS[direction]]:
             return True
         
@@ -199,27 +202,28 @@ class Map:
     # Affichage de débogage du labyrinthe -------------------------------------------------------|
     # --------------------------------------------------------------------------------------------
 
-    def draw(self):
-        """Affichage de la map pour le débogage"""
-        cell_size = 30
-        screen = pygame.display.set_mode((cell_size * self.width, cell_size * self.height))
+    def draw(self, surface:pygame.Surface, player_pos:tuple = None):
+        """
+        Affichage de la map pour le débogage sur la Surface donnée
+        """
+        w, h = surface.get_size()
+        cell_size_x, cell_size_y = w // self.width, h // self.height
 
         self.key_img = pygame.image.load("assets/images/key.png").convert_alpha()
-        self.key_img = pygame.transform.smoothscale(self.key_img, (cell_size, cell_size))
+        self.key_img = pygame.transform.smoothscale(self.key_img, (cell_size_x, cell_size_y))
 
-        running = True
-        while running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-            for y in range(self.height):
-                for x in range(self.width):
-                    self.draw_cell(x, y, cell_size, screen)
-            pygame.display.flip()
-        pygame.quit()
+        for y in range(self.height):
+            for x in range(self.width):
+                forced_color = (0, 0, 255) if (x, y) == player_pos else None
+                self.draw_cell(x, y, (cell_size_x, cell_size_y), surface, forced_color)
 
-    def draw_cell(self, x, y, cell_size, surface):
+    def draw_cell(self, x, y, cell_size:Union[int, tuple], surface, forced_color:tuple=None):
         """Affiche la salle correspondante | Composant de `draw`"""
+        if type(cell_size) is int:
+            cell_size_x, cell_size_y = cell_size, cell_size
+        else:
+            cell_size_x, cell_size_y = cell_size
+
         room = self.grid[y][x]
         room_type = room.type
         color = (0, 0, 0)
@@ -236,13 +240,18 @@ class Map:
             color = (0, 125, 125)
         elif room_type == "locked":
             color = (125, 125, 0)
+        elif room_type == "player":
+            color = (0, 0, 255)
         else:
             color = (128, 128, 128)
 
-        px = x * cell_size
-        py = y * cell_size
+        if forced_color is not None:
+            color = forced_color
 
-        pygame.draw.rect(surface, color, (px, py, cell_size, cell_size))
+        px = x * cell_size_x
+        py = y * cell_size_y
+
+        pygame.draw.rect(surface, color, (px, py, cell_size_x, cell_size_y))
 
         if room_type == "key":
             surface.blit(self.key_img, (px, py))
@@ -251,13 +260,13 @@ class Map:
         wall_color = (255, 255, 255)
 
         if room.walls["top"]:
-            pygame.draw.line(surface, wall_color, (px, py), (px + cell_size, py), wall_thickness)
+            pygame.draw.line(surface, wall_color, (px, py), (px + cell_size_x, py), wall_thickness)
         if room.walls["bottom"]:
-            pygame.draw.line(surface, wall_color, (px, py + cell_size), (px + cell_size, py + cell_size), wall_thickness)
+            pygame.draw.line(surface, wall_color, (px, py + cell_size_y), (px + cell_size_x, py + cell_size_y), wall_thickness)
         if room.walls["left"]:
-            pygame.draw.line(surface, wall_color, (px, py), (px, py + cell_size), wall_thickness)
+            pygame.draw.line(surface, wall_color, (px, py), (px, py + cell_size_y), wall_thickness)
         if room.walls["right"]:
-            pygame.draw.line(surface, wall_color, (px + cell_size, py), (px + cell_size, py + cell_size), wall_thickness)
+            pygame.draw.line(surface, wall_color, (px + cell_size_x, py), (px + cell_size_x, py + cell_size_y), wall_thickness)
 
     def create_image(self, filename: str = "map.png", cell_size: int = 30):
         """
@@ -333,4 +342,4 @@ if __name__ == "__main__":
     a = create_one_solution_map(25, 25, 3)
     print(a.can_move((0, 0), "top"))
     print(a.can_move((0, 0), "bottom"))
-    a.draw()
+    a.create_image()
