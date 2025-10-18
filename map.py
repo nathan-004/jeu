@@ -5,7 +5,6 @@ from copy import deepcopy
 
 from utils import Stack
 
-
 class Room:
     DIRECTIONS = {
         (0, -1): "top",
@@ -204,6 +203,10 @@ class Map:
         """Affichage de la map pour le débogage"""
         cell_size = 30
         screen = pygame.display.set_mode((cell_size * self.width, cell_size * self.height))
+
+        self.key_img = pygame.image.load("assets/images/key.png").convert_alpha()
+        self.key_img = pygame.transform.smoothscale(self.key_img, (cell_size, cell_size))
+
         running = True
         while running:
             for event in pygame.event.get():
@@ -219,6 +222,7 @@ class Map:
         """Affiche la salle correspondante | Composant de `draw`"""
         room = self.grid[y][x]
         room_type = room.type
+        color = (0, 0, 0)
 
         if room_type == "none":
             return
@@ -232,8 +236,6 @@ class Map:
             color = (0, 125, 125)
         elif room_type == "locked":
             color = (125, 125, 0)
-        elif room_type == "key":
-            color = (165, 42, 42)
         else:
             color = (128, 128, 128)
 
@@ -241,6 +243,9 @@ class Map:
         py = y * cell_size
 
         pygame.draw.rect(surface, color, (px, py, cell_size, cell_size))
+
+        if room_type == "key":
+            surface.blit(self.key_img, (px, py))
 
         wall_thickness = 2
         wall_color = (255, 255, 255)
@@ -253,6 +258,37 @@ class Map:
             pygame.draw.line(surface, wall_color, (px, py), (px, py + cell_size), wall_thickness)
         if room.walls["right"]:
             pygame.draw.line(surface, wall_color, (px + cell_size, py), (px + cell_size, py + cell_size), wall_thickness)
+
+    def create_image(self, filename: str = "map.png", cell_size: int = 30):
+        """
+        Crée une image PNG de la map sans ouvrir de fenêtre.
+
+        Parameters
+        ----------
+        filename:str
+            chemin de sortie
+        cell_size: int
+            taille en pixels d'une cellule
+        """
+        pygame.init()
+        width_px = cell_size * self.width
+        height_px = cell_size * self.height
+        surface = pygame.Surface((width_px, height_px), pygame.SRCALPHA)
+
+        self.key_img = pygame.image.load("assets/images/key.png")
+
+        for y in range(self.height):
+            for x in range(self.width):
+                self.draw_cell(x, y, cell_size, surface)
+
+        try:
+            pygame.image.save(surface, filename)
+        except Exception as e:
+            pygame.quit()
+            print(e)
+            raise
+
+        pygame.quit()
 
     # --------------------------------------------------------------------------------------------
     # Fonction spéciales de la map --------------------------------------------------------------|

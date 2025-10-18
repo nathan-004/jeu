@@ -14,7 +14,6 @@ class Inventaire:
         self.potion = None
         self.potion2 = None
 
-
 class Personnage:
     def __init__(self, nom, pv, degats, resistance):
         """
@@ -25,7 +24,6 @@ class Personnage:
             - degats : entier positif qui agit comme quantité de degats qu'inflige le personnage
             - resistance : entier soustrayant les degats subit pour connaitre le nombre de point de vie retirée
         """
-        print("test")
         self.nom = nom
         self.pv = pv
         self.degat = degats
@@ -55,22 +53,18 @@ class Joueur(Personnage):
 
     def equipe_obj(self, obj:Objet):
         self.obj = obj
-
-
+    
+    def move(self, direction:tuple):
+        self.position = (self.position[0] + direction[0], self.position[1] + direction[1])
 
 class Game:
     def __init__(self):
         self.map = create_one_solution_map(15, 15, 2)
-        self.personnage = Joueur(self,nom,pv,degats,resistance, (0, 15 // 2))
+        self.personnage = Joueur(self,"Nom",50,50,1, (0, 15 // 2))
 
     def main(self):
         pass
 
     def move(self, direction:tuple):
-        old_pos = self.personnage.position
-        new_pos = (old_pos[0] + direction[0], old_pos[1] + direction[1])
-
-        self.personnage.position = new_pos
-
-
-
+        if self.map.can_move(self.personnage.position, direction):
+            self.personnage.move(direction)
