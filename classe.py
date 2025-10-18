@@ -92,7 +92,11 @@ class Game:
     def move(self, direction:tuple):
         if self.map.can_move(self.personnage.position, direction):
             self.personnage.move(direction)
-        #if self.personnage.
+
+        cur_room = self.map.grid[self.personnage.position[1]][self.personnage.position[0]]
+        if cur_room.type == "key":
+            self.map.open()
+            cur_room.type = "path"
 
 if __name__ == "__main__":
     g = Game()

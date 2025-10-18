@@ -82,7 +82,7 @@ class Map:
         cur_y = start_pos[1]
         for x, y_variation in zip(range(start_pos[0]+1, end_pos[0]), variations):
             cell_base = self.grid[cur_y][x]
-            cell_base.type = "path_original"
+            cell_base.type = "path"
             cell_base.walls["left"] = False
 
             if y_variation == 0:
@@ -91,7 +91,7 @@ class Map:
 
             cur_y += y_variation
             var_cell = self.grid[cur_y][x]
-            var_cell.type = "path_original"
+            var_cell.type = "path"
             var_cell.walls["bottom" if y_variation == -1 else "top"] = False
             cell_base.walls["top" if y_variation == -1 else "bottom"] = False
             var_cell.walls["right"] = False
@@ -199,6 +199,14 @@ class Map:
             return True
         
         return False
+    
+    def open(self):
+        """Ouvre la prochaine porte verrouillée à height // 2"""
+        for x in range(self.width):
+            cell = self.grid[self.height // 2][x]
+            if cell.type == "locked":
+                cell.type = "path"
+                break
 
     # --------------------------------------------------------------------------------------------
     # Affichage de débogage du labyrinthe -------------------------------------------------------|
@@ -244,8 +252,6 @@ class Map:
             color = (125, 125, 0)
         elif room_type == "player":
             color = (0, 0, 255)
-        else:
-            color = (128, 128, 128)
 
         if forced_color is not None:
             color = forced_color
