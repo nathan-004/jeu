@@ -11,10 +11,25 @@ class Objet:
 
 class Inventaire:
     def __init__ (self):
+        # Transforme ça en deux dictionnaires : un d'équipements et l'autre de consommables sous forme {"nom": Objet()}
+        # Pour l'instant les deux seront vides
         self.armure = None
         self.arme = None
         self.potion = None
         self.potion2 = None
+
+    def add(self, obj:Objet):
+        """Ajoute un Objet dans les dictionnaires"""
+        # Regarde si le nom est potion
+        # Si c'est une potion l'ajouter dans le dictionnaire des consommables
+        # Sinon l'ajouter dans le dictionnaire des équipements
+    
+    def equip(self, perso):
+        """
+        perso:Personnage qui a une méthode perso.use()
+        """
+        # Pour tous les Objets dans le dictionnaire d'équipement
+        # Utiliser l'objet
 
 class Personnage:
     def __init__(self, nom, pv, degats, resistance):
@@ -56,8 +71,8 @@ class Personnage:
     def level_up(self):
         """Prend les attributs du personnage de base et ajoute un nombre * level"""
         # Augmente self.level de 1
-        # Modifie les attributs par attributs de base + 20 par exemple * self.level
-        # Use tous les objets de l'inventaire non consommable
+        # Modifie les attributs par attributs de base + 20 par exemple * self.level (Stocker les attributs de base dans __init__)
+        # (Use tous les objets de l'inventaire non consommable)
 
 class Monstre(Personnage):
     pass
