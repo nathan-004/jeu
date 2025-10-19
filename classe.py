@@ -11,19 +11,15 @@ class Objet:
 
 class Inventaire:
     def __init__ (self):
-        # Transforme ça en deux dictionnaires : un d'équipements et l'autre de consommables sous forme {"nom": Objet()}
-        # Pour l'instant les deux seront vides
-        self.armure = None
-        self.arme = None
-        self.potion = None
-        self.potion2 = None
+        self.equipements = {} 
+        self.consommables = {}
 
-    def add(self, obj:Objet):
-        """Ajoute un Objet dans les dictionnaires"""
-        # Regarde si le nom est potion
-        # Si c'est une potion l'ajouter dans le dictionnaire des consommables
-        # Sinon l'ajouter dans le dictionnaire des équipements
-    
+    def add(self, obj: Objet):
+        if obj.nom.lower() == "potion":
+            self.consommables[obj.nom] = obj
+        else:
+            self.equipements[obj.nom] = obj
+            
     def equip(self, perso):
         """
         perso:Personnage qui a une méthode perso.use()
