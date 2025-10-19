@@ -21,11 +21,8 @@ class Inventaire:
             self.equipements[obj.nom] = obj
             
     def equip(self, perso):
-        """
-        perso:Personnage qui a une méthode perso.use()
-        """
-        # Pour tous les Objets dans le dictionnaire d'équipement
-        # Utiliser l'objet
+        for objet in self.equipements.values():
+            
 
 class Personnage:
     def __init__(self, nom, pv, degats, resistance):
