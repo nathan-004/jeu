@@ -22,6 +22,7 @@ class Inventaire:
             
     def equip(self, perso):
         for objet in self.equipements.values():
+            perso.use(objet)
             
 
 class Personnage:
