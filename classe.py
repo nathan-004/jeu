@@ -1,6 +1,6 @@
 import pygame
 
-from map import create_one_solution_map, Map
+from map import create_one_solution_map
 
 class Objet:
     def __init__(self, nom, soin=0, degat=0, resistance=0):
@@ -31,6 +31,9 @@ class Personnage:
         self.degat = degats
         self.resistance = resistance
 
+        self.exp = 0
+        self.level = 0
+
     def use(self, obj:Objet):
         self.pv += obj.soin
         self.degat += obj.degat
@@ -43,6 +46,18 @@ class Personnage:
     def attaque(self, ennemi):
         ennemi.degat_subit(self.degat)
 
+    def victoire(self, ennemi):
+        """Ajoute de l'exp au personnage en fonction du niveau de l'ennemi"""
+        # Ajouter différence de niveau en exp par exemple
+
+        # Regarder si exp % 20 par exemple est plus grand que 0
+        # Si c'est le cas appeler self.level_up et enlever exp // 20 à exp
+
+    def level_up(self):
+        """Prend les attributs du personnage de base et ajoute un nombre * level"""
+        # Augmente self.level de 1
+        # Modifie les attributs par attributs de base + 20 par exemple * self.level
+        # Use tous les objets de l'inventaire non consommable
 
 class Monstre(Personnage):
     pass
@@ -61,8 +76,9 @@ class Joueur(Personnage):
 
 class Game:
     def __init__(self):
-        self.map = create_one_solution_map(15, 15, 2)
-        self.personnage = Joueur("Nom",50,50,1, (0, 15 // 2))
+        height, width = 15, 15
+        self.map = create_one_solution_map(height, width, 4)
+        self.personnage = Joueur("Nom",50,50,1, (0, height // 2))
 
     def main(self):
         screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)

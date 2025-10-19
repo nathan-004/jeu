@@ -78,6 +78,7 @@ class Map:
         variations = [0 for _ in range(diff_x // 3 - 1)] + [1 for _ in range(diff_x // 3)] + [-1 for _ in range(diff_x // 3)]
         random.shuffle(variations)
         variations += [0]
+        self.grid[start_pos[1]][start_pos[0]].walls["right"] = False
 
         cur_y = start_pos[1]
         for x, y_variation in zip(range(start_pos[0]+1, end_pos[0]), variations):
