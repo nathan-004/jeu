@@ -60,8 +60,8 @@ class Personnage:
         """Ajoute de l'exp au personnage en fonction du niveau de l'ennemi"""
         # Ajouter différence de niveau en exp par exemple
 
-        # Regarder si exp % 20 par exemple est plus grand que 0
-        # Si c'est le cas appeler self.level_up et enlever exp // 20 à exp
+        # Regarder si exp // 20 par exemple est plus grand que 0
+        # Si c'est le cas appeler self.level_up et mettre exp à exp % 20
 
     def level_up(self):
         """Prend les attributs du personnage de base et ajoute un nombre * level"""
