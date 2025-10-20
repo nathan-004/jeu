@@ -34,7 +34,6 @@ class ChestDisplay:
         
         self.load(self.image)
         self.surface.blit(self.chest_image, (self.pos[0], self.pos[1]))
-        print(self.frame)
 
     def load(self, n):
         if n == self._last_loaded:
