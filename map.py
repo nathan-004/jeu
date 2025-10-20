@@ -22,7 +22,7 @@ class Room:
             "top": True,
             "bottom": True,
         }
-        self.items = []
+        self.chest = random.random() < 0.1
         self.monster = random.random() < 0.3
 
 class Map:
@@ -224,6 +224,9 @@ class Map:
         self.key_img = pygame.image.load("assets/images/key.png").convert_alpha()
         self.key_img = pygame.transform.smoothscale(self.key_img, (cell_size_x, cell_size_y))
 
+        self.chest_image = pygame.image.load("assets/images/chest/chest1.png").convert_alpha()
+        self.chest_image = pygame.transform.scale(self.chest_image, (cell_size_x, cell_size_y))
+
         for y in range(self.height):
             for x in range(self.width):
                 forced_color = (0, 0, 255) if (x, y) == player_pos else None
@@ -260,7 +263,6 @@ class Map:
             intensity = int(dist * 255 / max_dist)
             color = (intensity, 0, 0)
 
-
         if room_type == "locked":
             color = (125, 125, 0)
 
@@ -274,6 +276,8 @@ class Map:
 
         if room_type == "key":
             surface.blit(self.key_img, (px, py))
+        if room.chest:
+            surface.blit(self.chest_image, (px, py))
 
         wall_thickness = 2
         wall_color = (255, 255, 255)
@@ -304,6 +308,8 @@ class Map:
         surface = pygame.Surface((width_px, height_px), pygame.SRCALPHA)
 
         self.key_img = pygame.image.load("assets/images/key.png")
+        self.chest_image = pygame.image.load("assets/images/chest/chest1.png")
+        self.chest_image = pygame.transform.scale(self.chest_image, (cell_size, cell_size))
 
         for y in range(self.height):
             for x in range(self.width):
