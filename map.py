@@ -2,6 +2,7 @@ from typing import Optional, Union
 import pygame
 import random
 from copy import deepcopy
+from display import ChestDisplay
 
 from utils import Stack
 
@@ -277,7 +278,9 @@ class Map:
         if room_type == "key":
             surface.blit(self.key_img, (px, py))
         if room.chest:
-            surface.blit(self.chest_image, (px, py))
+            if not type(room.chest) is ChestDisplay:
+                room.chest = ChestDisplay(surface, (px, py), (cell_size_x, cell_size_y))
+            room.chest.display(surface, (px, py), (cell_size_x, cell_size_y))
 
         wall_thickness = 2
         wall_color = (255, 255, 255)

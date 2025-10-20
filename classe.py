@@ -123,6 +123,8 @@ class Game:
         if cur_room.type == "key":
             self.map.open()
             cur_room.type = "path"
+        if cur_room.chest:
+            cur_room.chest.closed = False
 
 if __name__ == "__main__":
     g = Game()

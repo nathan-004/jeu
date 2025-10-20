@@ -1,3 +1,5 @@
+from typing import Optional
+
 import pygame
 from pygame.locals import *
 
@@ -9,11 +11,16 @@ class ChestDisplay:
         self.frame = 0
         self.image = 1
         self._last_loaded = None
-        self.img_f = 500
+        self.img_f = 10
         self.closed = True
         self.load(self.image)
 
-    def display(self):
+    def display(self, surface:Optional[pygame.Surface] = None, pos:Optional[tuple] = None, size:Optional[tuple] = None):
+        surface = surface or self.surface
+        pos = pos or self.default_pos
+        size = size or self.size
+        assert not (surface is None or pos is None or size is None), "Arguments non fournis"
+
         if self.closed and self.image > 1:
             self.frame += 1
             if self.frame // self.img_f > 0:
@@ -27,11 +34,12 @@ class ChestDisplay:
         
         self.load(self.image)
         self.surface.blit(self.chest_image, (self.pos[0], self.pos[1]))
+        print(self.frame)
 
     def load(self, n):
         if n == self._last_loaded:
             return
-        self.chest_image = pygame.image.load(f"assets/images/chest/chest{str(self.image)}.png").convert_alpha()
+        self.chest_image = pygame.image.load(f"assets/images/chest/chest{str(self.image)}.png")
         self.chest_image = pygame.transform.scale(self.chest_image, (self.size[0], self.size[1]))
         self._last_loaded = n
 
