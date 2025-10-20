@@ -23,6 +23,7 @@ class Room:
             "bottom": True,
         }
         self.items = []
+        self.monster = random.random() < 0.3
 
 class Map:
     """Objet représentant la carte sous forme de matrice de Salles"""
@@ -249,10 +250,19 @@ class Map:
             color = (0, 0, 0)
         elif room_type == "path_original":
             color = (0, 125, 125)
-        elif room_type == "locked":
-            color = (125, 125, 0)
         elif room_type == "player":
             color = (0, 0, 255)
+
+        if room.monster:
+            cx, cy = self.width, self.height / 2
+            dist = ((x)**2 + (y - cy)**2)**0.5
+            max_dist = ((cx)**2 + (cy)**2)**0.5
+            intensity = int(dist * 255 / max_dist)
+            color = (intensity, 0, 0)
+
+
+        if room_type == "locked":
+            color = (125, 125, 0)
 
         if forced_color is not None:
             color = forced_color
