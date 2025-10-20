@@ -17,9 +17,9 @@ class Inventaire:
 
     def add(self, obj: Objet):
         if obj.type.lower() == "potion":
-            self.consommables[obj.nom] = obj
+            self.consommables[obj.type] = obj
         else:
-            self.equipements[obj.nom] = obj
+            self.equipements[obj.type] = obj
             
     def equip(self, perso):
         for objet in self.equipements.values():
