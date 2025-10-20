@@ -3,9 +3,9 @@ import pygame
 from map import create_one_solution_map
 
 class Objet:
-    def __init__(self, nom, type, soin=0, degat=0, resistance=0):
+    def __init__(self, nom, type_, soin=0, degat=0, resistance=0):
         self.nom = nom
-        self.type = type
+        self.type = type_
         self.soin = soin
         self.degat = degat
         self.resistance = resistance
