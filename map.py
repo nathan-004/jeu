@@ -23,7 +23,7 @@ class Room:
             "top": True,
             "bottom": True,
         }
-        self.chest = random.random() < 0.1
+        self.chest = False
         self.monster = random.random() < 0.3
 
 class Map:
@@ -66,6 +66,7 @@ class Map:
 
         self.random_path(start_pos, end_pos)
         self.create_maze(start_pos)
+        self.create_chest()
         #self.create_locked_rooms()
 
     def random_path(self, start_pos:tuple, end_pos:tuple):
@@ -156,6 +157,19 @@ class Map:
             diff_y = min(max(2, diff_y), self.height // 2)
             diff_y *= random.choice([-1, 1])
             self.grid[self.height//2 + diff_y][idx * (self.width // (n)) - random.randint(1, self.width // n) ].type = 'key'
+
+    def create_chest(self, p:float = 0.1):
+        """
+        Crée plusieurs coffres en respectant le rapport p/1
+        """
+        n = int(p * self.width * self.height)
+        for _ in range(n):
+            x = int(random.uniform(0, self.width)) # Avoir la même chance de tomber au début ou à la fin
+            sigma = (self.height // 2) // 2 # Plus petit -> moins de dispersion
+            diff_y = int(random.normalvariate(self.height // 4, sigma)) # Plus de chances de tomber à 1/4 de distance du centre
+            diff_y = min(max(2, diff_y), self.height // 2)
+            diff_y *= random.choice([-1, 1])
+            self.grid[self.height // 2 + diff_y][x].chest = True
 
     def _is_complete(self):
         """Retourne `True` si toutes les cellules de la Grille ont été initiées"""
