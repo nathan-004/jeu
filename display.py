@@ -4,15 +4,15 @@ import pygame
 from pygame.locals import *
 
 class ChestDisplay:
-    def __init__(self, surface:pygame.Surface, pos:tuple, size:tuple):
+    def __init__(self, surface:pygame.Surface, pos:tuple, size:tuple, closed:bool = True):
         self.surface = surface
         self.pos = pos
         self.size = size
         self.frame = 0
-        self.image = 1
+        self.image = 1 if closed else 15
         self._last_loaded = None
         self.img_f = 10
-        self.closed = True
+        self.closed = closed
         self.load(self.image)
 
     def display(self, surface:Optional[pygame.Surface] = None, pos:Optional[tuple] = None, size:Optional[tuple] = None):
