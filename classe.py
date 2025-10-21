@@ -1,5 +1,6 @@
 import pygame
 
+from display import bloc_txt
 from map import create_one_solution_map
 
 class Objet:
@@ -23,8 +24,7 @@ class Inventaire:
             
     def equip(self, perso):
         for objet in self.equipements.values():
-            perso.use(objet)
-            
+            perso.use(objet)  
 
 class Personnage:
     def __init__(self, nom, pv, degats, resistance):
@@ -90,8 +90,19 @@ class Game:
         self.map = create_one_solution_map(height, width, 4)
         self.personnage = Joueur("Nom",50,50,1, (0, height // 2))
 
+        # self.TEXTS = {
+        #     (0, height//2): ["Test1", "Test2"],
+        #     (width//2, height//2): ["Test3", "Test4"]
+        # }
+
+        self.visited = set()
+
     def main(self):
+        # pygame.font.init()
+
         screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        # clock = pygame.time.Clock()
+
         running = True
         while running:
             for event in pygame.event.get():
@@ -110,6 +121,13 @@ class Game:
                         self.move((-1, 0))
             
             self.map.draw(surface=screen, player_pos = self.personnage.position)
+
+            # if self.personnage.position in self.TEXTS and self.personnage.position not in self.visited:
+            #     for text in self.TEXTS[self.personnage.position]:
+            #         text_bloc = bloc_txt(text, screen, clock)
+            #         text_bloc.annim_txt()
+            
+            self.visited.add(self.personnage.position)
 
             pygame.display.flip()
 

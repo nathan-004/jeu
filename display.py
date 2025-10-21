@@ -43,21 +43,26 @@ class ChestDisplay:
         self._last_loaded = n
 
 class bloc_txt:
-    def __init__(self,txt):
+    def __init__(self,txt, fenetre, clock):
         self.txt=f'*{txt}*'
+        w,h = pygame.display.get_window_size()
         self.bloc=pygame.Rect((10,h/1.7), (w-20, 1/3*h))
+
+        self.my_font = pygame.font.SysFont('Comic Sans MS', 30)
+        self.fenetre = fenetre
+        self.clock = clock
         
     def display_bloc(self,txt=''):
         txt = self.txt if txt=='' else txt
-        pygame.draw.rect(fenetre,(255,0,0),self.bloc)
-        fenetre.blit(my_font.render(txt, True, (0,0,0)), self.bloc)
+        pygame.draw.rect(self.fenetre,(255,0,0),self.bloc)
+        self.fenetre.blit(self.my_font.render(txt, True, (0,0,0)), self.bloc)
     def annim_txt(self):
         aff=''
         for val in self.txt:
             aff+=val
             print(aff)
             self.display_bloc(aff)
-            clock.tick(10)
+            self.clock.tick(10)
             pygame.display.update()
 
 if __name__ == "__main__":
@@ -66,7 +71,6 @@ if __name__ == "__main__":
 
     running=True
     fenetre = pygame.display.set_mode((300,300))
-    my_font = pygame.font.SysFont('Comic Sans MS', 30)
     clock = pygame.time.Clock()
 
     texte='une petite prairie jolie'
@@ -77,7 +81,7 @@ if __name__ == "__main__":
         for event in pygame.event.get():
             if event.type == QUIT:
                 running = False
-        test=bloc_txt(texte)
+        test=bloc_txt(texte, fenetre, clock)
         #test.display_bloc('txt')
         test.annim_txt()
         pygame.display.update()
