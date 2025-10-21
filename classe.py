@@ -47,6 +47,7 @@ class Personnage:
 
         self.exp = 0
         self.level = 0
+        self.inventaire.equip(self)
 
     def use(self, obj:Objet):
         self.pv += obj.soin
