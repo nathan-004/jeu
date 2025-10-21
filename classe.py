@@ -41,6 +41,10 @@ class Personnage:
         self.degat = degats
         self.resistance = resistance
 
+        self.pv_base = self.pv
+        self.degat_base = self.degat
+        self.resistance_base = self.resistance
+
         self.exp = 0
         self.level = 0
 
@@ -56,22 +60,22 @@ class Personnage:
     def attaque(self, ennemi):
         ennemi.degat_subit(self.degat)
 
-    def victoire(self, ennemi):
+     def victoire(self, ennemi):
         """Ajoute de l'exp au personnage en fonction du niveau de l'ennemi"""
         self.exp = ennemi.level - self.level # Ajouter différence de niveau en exp par exemple
-        
+
         if self.exp // 20 > 0: # Regarder si exp // 20 par exemple est plus grand que 0
-            self.level_up
-            self.exp +=.exp % 20 # Si c'est le cas appeler self.level_up et mettre exp à exp % 20
+            self.level_up()
+            self.exp = self.exp % 20 # Si c'est le cas appeler self.level_up et mettre exp à exp % 20
 
     def level_up(self):
         """Prend les attributs du personnage de base et ajoute un nombre * level"""
         self.level = self.level + 1 # Augmente self.level de 1
-        self.pv += 20 * self.level 
-        self.degat += 20 * self.level
-        self.resistance += 20 * self.level # Modifie les attributs par attributs de base + 20 par exemple * self.level (Stocker les attributs de base dans __init__)
-        # (Use tous les objets de l'inventaire non consommable)
 
+        self.pv = self.pv_base + 20 * self.level
+        self.degat = self.degat_base + 20 * self.level
+        self.resistance = self.resistance_base + 20 * self.level # Modifie les attributs par attributs de base + 20 par exemple * self.level (Stocker les attributs de base dans __init__)
+        self.inv = self.equip() # (Use tous les objets de l'inventaire non consommable)
 class Monstre(Personnage):
     pass
 
