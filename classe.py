@@ -47,7 +47,8 @@ class Personnage:
 
         self.exp = 0
         self.level = 0
-        self.inventaire.equip(self)
+        self.inventaire = Inventaire()
+
 
     def use(self, obj:Objet):
         self.pv += obj.soin
@@ -69,14 +70,15 @@ class Personnage:
             self.level_up()
             self.exp = self.exp % 20 # Si c'est le cas appeler self.level_up et mettre exp à exp % 20
 
-    def level_up(self):
+   def level_up(self):
         """Prend les attributs du personnage de base et ajoute un nombre * level"""
         self.level = self.level + 1 # Augmente self.level de 1
 
         self.pv = self.pv_base + 20 * self.level
         self.degat = self.degat_base + 20 * self.level
         self.resistance = self.resistance_base + 20 * self.level # Modifie les attributs par attributs de base + 20 par exemple * self.level (Stocker les attributs de base dans __init__)
-        self.inv = self.equip() # (Use tous les objets de l'inventaire non consommable)
+        inventaire.use(self) # (Use tous les objets de l'inventaire non consommable)
+
 class Monstre(Personnage):
     pass
 
