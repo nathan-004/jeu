@@ -67,7 +67,9 @@ class Personnage:
     def level_up(self):
         """Prend les attributs du personnage de base et ajoute un nombre * level"""
         self.level = self.level + 1 # Augmente self.level de 1
-        self.pv += 20 * self.level # Modifie les attributs par attributs de base + 20 par exemple * self.level (Stocker les attributs de base dans __init__)
+        self.pv += 20 * self.level 
+        self.degat += 20 * self.level
+        self.resistance += 20 * self.level # Modifie les attributs par attributs de base + 20 par exemple * self.level (Stocker les attributs de base dans __init__)
         # (Use tous les objets de l'inventaire non consommable)
 
 class Monstre(Personnage):
