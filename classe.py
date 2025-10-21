@@ -58,15 +58,16 @@ class Personnage:
 
     def victoire(self, ennemi):
         """Ajoute de l'exp au personnage en fonction du niveau de l'ennemi"""
-        # Ajouter différence de niveau en exp par exemple
-
-        # Regarder si exp // 20 par exemple est plus grand que 0
-        # Si c'est le cas appeler self.level_up et mettre exp à exp % 20
+        self.exp = ennemi.level - self.level # Ajouter différence de niveau en exp par exemple
+        
+        if self.ex // 20 > 0: # Regarder si exp // 20 par exemple est plus grand que 0
+            self.level_up
+            self.exp = self.exp % 20 # Si c'est le cas appeler self.level_up et mettre exp à exp % 20
 
     def level_up(self):
         """Prend les attributs du personnage de base et ajoute un nombre * level"""
-        # Augmente self.level de 1
-        # Modifie les attributs par attributs de base + 20 par exemple * self.level (Stocker les attributs de base dans __init__)
+        self.level = self.level + 1 # Augmente self.level de 1
+        self.pv += 20 * self.level # Modifie les attributs par attributs de base + 20 par exemple * self.level (Stocker les attributs de base dans __init__)
         # (Use tous les objets de l'inventaire non consommable)
 
 class Monstre(Personnage):
