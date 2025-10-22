@@ -1,6 +1,6 @@
 import pygame
 
-from display import bloc_txt
+from display import TextDisplay
 from map import create_one_solution_map
 
 class Objet:
@@ -189,7 +189,7 @@ class Combat:
             self.ennemi.use(Objet("Soin", "potion", soin=10))
         else:
             self.ennemi.attaque(self.joueur)
-        self.tour += 1
+        self.tour += 1   
 
 if __name__ == "__main__":
     g = Game()

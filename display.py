@@ -42,48 +42,77 @@ class ChestDisplay:
         self.chest_image = pygame.transform.scale(self.chest_image, (self.size[0], self.size[1]))
         self._last_loaded = n
 
-class bloc_txt:
+class TextDisplay:
     def __init__(self,txt, fenetre, clock):
-        self.txt=f'*{txt}*'
+        self.txt = f'*{txt}*'
+        self.mot = self.txt.split(' ')[0]
+        self.frames = 0	#len(self.txt*pygame.time.get_ticks())
+        self.end = False
+        self.time = 0
         w,h = pygame.display.get_window_size()
-        self.bloc=pygame.Rect((10,h/1.7), (w-20, 1/3*h))
+        self.bloc = pygame.Rect((10,h/1.7), (w-20, 1/3*h))
 
-        self.my_font = pygame.font.SysFont('Comic Sans MS', 30)
+        self.my_font = pygame.font.SysFont('Comic Sans MS', 20)
         self.fenetre = fenetre
         self.clock = clock
+        self.blocliste = [pygame.Rect((15,h/1.7+5), (w-20, self.my_font.get_height()))]
         
-    def display_bloc(self,txt=''):
-        txt = self.txt if txt=='' else txt
+        cur_w = 0
+        cur_l = 0
+        self.txts = [""]
+
+        for mot in self.txt.split(' '):
+            if (len(mot) + cur_w ) * self.my_font.size("a")[0] >= w - 20:
+                cur_l += 1
+                self.txts.append("")
+                self.blocliste.append(pygame.Rect((15,h/1.7+cur_l*(self.my_font.get_height()+5)), (w-20, self.my_font.get_height())))
+                cur_w = 0
+            self.txts[cur_l] += mot + " "
+            cur_w += len(mot) + 1
+
+        print(self.blocliste, self.txts)
+        
+    def display(self,delay=100):	#delay est en milliseconde
         pygame.draw.rect(self.fenetre,(255,0,0),self.bloc)
-        self.fenetre.blit(self.my_font.render(txt, True, (0,0,0)), self.bloc)
-    def annim_txt(self):
-        aff=''
-        for val in self.txt:
-            aff+=val
-            print(aff)
-            self.display_bloc(aff)
-            self.clock.tick(10)
-            pygame.display.update()
+        cur_txt_prog = 0
+        for txt, bloc in zip(self.txts, self.blocliste):
+            self.fenetre.blit(self.my_font.render(txt[:max(0, min(self.frames - cur_txt_prog, len(txt) - 1))], True, (0,0,0)), bloc)
+            cur_txt_prog += len(txt)
+        if self.time>=delay and not self.end:
+            self.frames = self.frames+self.time//delay
+            self.time = 0
+        self.time += self.clock.get_time()
+        self.end = self.frames>=len(self.txt)
+        print(self.txt[0:self.frames],self.end)
+        
+    def reset(self):
+        self.frames = 0
+        self.time = 0
+        self.end = False
+        
+    def reset(self):
+        self.frames = 0
+        self.time = 0
+        self.end = False
 
 if __name__ == "__main__":
     pygame.init()
     pygame.font.init()
 
     running=True
-    fenetre = pygame.display.set_mode((300,300))
+    fenetre = pygame.display.set_mode((500,300))
     clock = pygame.time.Clock()
 
-    texte='une petite prairie jolie'
+    texte= 'une petite prairie jolie, et des petites fleurs y poussait. En frolant cette pelouse, vous remarquez un arbre'
 
     w,h = pygame.display.get_window_size()
-
+    test=TextDisplay(texte, fenetre, clock)
     while running:
         for event in pygame.event.get():
             if event.type == QUIT:
                 running = False
-        test=bloc_txt(texte, fenetre, clock)
-        #test.display_bloc('txt')
-        test.annim_txt()
+        test.display()
+        #test.reset() if test.end and test.time >= 1000 else None
         pygame.display.update()
         clock.tick(10)
     pygame.quit()
