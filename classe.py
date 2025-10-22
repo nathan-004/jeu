@@ -49,7 +49,6 @@ class Personnage:
         self.level = 0
         self.inventaire = Inventaire()
 
-
     def use(self, obj:Objet):
         self.pv += obj.soin
         self.degat += obj.degat
@@ -111,6 +110,7 @@ class Game:
         # pygame.font.init()
 
         screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        self.combat = False
         # clock = pygame.time.Clock()
 
         running = True
@@ -145,14 +145,47 @@ class Game:
 
     def move(self, direction:tuple):
         if self.map.can_move(self.personnage.position, direction):
-            self.personnage.move(direction)
+            if not self.combat:
+                self.personnage.move(direction)
 
         cur_room = self.map.grid[self.personnage.position[1]][self.personnage.position[0]]
+        if cur_room.monster:
+            self.combat = Combat(self.personnage, Monstre("Test", 10, 10, 10))
         if cur_room.type == "key":
             self.map.open()
             cur_room.type = "path"
         if cur_room.chest:
             cur_room.chest.closed = False
+
+class Combat:
+    def __init__(self, joueur:Joueur, ennemi:Personnage):
+        self.joueur = joueur
+        self.ennemi = ennemi
+        self.tour = 0 # Pair quand c'est au tour du joueur
+    
+    def joueur_utiliser(self, objet:Objet):
+        """Fait utiliser un objet de l'inventaire du joueur"""
+        # Vérifier si c'est au tour du joueur sinon return
+
+        # Utiliser ici
+
+        self.tour += 1
+
+    def joueur_attaque(self):
+        """Attaque du joueur sur l'ennemi"""
+        # Vérifier si c'est au tour du joueur sinon return
+
+        # Attaquer ici
+
+        self.tour += 1
+    
+    def ennemi_turn(self):
+        """Tour de l'ennemi choisir action ennemi"""
+        # Vérifier que c'est bien le tour de l'ennemi
+
+        # Jouer ici
+        
+        self.tour += 1
 
 if __name__ == "__main__":
     g = Game()
