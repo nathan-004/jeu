@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Callable
 
 import pygame
 from pygame.locals import *
@@ -94,6 +94,26 @@ class TextDisplay:
         self.frames = 0
         self.time = 0
         self.end = False
+
+class MouseButton:
+    def __init__(self, text, pos, size, action:Callable, screen:pygame.Surface):
+        """
+        Stocker le text, la pos, la taille, l'action et la fenêtre
+        action correspond à la fonction qui doit être lancée à l'appui -> on peut l'appeler comme ça : action()
+        """
+        # Initier les attributs
+
+        # Créer un attribut qui contient un bloc pygame
+    
+    def display(self):
+        """Affiche le rectangle, ses contours et le texte d'une couleur ou d'une autre si la souris passe dessus"""
+        # Déterminer la couleur en fonction de la position de la souris
+        
+        # Ajoute le rectangle dans l'écran
+
+        # Ajoute les bordures
+
+        # Affiche le texte
 
 if __name__ == "__main__":
     pygame.init()
