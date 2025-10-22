@@ -165,29 +165,30 @@ class Combat:
 
     def joueur_utiliser(self, objet:Objet):
         """Fait utiliser un objet de l'inventaire du joueur"""
-        if self.tour % 2 == 0: # Vérifier si c'est au tour du joueur sinon return
-            self.joueur.use(objet) # Utiliser ici
+        if self.tour % 2 == 0:
+            self.joueur.use(objet)
         else:
             return
         self.tour += 1
 
     def joueur_attaque(self):
         """Attaque du joueur sur l'ennemi"""
-        if self.tour % 2 == 0: # Vérifier si c'est au tour du joueur sinon return
-            self.joueur.attaque() # Attaquer ici
+        if self.tour % 2 == 0:
+            self.joueur.attaque(self.ennemi)
         else:
             return
+
         self.tour += 1
 
     def ennemi_turn(self):
         """Tour de l'ennemi choisir action ennemi"""
-        if self.tour % 2 != 0: # Vérifier que c'est bien le tour de l'ennemi
-            if self.ennemi.pv <= 10: # Jouer ici
-                self.ennemi.use(objet)
-            else:
-                self.ennemi.attaque()
-        else:
+        if self.tour % 2 == 0:
             return
+        
+        if self.ennemi.pv <= 10: # Jouer ici
+            self.ennemi.use(Objet("Soin", "potion", soin=10))
+        else:
+            self.ennemi.attaque(self.joueur)
         self.tour += 1
 
 if __name__ == "__main__":
