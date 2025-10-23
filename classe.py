@@ -1,4 +1,5 @@
 import pygame
+from random import shuffle
 
 from display import TextDisplay
 from map import create_one_solution_map
@@ -24,7 +25,26 @@ class Inventaire:
             
     def equip(self, perso):
         for objet in self.equipements.values():
-            perso.use(objet)  
+            perso.use(objet)
+
+class Coffre:
+    """Permet de renvoyer un type d'objet aléatoire en fonction de ceux déjà renvoyés"""
+
+    def __init__(self, n:int=1, types:list=["potion", "arme", "armure"]):
+        """
+        n: Nombre de tirages où l'on est sûr d'avoir le même nombre d'objets
+        types: Nom des types d'objet à retourner
+        """
+        self.types = types
+        self.n = n
+        self.objets = [] # Contient la liste de types d'objet aléatoires
+
+    def get(self):
+        """Retourne un type d'objet aléatoire"""
+        # Regarder si self.objets est vide
+        # Si vide : créer une nouvelle liste qui contient self.n fois tous les éléments de self.types et la rendre aléatoire avec shuffle !! Attention aux références !!
+
+        # Retourner le premier élément de self.objets et le supprimer (liste.pop(0) ?)
 
 class Personnage:
     def __init__(self, nom, pv, degats, resistance):
