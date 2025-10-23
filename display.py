@@ -11,7 +11,7 @@ class ChestDisplay:
         self.frame = 0
         self.image = 1 if closed else 15
         self._last_loaded = None
-        self.img_f = 10
+        self.img_f = 1
         self.closed = closed
         self.load(self.image)
 
@@ -43,7 +43,7 @@ class ChestDisplay:
         self._last_loaded = n
 
 class TextDisplay:
-    def __init__(self,txt, fenetre, clock):
+    def __init__(self,txt, fenetre, clock, police=20):
         self.txt = f'*{txt}*'
         self.mot = self.txt.split(' ')[0]
         self.frames = 0	#len(self.txt*pygame.time.get_ticks())
@@ -52,7 +52,7 @@ class TextDisplay:
         w,h = pygame.display.get_window_size()
         self.bloc = pygame.Rect((10,h/1.7), (w-20, 1/3*h))
 
-        self.my_font = pygame.font.SysFont('Comic Sans MS', 20)
+        self.my_font = pygame.font.SysFont('Comic Sans MS', police)
         self.fenetre = fenetre
         self.clock = clock
         self.blocliste = [pygame.Rect((15,h/1.7+5), (w-20, self.my_font.get_height()))]
@@ -121,7 +121,7 @@ if __name__ == "__main__":
     texte= 'une petite prairie jolie, et des petites fleurs y poussait. En frolant cette pelouse, vous remarquez un arbre'
 
     w,h = pygame.display.get_window_size()
-    test=TextDisplay(texte, fenetre, clock)
+    test=TextDisplay(texte, fenetre, clock, 15)
     while running:
         for event in pygame.event.get():
             if event.type == QUIT:
