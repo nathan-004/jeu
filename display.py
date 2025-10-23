@@ -11,7 +11,7 @@ class ChestDisplay:
         self.frame = 0
         self.image = 1 if closed else 15
         self._last_loaded = None
-        self.img_f = 10
+        self.img_f = 1
         self.closed = closed
         self.load(self.image)
 
@@ -89,11 +89,6 @@ class TextDisplay:
         self.frames = 0
         self.time = 0
         self.end = False
-        
-    def reset(self):
-        self.frames = 0
-        self.time = 0
-        self.end = False
 
 class MouseButton:
     def __init__(self, text, pos, size, action:Callable, screen:pygame.Surface):
@@ -131,6 +126,12 @@ if __name__ == "__main__":
         for event in pygame.event.get():
             if event.type == QUIT:
                 running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_z:
+                    if test.end:
+                        running = False
+                    else:
+                        test.frames = len(test.txt)
         test.display()
         #test.reset() if test.end and test.time >= 1000 else None
         pygame.display.update()

@@ -99,19 +99,21 @@ class Game:
         self.map = create_one_solution_map(height, width, 4)
         self.personnage = Joueur("Nom",50,50,1, (0, height // 2))
 
-        # self.TEXTS = {
-        #     (0, height//2): ["Test1", "Test2"],
-        #     (width//2, height//2): ["Test3", "Test4"]
-        # }
+        self.TEXTS = {
+            (0, height//2): ["Test1", "Test2"],
+            (width//2, height//2): ["Test3", "Test4"]
+        }
 
         self.visited = set()
 
     def main(self):
-        # pygame.font.init()
+        pygame.font.init()
 
         screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.combat = False
-        # clock = pygame.time.Clock()
+        clock = pygame.time.Clock()
+
+        current_texts = []
 
         running = True
         while running:
@@ -129,23 +131,34 @@ class Game:
                         self.move((0, 1))
                     elif event.key == pygame.K_LEFT:
                         self.move((-1, 0))
-            
+                    elif event.key == pygame.K_z:
+                        if current_texts != []:
+                            if current_texts[0].end:
+                                current_texts.pop(0)
+                            else:
+                                current_texts[0].frames = len(current_texts[0].txt)
+
             self.map.draw(surface=screen, player_pos = self.personnage.position)
 
-            # if self.personnage.position in self.TEXTS and self.personnage.position not in self.visited:
-            #     for text in self.TEXTS[self.personnage.position]:
-            #         text_bloc = bloc_txt(text, screen, clock)
-            #         text_bloc.annim_txt()
+            if self.personnage.position in self.TEXTS and self.personnage.position not in self.visited:
+                for text in self.TEXTS[self.personnage.position]:
+                    current_texts.append(TextDisplay(text, screen, clock))
+            
+            if current_texts != []:
+                current_texts[0].display()
             
             self.visited.add(self.personnage.position)
 
             pygame.display.flip()
+            clock.tick(10)
 
         pygame.quit()
 
     def move(self, direction:tuple):
         if self.map.can_move(self.personnage.position, direction):
             if not self.combat:
+                self.personnage.move(direction)
+            else:
                 self.personnage.move(direction)
 
         cur_room = self.map.grid[self.personnage.position[1]][self.personnage.position[0]]
