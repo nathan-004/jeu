@@ -362,6 +362,7 @@ def create_one_solution_map(width, height, n = 3) -> Map:
     """
     Créé `n` instance de Map pour garantir qu'il n'y a qu'une solution possible au labyrinthe
     !!Ne pas mettre une width trop petite pour un `n` trop grand!!
+    !!Peut diminuer la taille longueur si n ne divise pas width!! 
 
     Returns
     -------

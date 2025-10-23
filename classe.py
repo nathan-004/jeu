@@ -100,8 +100,9 @@ class Game:
         self.personnage = Joueur("Nom",50,50,1, (0, height // 2))
 
         self.TEXTS = {
-            (0, height//2): ["Test1", "Test2"],
-            (width//2, height//2): ["Test3", "Test4"]
+            (0, height//2): ["Ceci est un texte plutôt long pour tester le test vicieusement fait", "Ceci est un autre texte qui permet de décrire ce qui se passe dans ce jeu de manière plutôt exhaustive même si le jeu n'est pas fini car c'est le destin. Il y a du texte alors qu'on n'a pas de jeu mais c'est pas si grave. On se demande comment le jeu peut il être joué lorsque les utilisateurs ne connaîssent pas les règles donc on doit bien lui expliquer correctement en développant bien toutes les options"],
+            (width//2, height//2): ["Test3", "Test4"],
+            (width-4, height // 2): ["Félicitation, vous êtes arrivés à la fin.", "Mais ne vous méprenez pas.", "L'aventure n'est jamais ..."]
         }
 
         self.visited = set()
@@ -123,7 +124,17 @@ class Game:
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         running = False
-                    elif event.key == pygame.K_RIGHT:
+
+                    if current_texts != []:
+                        if event.key == pygame.K_z:
+                            if current_texts != []:
+                                if current_texts[0].end:
+                                    current_texts.pop(0)
+                                else:
+                                    current_texts[0].frames = len(current_texts[0].txt)
+                        continue
+                    
+                    if event.key == pygame.K_RIGHT:
                         self.move((1, 0))
                     elif event.key == pygame.K_UP:
                         self.move((0, -1))
