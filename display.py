@@ -11,7 +11,7 @@ class ChestDisplay:
         self.frame = 0
         self.image = 1 if closed else 15
         self._last_loaded = None
-        self.img_f = 1
+        self.img_f = 10
         self.closed = closed
         self.load(self.image)
 
