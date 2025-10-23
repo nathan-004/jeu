@@ -382,8 +382,39 @@ def create_one_solution_map(width, height, n = 3) -> Map:
     
     return result
 
+def get_absolute_direction(initial_direction: tuple, relative_direction: tuple):
+    """
+    Renvoie la direction absolue (dans la map) à partir de la direction initiale
+    et de la direction relative à l'initiale.
+
+    Paramètres
+    ----------
+    initial_direction : tuple[int, int]
+    relative_direction : tuple[int, int]
+        direction relative à l'orientation initiale
+
+    Retourne
+    --------
+    tuple[int, int]
+        La direction absolue dans la map
+    """
+    rotations = {
+        (0, -1): lambda x, y: (x, y),
+        (1, 0): lambda x, y: (-y, x), # rotation 90° horaire
+        (0, 1): lambda x, y: (-x, -y), # rotation 180°
+        (-1, 0): lambda x, y: (y, -x), # rotation 90° antihoraire
+    }
+
+    assert initial_direction in rotations, "Direction initiale non valide" + str(initial_direction) 
+
+    return rotations[initial_direction](*relative_direction)
+
 if __name__ == "__main__":
-    a = create_one_solution_map(25, 25, 3)
-    print(a.can_move((0, 0), "top"))
-    print(a.can_move((0, 0), "bottom"))
-    a.create_image()
+    # a = create_one_solution_map(25, 25, 3)
+    # print(a.can_move((0, 0), "top"))
+    # print(a.can_move((0, 0), "bottom"))
+    # a.create_image()
+    print(get_absolute_direction((0, -1), (0, 1)))
+    print(get_absolute_direction((1, 0), (0, 1)))
+    print(get_absolute_direction((0, -1), (1, 0)))
+    print(get_absolute_direction((0, 1), (1, 0)))
