@@ -72,7 +72,7 @@ class TextDisplay:
 
         print(self.blocliste, self.txts)
         
-    def display(self,delay=100):	#delay est en milliseconde
+    def display(self,delay=20):	#delay est en milliseconde
         pygame.draw.rect(self.fenetre,(255,0,0),self.bloc)
         cur_txt_prog = 0
         for txt, bloc in zip(self.txts, self.blocliste):

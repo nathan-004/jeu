@@ -146,7 +146,7 @@ class Game:
                         running = False
 
                     if current_texts != []:
-                        if event.key == pygame.K_z:
+                        if any(pygame.key.get_pressed()):
                             if current_texts != []:
                                 if current_texts[0].end:
                                     current_texts.pop(0)
@@ -162,7 +162,7 @@ class Game:
                         self.move((0, 1))
                     elif event.key == pygame.K_LEFT:
                         self.move((-1, 0))
-                    elif event.key == pygame.K_z:
+                    elif any(pygame.key.get_pressed()):
                         if current_texts != []:
                             if current_texts[0].end:
                                 current_texts.pop(0)
@@ -181,7 +181,7 @@ class Game:
             self.visited.add(self.personnage.position)
 
             pygame.display.flip()
-            clock.tick(10)
+            clock.tick(100)
 
         pygame.quit()
 
