@@ -110,6 +110,25 @@ class MouseButton:
 
         # Affiche le texte
 
+class RoomDisplay:
+    def __init__(self,screen):
+        self.screen = screen
+        self.bg = pygame.image.load('assets\\images\\background\\Salle_fond.png')
+        self.bg.convert()
+        self.shade = pygame.image.load('assets\\images\\background\\Shade.png')
+        self.shade.convert()
+        self.w,self.h =pygame.display.get_window_size()
+        self.bg = pygame.transform.scale(self.bg, (self.w*0.7,self.h*0.7))
+        self.shade = pygame.transform.scale(self.shade, (0, 0))
+        self.bloc = self.bg.get_rect()
+        self.bloc.center = self.w//2,self.h//2
+        
+    def display_bg(self):
+        self.screen.blit(self.bg,self.bloc)
+        #self.bg = pygame.transform.scale(self.bg, (self.w,self.h))
+        self.screen.fill('black')
+    def display_shade(self):
+        self.screen.blit(self.bg,(0,0))
 def get_size(surface:pygame.Surface, pourcentage:float, size:str = "width") -> float:
     """Renvoie la valeur en pixel qui correspond au pourcentage de la dimension de la surface"""
     assert size == "width" or size == "height", f"Dimension {size} non disponible"
@@ -122,13 +141,13 @@ if __name__ == "__main__":
     pygame.font.init()
 
     running=True
-    fenetre = pygame.display.set_mode((500,300))
+    fenetre = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     clock = pygame.time.Clock()
 
     texte= 'une petite prairie jolie, et des petites fleurs y poussait. En frolant cette pelouse, vous remarquez un arbre'
 
-    w,h = pygame.display.get_window_size()
     test=TextDisplay(texte, fenetre, clock, 15)
+    background = RoomDisplay(fenetre)
     while running:
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -139,7 +158,9 @@ if __name__ == "__main__":
                         running = False
                     else:
                         test.frames = len(test.txt)
-        test.display()
+        background.display_bg()
+        #test.display()
+        background.display_shade()
         #test.reset() if test.end and test.time >= 1000 else None
         pygame.display.update()
         clock.tick(10)
