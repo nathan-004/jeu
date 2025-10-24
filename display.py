@@ -114,21 +114,16 @@ class RoomDisplay:
     def __init__(self,screen):
         self.screen = screen
         self.bg = pygame.image.load('assets\\images\\background\\Salle_fond.png')
-        self.bg.convert()
         self.shade = pygame.image.load('assets\\images\\background\\Shade.png')
-        self.shade.convert()
         self.w,self.h =pygame.display.get_window_size()
         self.bg = pygame.transform.scale(self.bg, (self.w*0.7,self.h*0.7))
-        self.shade = pygame.transform.scale(self.shade, (0, 0))
-        self.bloc = self.bg.get_rect()
-        self.bloc.center = self.w//2,self.h//2
+        self.shade = pygame.transform.scale(self.shade, (self.w*0.7,self.h*0.7))
+
         
     def display_bg(self):
-        self.screen.blit(self.bg,self.bloc)
-        #self.bg = pygame.transform.scale(self.bg, (self.w,self.h))
-        self.screen.fill('black')
+        self.screen.blit(self.bg,(self.w*0.3//2,0))
     def display_shade(self):
-        self.screen.blit(self.bg,(0,0))
+        self.screen.blit(self.shade,(self.w*0.3//2,0))
 def get_size(surface:pygame.Surface, pourcentage:float, size:str = "width") -> float:
     """Renvoie la valeur en pixel qui correspond au pourcentage de la dimension de la surface"""
     assert size == "width" or size == "height", f"Dimension {size} non disponible"
