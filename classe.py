@@ -2,7 +2,7 @@ import pygame
 from random import shuffle
 
 from display import TextDisplay, get_size
-from map import create_one_solution_map
+from map import create_one_solution_map, get_absolute_direction
 
 class Objet:
     def __init__(self, nom, type_, soin=0, degat=0, resistance=0):
@@ -105,6 +105,7 @@ class Joueur(Personnage):
     def __init__(self, nom, pv, degats, resistance, position:tuple, inventaire:Inventaire = Inventaire() ):
         super().__init__(nom, pv, degats, resistance)
         self.position = position
+        self.direction = (1, 0) # Direction de base vers la droite
         self.inventaire = inventaire
 
     def equipe_obj(self, obj:Objet):
@@ -112,6 +113,7 @@ class Joueur(Personnage):
     
     def move(self, direction:tuple):
         self.position = (self.position[0] + direction[0], self.position[1] + direction[1])
+        self.direction = direction
 
 class Game:
     def __init__(self):
@@ -192,6 +194,7 @@ class Game:
         pygame.quit()
 
     def move(self, direction:tuple):
+        direction = get_absolute_direction(self.personnage.direction, direction)
         if self.map.can_move(self.personnage.position, direction):
             if not self.combat:
                 self.personnage.move(direction)
