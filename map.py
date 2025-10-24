@@ -229,9 +229,11 @@ class Map:
     # Affichage de débogage du labyrinthe -------------------------------------------------------|
     # --------------------------------------------------------------------------------------------
 
-    def draw(self, surface:pygame.Surface, player_pos:tuple = None):
+    def draw(self, surface:pygame.Surface, player = None):
         """
         Affichage de la map pour le débogage sur la Surface donnée
+        player:Joueur
+            Contient la position et la direction du personnage
         """
         w, h = surface.get_size()
         cell_size_x, cell_size_y = w // self.width, h // self.height
@@ -243,9 +245,15 @@ class Map:
         self.chest_image = pygame.transform.scale(self.chest_image, (cell_size_x, cell_size_y))
 
         for y in range(self.height):
-            for x in range(self.width):
-                forced_color = (0, 0, 255) if (x, y) == player_pos else None
-                self.draw_cell(x, y, (cell_size_x, cell_size_y), surface, forced_color)
+            for x in range(self.width): 
+                self.draw_cell(x, y, (cell_size_x, cell_size_y), surface)
+                if (x, y) == player.position:
+                    px = x * cell_size_x + cell_size_x // 2
+                    py = y * cell_size_y + cell_size_y // 2
+                    dir_x, dir_y = player.direction
+                    end_pos = (px + dir_x * cell_size_x // 3, py + dir_y * cell_size_y // 3)
+                    pygame.draw.circle(surface, (0, 0, 255), (px, py), cell_size_x // 4)
+                    pygame.draw.line(surface, (0, 0, 255), (px, py), end_pos, 2)
 
     def draw_cell(self, x, y, cell_size:Union[int, tuple], surface, forced_color:tuple=None):
         """Affiche la salle correspondante | Composant de `draw`"""
@@ -280,9 +288,6 @@ class Map:
 
         if room_type == "locked":
             color = (125, 125, 0)
-
-        if forced_color is not None:
-            color = forced_color
 
         px = x * cell_size_x
         py = y * cell_size_y

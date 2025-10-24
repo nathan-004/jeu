@@ -176,7 +176,7 @@ class Game:
                             else:
                                 current_texts[0].frames = len(current_texts[0].txt)
 
-            self.map.draw(surface=map_surface, player_pos = self.personnage.position)
+            self.map.draw(surface=map_surface, player = self.personnage)
             screen.blit(map_surface, map_position)
 
             if self.personnage.position in self.TEXTS and self.personnage.position not in self.visited:
