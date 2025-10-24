@@ -110,6 +110,13 @@ class MouseButton:
 
         # Affiche le texte
 
+def get_size(surface:pygame.Surface, pourcentage:float, size:str = "width") -> float:
+    """Renvoie la valeur en pixel qui correspond au pourcentage de la dimension de la surface"""
+    assert size == "width" or size == "height", f"Dimension {size} non disponible"
+    val = surface.get_size()[0 if size == "width" else 1]
+
+    return pourcentage * val / 100
+
 if __name__ == "__main__":
     pygame.init()
     pygame.font.init()

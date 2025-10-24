@@ -1,7 +1,7 @@
 import pygame
 from random import shuffle
 
-from display import TextDisplay
+from display import TextDisplay, get_size
 from map import create_one_solution_map
 
 class Objet:
@@ -115,14 +115,14 @@ class Joueur(Personnage):
 
 class Game:
     def __init__(self):
-        height, width = 15, 15
-        self.map = create_one_solution_map(height, width, 4)
+        height, width = 15, 16
+        self.map = create_one_solution_map(width, height, 4)
         self.personnage = Joueur("Nom",50,50,1, (0, height // 2))
 
         self.TEXTS = {
             (0, height//2): ["Ceci est un texte plutôt long pour tester le test vicieusement fait", "Ceci est un autre texte qui permet de décrire ce qui se passe dans ce jeu de manière plutôt exhaustive même si le jeu n'est pas fini car c'est le destin. Il y a du texte alors qu'on n'a pas de jeu mais c'est pas si grave. On se demande comment le jeu peut il être joué lorsque les utilisateurs ne connaîssent pas les règles donc on doit bien lui expliquer correctement en développant bien toutes les options"],
-            (width//2, height//2): ["Test3", "Test4"],
-            (width-4, height // 2): ["Félicitation, vous êtes arrivés à la fin.", "Mais ne vous méprenez pas.", "L'aventure n'est jamais ..."]
+            (width//2 - 1, height//2): ["Test3", "Test4"],
+            (width-1, height // 2): ["Félicitation, vous êtes arrivés à la fin.", "Mais ne vous méprenez pas.", "L'aventure n'est jamais ..."]
         }
 
         self.visited = set()
@@ -131,6 +131,11 @@ class Game:
         pygame.font.init()
 
         screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        map_size = (500, 400)
+        map_surface = pygame.Surface(map_size, pygame.SRCALPHA)
+        map_surface.fill((0, 0, 0, 180))
+        map_position = (get_size(screen, 100) - map_size[0], get_size(screen, 100, "height") - map_size[1])
+
         self.combat = False
         clock = pygame.time.Clock()
 
@@ -169,7 +174,8 @@ class Game:
                             else:
                                 current_texts[0].frames = len(current_texts[0].txt)
 
-            self.map.draw(surface=screen, player_pos = self.personnage.position)
+            self.map.draw(surface=map_surface, player_pos = self.personnage.position)
+            screen.blit(map_surface, map_position)
 
             if self.personnage.position in self.TEXTS and self.personnage.position not in self.visited:
                 for text in self.TEXTS[self.personnage.position]:
