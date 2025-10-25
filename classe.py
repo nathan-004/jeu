@@ -1,4 +1,5 @@
 import pygame
+import time
 from random import shuffle
 
 from display import TextDisplay, get_size
@@ -11,6 +12,11 @@ class Objet:
         self.soin = soin
         self.degat = degat
         self.resistance = resistance
+        # initier la valeur de temps d'écart d'utilisation 
+
+    def use(self, personnage):
+        # Vérifier que le temps présent - dernier temps d'utilisation stocké est plus grand qu'une valeur définie si c'est un consommable 
+        # Rajouter les attributs de l'objet au personnage (remplace Personnage.use)
 
 class Inventaire:
     def __init__ (self):
