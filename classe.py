@@ -12,11 +12,12 @@ class Objet:
         self.soin = soin
         self.degat = degat
         self.resistance = resistance
-        # initier la valeur de temps d'écart d'utilisation 
+        # initier la valeur d'utilisation de l'objet
 
     def use(self, personnage):
-        # Vérifier que le temps présent - dernier temps d'utilisation stocké est plus grand qu'une valeur définie si c'est un consommable 
+        # Vérifier que l'objet n'a pas été utilisé si c'est un consommable 
         # Rajouter les attributs de l'objet au personnage (remplace Personnage.use)
+        # Midifier joueur.move pour qu'à chaque appel, reanitialise l'utilisation de l'objet consommable
 
 class Inventaire:
     def __init__ (self):
@@ -254,4 +255,4 @@ class Combat:
 
 if __name__ == "__main__":
     g = Game()
-    g.main()
+    g.main())
