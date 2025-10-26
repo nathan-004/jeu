@@ -83,7 +83,7 @@ class TextDisplay:
             self.time = 0
         self.time += self.clock.get_time()
         self.end = self.frames>=len(self.txt)
-        print(self.txt[0:self.frames],self.end)
+        #print(self.txt[0:self.frames],self.end)
         
     def reset(self):
         self.frames = 0
@@ -126,6 +126,7 @@ class RoomDisplay:
         self.screen.blit(self.bg,(self.w*0.3//2,0))
     def display_shade(self):
         self.screen.blit(self.shade,(self.w*(1-self.taille)//2,0))
+        
 def get_size(surface:pygame.Surface, pourcentage:float, size:str = "width") -> float:
     """Renvoie la valeur en pixel qui correspond au pourcentage de la dimension de la surface"""
     assert size == "width" or size == "height", f"Dimension {size} non disponible"

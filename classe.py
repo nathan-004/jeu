@@ -137,21 +137,23 @@ class Game:
 
         self.visited = set()
     
-    def display_room(self):
-        screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-        room = RoomDisplay(screen)
+    def display_room(self,screen :pygame.Surface,percentage=70):
+        room = RoomDisplay(screen, percentage)
         doorR =  pygame.image.load('assets\\images\\doors\\Porte_cote.png')
         doorL =  pygame.image.load('assets\\images\\doors\\Porte_cote.png')#.transform.flip(img, True, False)
         doorC =  pygame.image.load('assets\\images\\doors\\Porte_Face.png')
         doors = [doorL, doorC, doorR]
+        for  i in range(3):
+            doors[i] = pygame.transform.scale(doors[i], (get_size(screen, 13*(percentage/100)), get_size(screen, 71*(percentage/100), "height")))
         room.display_bg()
+        screen.blit(doors[0],(get_size(screen, 85*(percentage/100)+15),get_size(screen, 26*(percentage/100), "height")))
         room.display_shade()
 
     def main(self):
         pygame.font.init()
 
         screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-        map_size = (500, 400)
+        map_size = (get_size(screen, 30, "height"), get_size(screen, 30, "height"))
         map_surface = pygame.Surface(map_size, pygame.SRCALPHA)
         map_surface.fill((0, 0, 0, 180))
         map_position = (get_size(screen, 100) - map_size[0], get_size(screen, 100, "height") - map_size[1])
@@ -194,7 +196,7 @@ class Game:
                             else:
                                 current_texts[0].frames = len(current_texts[0].txt)
 
-            self.display_room()
+            self.display_room(screen)
             self.map.draw(surface=map_surface, player = self.personnage)
             screen.blit(map_surface, map_position)
 
