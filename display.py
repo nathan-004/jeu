@@ -121,6 +121,7 @@ class RoomDisplay:
 
         
     def display_bg(self):
+        self.screen.fill(('black'))
         self.screen.blit(self.bg,(self.w*0.3//2,0))
     def display_shade(self):
         self.screen.blit(self.shade,(self.w*0.3//2,0))

@@ -2,7 +2,7 @@ import pygame
 import time
 from random import shuffle
 
-from display import TextDisplay, get_size
+from display import TextDisplay, get_size, RoomDisplay
 from map import create_one_solution_map, get_absolute_direction
 
 class Objet:
@@ -18,6 +18,7 @@ class Objet:
         # Vérifier que l'objet n'a pas été utilisé si c'est un consommable 
         # Rajouter les attributs de l'objet au personnage (remplace Personnage.use)
         # Midifier joueur.move pour qu'à chaque appel, reanitialise l'utilisation de l'objet consommable
+        pass
 
 class Inventaire:
     def __init__ (self):
@@ -135,6 +136,11 @@ class Game:
         }
 
         self.visited = set()
+    
+    def create_room(self):
+        room = RoomDisplay(screen = pygame.display.get_surface())
+        room.display_bg()
+        room.display_shade()
 
     def main(self):
         pygame.font.init()
@@ -183,6 +189,7 @@ class Game:
                             else:
                                 current_texts[0].frames = len(current_texts[0].txt)
 
+            self.create_room()
             self.map.draw(surface=map_surface, player = self.personnage)
             screen.blit(map_surface, map_position)
 
@@ -255,4 +262,4 @@ class Combat:
 
 if __name__ == "__main__":
     g = Game()
-    g.main())
+    g.main()
