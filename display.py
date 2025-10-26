@@ -111,20 +111,21 @@ class MouseButton:
         # Affiche le texte
 
 class RoomDisplay:
-    def __init__(self,screen):
+    def __init__(self,screen,taille=70):
+        self.taille=taille/100
         self.screen = screen
         self.bg = pygame.image.load('assets\\images\\background\\Salle_fond.png')
         self.shade = pygame.image.load('assets\\images\\background\\Shade.png')
         self.w,self.h =pygame.display.get_window_size()
-        self.bg = pygame.transform.scale(self.bg, (self.w*0.7,self.h*0.7))
-        self.shade = pygame.transform.scale(self.shade, (self.w*0.7,self.h*0.7))
+        self.bg = pygame.transform.scale(self.bg, (self.w*self.taille,self.h*self.taille))
+        self.shade = pygame.transform.scale(self.shade, (self.w*self.taille,self.h*self.taille))
 
         
     def display_bg(self):
         self.screen.fill(('black'))
         self.screen.blit(self.bg,(self.w*0.3//2,0))
     def display_shade(self):
-        self.screen.blit(self.shade,(self.w*0.3//2,0))
+        self.screen.blit(self.shade,(self.w*(1-self.taille)//2,0))
 def get_size(surface:pygame.Surface, pourcentage:float, size:str = "width") -> float:
     """Renvoie la valeur en pixel qui correspond au pourcentage de la dimension de la surface"""
     assert size == "width" or size == "height", f"Dimension {size} non disponible"
