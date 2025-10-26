@@ -137,8 +137,13 @@ class Game:
 
         self.visited = set()
     
-    def create_room(self):
-        room = RoomDisplay(screen = pygame.display.get_surface())
+    def display_room(self):
+        screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        room = RoomDisplay(screen)
+        doorR =  pygame.image.load('assets\\images\\doors\\Porte_cote.png')
+        doorL =  pygame.image.load('assets\\images\\doors\\Porte_cote.png')#.transform.flip(img, True, False)
+        doorC =  pygame.image.load('assets\\images\\doors\\Porte_Face.png')
+        doors = [doorL, doorC, doorR]
         room.display_bg()
         room.display_shade()
 
@@ -189,7 +194,7 @@ class Game:
                             else:
                                 current_texts[0].frames = len(current_texts[0].txt)
 
-            self.create_room()
+            self.display_room()
             self.map.draw(surface=map_surface, player = self.personnage)
             screen.blit(map_surface, map_position)
 
