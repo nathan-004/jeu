@@ -201,11 +201,7 @@ class Game:
                             else:
                                 current_texts[0].frames = len(current_texts[0].txt)
 
-<<<<<<< HEAD
             self.display_room(screen)
-=======
-            self.display_room(screen, self.personnage.direction)
->>>>>>> d0481d8d0192b3fb9afa27cf32763bb55a9675fc
             self.map.draw(surface=map_surface, player = self.personnage)
             screen.blit(map_surface, map_position)
 
