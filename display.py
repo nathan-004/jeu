@@ -96,21 +96,27 @@ class MouseButton:
         Stocker le text, la pos, la taille, l'action et la fenêtre
         action correspond à la fonction qui doit être lancée à l'appui -> on peut l'appeler comme ça : action()
         """
-        self.text = f'*{txt}*'
+        self.text = text
         self.pos = pos
         self.size = size
         self.action = action
-        self.screen = pygame.Rect(larg, Long) # Créer un attribut qui contient un bloc pygame
+        self.screen = screen
+        self.background = pygame.Rect(pos, size)
     
     def display(self):
         """Affiche le rectangle, ses contours et le texte d'une couleur ou d'une autre si la souris passe dessus"""
-        # Déterminer la couleur en fonction de la position de la souris
-        
-        # Ajoute le rectangle dans l'écran
+        mouse_pos = pygame.mouse.get_pos()
+        hovered = self.background.collidepoint(mouse_pos)
+        color = (255, 120, 87) if not hovered else (239, 255, 94)
 
-        # Ajoute les bordures
+        pygame.draw.rect(self.screen, "black", self.background)
 
-        # Affiche le texte
+        pygame.draw.rect(self.screen, color, self.background, 2)
+
+        font = pygame.font.SysFont(None, int(self.size[1] * 0.6))
+        text_surf = font.render(self.text, True, color)
+        text_rect = text_surf.get_rect(center=self.background.center)
+        self.screen.blit(text_surf, text_rect)
 
 class RoomDisplay:
     def __init__(self,screen,taille=70):
@@ -148,6 +154,7 @@ if __name__ == "__main__":
 
     test=TextDisplay(texte, fenetre, clock, 15)
     background = RoomDisplay(fenetre)
+    button = MouseButton("Test", (0,0), (100, 50), lambda : print("test"), fenetre)
     while running:
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -158,9 +165,12 @@ if __name__ == "__main__":
                         running = False
                     else:
                         test.frames = len(test.txt)
+                if event.key == K_ESCAPE:
+                    running = False
         background.display_bg()
         #test.display()
         background.display_shade()
+        button.display()
         #test.reset() if test.end and test.time >= 1000 else None
         pygame.display.update()
         clock.tick(10)
