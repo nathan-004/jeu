@@ -26,6 +26,15 @@ class Room:
         self.chest = False
         self.monster = random.random() < 0.3
 
+    def get_content(self) -> dict:
+        """Renvoie un dictionnaire contenant les informations de la salle"""
+        return {
+            "type": self.type,
+            "walls": self.walls,
+            "chest": not self.chest.closed if type(self.chest) is ChestDisplay else self.chest,
+            "monster": self.monster
+        }
+
 class Map:
     """Objet représentant la carte sous forme de matrice de Salles"""
 
@@ -362,6 +371,23 @@ class Map:
             return result
         else:
             raise NotImplementedError
+        
+    def get_content(self) -> dict:
+        """
+        Renvoie le contenu de la map sous forme de dictionnaire
+
+        Renvoie
+        -------
+        {
+            "grid": [
+            ],
+        }
+        """
+        content = {
+            "grid": [[room.get_content() for room in row] for row in self.grid]
+        }
+
+        return content
 
 def create_one_solution_map(width, height, n = 3) -> Map:
     """

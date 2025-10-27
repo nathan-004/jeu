@@ -2,8 +2,8 @@ import pygame
 import time
 from random import shuffle
 
-from display import TextDisplay, get_size, RoomDisplay
-from map import create_one_solution_map, get_absolute_direction
+from display import TextDisplay, get_size, RoomDisplay, ChestDisplay
+from map import create_one_solution_map, get_absolute_direction, Room, Map
 
 class Objet:
     def __init__(self, nom, type_, soin=0, degat=0, resistance=0):
@@ -235,8 +235,10 @@ class Game:
             cur_room.type = "path"
         if cur_room.chest:
             cur_room.chest.closed = False
-        
-        
+    
+    def save(self):
+        # Sauvegarder la map
+        map_content = self.map.get_content()
 
 class Combat:
     def __init__(self, joueur:Joueur, ennemi:Personnage):
@@ -270,8 +272,9 @@ class Combat:
             self.ennemi.use(Objet("Soin", "potion", soin=10))
         else:
             self.ennemi.attaque(self.joueur)
-        self.tour += 1   
+        self.tour += 1
 
 if __name__ == "__main__":
     g = Game()
     g.main()
+    print(g.save())
