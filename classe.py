@@ -3,8 +3,8 @@ import time
 from random import shuffle
 import json
 
-from display import TextDisplay, get_size, RoomDisplay, ChestDisplay
-from map import create_one_solution_map, get_absolute_direction, Room, Map
+from display import TextDisplay, get_size, RoomDisplay, MouseButton
+from map import create_one_solution_map, get_absolute_direction
 
 class Objet:
     def __init__(self, nom, type_, soin=0, degat=0, resistance=0):
@@ -167,6 +167,11 @@ class Game:
         map_surface.fill((0, 0, 0, 180))
         map_position = (get_size(self.screen, 100) - map_size[0], get_size(self.screen, 100, "height") - map_size[1])
 
+        buttons_size = (get_size(self.screen, 100), 50)
+        buttons_surface = pygame.Surface(buttons_size, pygame.SRCALPHA)
+        buttons_surface.fill((0, 0, 0, 180))
+        buttons_position = (0, get_size(self.screen, 100, "height") - buttons_size[1])
+
         self.combat = False
         self.clock = pygame.time.Clock()
 
@@ -204,14 +209,21 @@ class Game:
                                 self.current_texts.pop(0)
                             else:
                                 self.current_texts[0].frames = len(self.current_texts[0].txt)
+                if self.combat:
+                    self.combat.buttons_event(event)
 
             cur_room = self.map.grid[self.personnage.position[1]][self.personnage.position[0]]
             if cur_room.monster:
                 if not self.combat:
                     self.combat = Combat(self.personnage, Monstre("Test", 10, 10, 10))
-            
+
+            self.display_room(self.screen)
+            self.map.draw(surface=map_surface, player = self.personnage)
+            self.screen.blit(map_surface, map_position)
+
             if self.combat:
-                pass
+                self.combat.display_buttons(buttons_surface, button_bloc_pos=buttons_position)
+                self.screen.blit(buttons_surface, buttons_position)
             elif cur_room.type == "key":
                 self.map.open()
                 cur_room.type = "path"
@@ -219,11 +231,7 @@ class Game:
                 self.current_texts.append(TextDisplay("Une porte s'est ouverte ...", self.screen, self.clock))
             elif cur_room.chest:
                 cur_room.chest.closed = False
-
-            self.display_room(self.screen)
-            self.map.draw(surface=map_surface, player = self.personnage)
-            self.screen.blit(map_surface, map_position)
-
+            
             if self.personnage.position in self.TEXTS and self.personnage.position not in self.visited:
                 for text in self.TEXTS[self.personnage.position]:
                     self.current_texts.append(TextDisplay(text, self.screen, self.clock))
@@ -255,17 +263,23 @@ class Combat:
         self.joueur = joueur
         self.ennemi = ennemi
         self.tour = 0 # Pair quand c'est au tour du joueur
+        self.buttons = None
 
-    def joueur_utiliser(self, objet:Objet):
-        """Fait utiliser un objet de l'inventaire du joueur"""
+    def joueur_utiliser(self):
+        """Fait utiliser le seul consommable de l'inventaire du joueur"""
+        print("Utilise un item")
         if self.tour % 2 == 0:
-            self.joueur.use(objet)
+            try:
+                self.joueur.use(self.joueur.inventaire.consommables.values()[0])
+            except IndexError:
+                pass
         else:
             return
         self.tour += 1
 
     def joueur_attaque(self):
         """Attaque du joueur sur l'ennemi"""
+        print("Attaque du joueur")
         if self.tour % 2 == 0:
             self.joueur.attaque(self.ennemi)
         else:
@@ -283,6 +297,33 @@ class Combat:
         else:
             self.ennemi.attaque(self.joueur)
         self.tour += 1
+
+    def display_buttons(self, surface:pygame.Surface, space_percent:int = 20, button_bloc_pos:tuple = (0, 0)):
+        """
+        Initie les boutons de combat
+        """
+        surface.fill((0, 0, 0, 180))
+
+        if self.buttons is None:
+            buttons = [("COMBAT", self.joueur_attaque), ("UTILISER", self.joueur_utiliser)]
+
+            space = int(get_size(surface, space_percent) / (len(buttons) + 1))
+            size = (int(get_size(surface, 100 - space_percent) / len(buttons)), int(get_size(surface, 100, "height")))
+
+            self.buttons = []
+            for idx, (button_txt, button_callable) in enumerate(buttons, start=1):
+                pos = (space * idx + size[0] * (idx - 1), 0)
+                self.buttons.append(MouseButton(button_txt, pos, size, button_callable, surface, button_bloc_pos))
+        
+        for button in self.buttons:
+            button.display()
+    
+    def buttons_event(self, event):
+        if self.buttons is None:
+            return
+        
+        for button in self.buttons:
+            button.handle_event(event)
 
 if __name__ == "__main__":
     g = Game()

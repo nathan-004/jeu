@@ -91,7 +91,7 @@ class TextDisplay:
         self.end = False
 
 class MouseButton:
-    def __init__(self, text, pos, size, action:Callable, screen:pygame.Surface):
+    def __init__(self, text, pos, size, action:Callable, screen:pygame.Surface, position:tuple = (0, 0)):
         """
         Stocker le text, la pos, la taille, l'action et la fenêtre
         action correspond à la fonction qui doit être lancée à l'appui -> on peut l'appeler comme ça : action()
@@ -102,11 +102,13 @@ class MouseButton:
         self.action = action
         self.screen = screen
         self.background = pygame.Rect(pos, size)
+        self.position = position
     
     def display(self):
         """Affiche le rectangle, ses contours et le texte d'une couleur ou d'une autre si la souris passe dessus"""
         mouse_pos = pygame.mouse.get_pos()
-        hovered = self.background.collidepoint(mouse_pos)
+        local_mouse_pos = (mouse_pos[0] - self.position[0], mouse_pos[1] - self.position[1])
+        hovered = self.background.collidepoint(local_mouse_pos)
         color = (255, 120, 87) if not hovered else (239, 255, 94)
 
         pygame.draw.rect(self.screen, "black", self.background)
@@ -120,7 +122,10 @@ class MouseButton:
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            if self.background.collidepoint(event.pos):
+            print("Clic intercepté")
+            local_pos = (event.pos[0] - self.position[0], event.pos[1] - self.position[1])
+            if self.background.collidepoint(local_pos):
+                print("action réalisée")
                 self.action()
 
 class RoomDisplay:
