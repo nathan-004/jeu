@@ -123,9 +123,9 @@ class RoomDisplay:
         
     def display_bg(self):
         self.screen.fill(('black'))
-        self.screen.blit(self.bg,(self.w*0.3//2,0))
+        self.screen.blit(self.bg,(self.w*0.3/2,0))
     def display_shade(self):
-        self.screen.blit(self.shade,(self.w*(1-self.taille)//2,0))
+        self.screen.blit(self.shade,(self.w*0.3/2,0))
         
 def get_size(surface:pygame.Surface, pourcentage:float, size:str = "width") -> float:
     """Renvoie la valeur en pixel qui correspond au pourcentage de la dimension de la surface"""

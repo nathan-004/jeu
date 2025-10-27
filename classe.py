@@ -143,10 +143,11 @@ class Game:
         doorL =  pygame.image.load('assets\\images\\doors\\Porte_cote.png')#.transform.flip(img, True, False)
         doorC =  pygame.image.load('assets\\images\\doors\\Porte_Face.png')
         doors = [doorL, doorC, doorR]
-        for  i in range(3):
-            doors[i] = pygame.transform.scale(doors[i], (get_size(screen, 13*(percentage/100)), get_size(screen, 71*(percentage/100), "height")))
         room.display_bg()
-        screen.blit(doors[0],(get_size(screen, 85*(percentage/100)+15),get_size(screen, 26*(percentage/100), "height")))
+        for  i in range(3):
+            doors[i] = pygame.transform.scale(doors[i], (get_size(screen, 13*(percentage/100)), get_size(screen, 71*(percentage/100), "height"))) if i != 1 else pygame.transform.scale(doors[i], (get_size(screen,(300*100/get_size(screen,100))*(percentage/100)), get_size(screen, 49*(percentage/100), "height")))
+            doors[i] = pygame.transform.flip(doors[i], True, False) if i == 2 else doors[i]
+            screen.blit(doors[i],(get_size(screen, ((99.7-percentage)/2)+((85/(100/percentage))if i == 0 else (4/(100/percentage))) ),get_size(screen, 26*(percentage/99.7), "height"))) if i != 1 else screen.blit(doors[i],(get_size(screen, ((100-percentage)/2)+((41-(10/(100/percentage)))) ),get_size(screen, 32*(percentage/99.7), "height")))
         room.display_shade()
 
     def main(self):
