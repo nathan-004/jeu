@@ -205,6 +205,17 @@ class Game:
                             else:
                                 current_texts[0].frames = len(current_texts[0].txt)
 
+            cur_room = self.map.grid[self.personnage.position[1]][self.personnage.position[0]]
+            if cur_room.monster:
+                self.combat = Combat(self.personnage, Monstre("Test", 10, 10, 10))
+            if cur_room.type == "key":
+                self.map.open()
+                cur_room.type = "path"
+                current_texts.append(TextDisplay("Vous avez trouvé une clé", screen, clock))
+                current_texts.append(TextDisplay("Une porte s'est ouverte ...", screen, clock))
+            if cur_room.chest:
+                cur_room.chest.closed = False
+
             self.display_room(screen)
             self.map.draw(surface=map_surface, player = self.personnage)
             screen.blit(map_surface, map_position)
@@ -230,15 +241,6 @@ class Game:
                 self.personnage.move(direction)
             else:
                 self.personnage.move(direction)
-
-        cur_room = self.map.grid[self.personnage.position[1]][self.personnage.position[0]]
-        if cur_room.monster:
-            self.combat = Combat(self.personnage, Monstre("Test", 10, 10, 10))
-        if cur_room.type == "key":
-            self.map.open()
-            cur_room.type = "path"
-        if cur_room.chest:
-            cur_room.chest.closed = False
     
     def save(self):
         # Sauvegarder la map
