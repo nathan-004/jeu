@@ -96,11 +96,9 @@ class MouseButton:
         Stocker le text, la pos, la taille, l'action et la fenêtre
         action correspond à la fonction qui doit être lancée à l'appui -> on peut l'appeler comme ça : action()
         """
-        self.text = f'*{txt}*'
-        self.pos = pos
-        self.size = size
-        self.action = action
-        self.screen = pygame.Rect(larg, Long) # Créer un attribut qui contient un bloc pygame
+        # Initier les attributs
+
+        # Créer un attribut qui contient un bloc pygame
     
     def display(self):
         """Affiche le rectangle, ses contours et le texte d'une couleur ou d'une autre si la souris passe dessus"""
@@ -125,9 +123,9 @@ class RoomDisplay:
         
     def display_bg(self):
         self.screen.fill(('black'))
-        self.screen.blit(self.bg,(self.w*0.3/2,0))
+        self.screen.blit(self.bg,(self.w*(1-self.taille)/2,0))
     def display_shade(self):
-        self.screen.blit(self.shade,(self.w*0.3/2,0))
+        self.screen.blit(self.shade,(self.w*(1-self.taille)/2,0))
         
 def get_size(surface:pygame.Surface, pourcentage:float, size:str = "width") -> float:
     """Renvoie la valeur en pixel qui correspond au pourcentage de la dimension de la surface"""
@@ -165,4 +163,3 @@ if __name__ == "__main__":
         pygame.display.update()
         clock.tick(10)
     pygame.quit()
-
