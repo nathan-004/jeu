@@ -152,7 +152,7 @@ class Game:
                 doors[i] = pygame.transform.flip(doors[i], True, False) if i == 0 else doors[i]
                 screen.blit(doors[i],(get_size(screen, ((99.7-percentage)/2)+((85/(100/percentage))if i == 1 else (4/(100/percentage))) ),get_size(screen, 26*(percentage/99.7), "height"))) if i != 2 else screen.blit(doors[i],(get_size(screen, ((100-percentage)/2)+((41-(10/(100/percentage)))) ),get_size(screen, 32*(percentage/99.7), "height")))
         room.display_shade()
-        print( get_absolute_direction(self.personnage.direction, (0, 0)) )
+        print( self.map.can_move(self.personnage.position, direction) )
 
     def main(self):
         pygame.font.init()
@@ -201,7 +201,11 @@ class Game:
                             else:
                                 current_texts[0].frames = len(current_texts[0].txt)
 
+<<<<<<< HEAD
             self.display_room(screen)
+=======
+            self.display_room(screen, self.personnage.direction)
+>>>>>>> d0481d8d0192b3fb9afa27cf32763bb55a9675fc
             self.map.draw(surface=map_surface, player = self.personnage)
             screen.blit(map_surface, map_position)
 
