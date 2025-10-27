@@ -161,16 +161,16 @@ class Game:
     def main(self):
         pygame.font.init()
 
-        screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-        map_size = (get_size(screen, 30, "height"), get_size(screen, 30, "height"))
+        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        map_size = (get_size(self.screen, 30, "height"), get_size(self.screen, 30, "height"))
         map_surface = pygame.Surface(map_size, pygame.SRCALPHA)
         map_surface.fill((0, 0, 0, 180))
-        map_position = (get_size(screen, 100) - map_size[0], get_size(screen, 100, "height") - map_size[1])
+        map_position = (get_size(self.screen, 100) - map_size[0], get_size(self.screen, 100, "height") - map_size[1])
 
         self.combat = False
-        clock = pygame.time.Clock()
+        self.clock = pygame.time.Clock()
 
-        current_texts = []
+        self.current_texts = []
 
         running = True
         while running:
@@ -181,13 +181,13 @@ class Game:
                     if event.key == pygame.K_ESCAPE:
                         running = False
 
-                    if current_texts != []:
+                    if self.current_texts != []:
                         if any(pygame.key.get_pressed()):
-                            if current_texts != []:
-                                if current_texts[0].end:
-                                    current_texts.pop(0)
+                            if self.current_texts != []:
+                                if self.current_texts[0].end:
+                                    self.current_texts.pop(0)
                                 else:
-                                    current_texts[0].frames = len(current_texts[0].txt)
+                                    self.current_texts[0].frames = len(self.current_texts[0].txt)
                         continue
                     
                     if event.key == pygame.K_RIGHT:
@@ -199,38 +199,42 @@ class Game:
                     elif event.key == pygame.K_LEFT:
                         self.move((-1, 0))
                     elif any(pygame.key.get_pressed()):
-                        if current_texts != []:
-                            if current_texts[0].end:
-                                current_texts.pop(0)
+                        if self.current_texts != []:
+                            if self.current_texts[0].end:
+                                self.current_texts.pop(0)
                             else:
-                                current_texts[0].frames = len(current_texts[0].txt)
+                                self.current_texts[0].frames = len(self.current_texts[0].txt)
 
             cur_room = self.map.grid[self.personnage.position[1]][self.personnage.position[0]]
             if cur_room.monster:
-                self.combat = Combat(self.personnage, Monstre("Test", 10, 10, 10))
-            if cur_room.type == "key":
+                if not self.combat:
+                    self.combat = Combat(self.personnage, Monstre("Test", 10, 10, 10))
+            
+            if self.combat:
+                pass
+            elif cur_room.type == "key":
                 self.map.open()
                 cur_room.type = "path"
-                current_texts.append(TextDisplay("Vous avez trouvé une clé", screen, clock))
-                current_texts.append(TextDisplay("Une porte s'est ouverte ...", screen, clock))
-            if cur_room.chest:
+                self.current_texts.append(TextDisplay("Vous avez trouvé une clé", self.screen, self.clock))
+                self.current_texts.append(TextDisplay("Une porte s'est ouverte ...", self.screen, self.clock))
+            elif cur_room.chest:
                 cur_room.chest.closed = False
 
-            self.display_room(screen)
+            self.display_room(self.screen)
             self.map.draw(surface=map_surface, player = self.personnage)
-            screen.blit(map_surface, map_position)
+            self.screen.blit(map_surface, map_position)
 
             if self.personnage.position in self.TEXTS and self.personnage.position not in self.visited:
                 for text in self.TEXTS[self.personnage.position]:
-                    current_texts.append(TextDisplay(text, screen, clock))
+                    self.current_texts.append(TextDisplay(text, self.screen, self.clock))
             
-            if current_texts != []:
-                current_texts[0].display()
+            if self.current_texts != []:
+                self.current_texts[0].display()
             
             self.visited.add(self.personnage.position)
 
             pygame.display.flip()
-            clock.tick(100)
+            self.clock.tick(100)
 
         pygame.quit()
 
@@ -240,7 +244,7 @@ class Game:
             if not self.combat:
                 self.personnage.move(direction)
             else:
-                self.personnage.move(direction)
+                self.current_texts.append(TextDisplay("Ne vous en allez pas si vite !", self.screen, self.clock))
     
     def save(self):
         # Sauvegarder la map

@@ -11,7 +11,7 @@ class ChestDisplay:
         self.frame = 0
         self.image = 1 if closed else 15
         self._last_loaded = None
-        self.img_f = 10
+        self.img_f = 1
         self.closed = closed
         self.load(self.image)
 
@@ -118,6 +118,11 @@ class MouseButton:
         text_rect = text_surf.get_rect(center=self.background.center)
         self.screen.blit(text_surf, text_rect)
 
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if self.background.collidepoint(event.pos):
+                self.action()
+
 class RoomDisplay:
     def __init__(self,screen,taille=70):
         self.taille=taille/100
@@ -167,6 +172,7 @@ if __name__ == "__main__":
                         test.frames = len(test.txt)
                 if event.key == K_ESCAPE:
                     running = False
+            button.handle_event(event)
         background.display_bg()
         #test.display()
         background.display_shade()
