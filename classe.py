@@ -315,11 +315,12 @@ class Combat:
                 pos = (space * idx + size[0] * (idx - 1), 0)
                 self.buttons.append(MouseButton(button_txt, pos, size, button_callable, surface, button_bloc_pos))
         
-        for button in self.buttons:
-            button.display()
+        if self.tour % 2 == 0:
+            for button in self.buttons:
+                button.display()
     
     def buttons_event(self, event):
-        if self.buttons is None:
+        if self.buttons is None or self.tour % 2 != 0:
             return
         
         for button in self.buttons:
