@@ -96,9 +96,11 @@ class MouseButton:
         Stocker le text, la pos, la taille, l'action et la fenêtre
         action correspond à la fonction qui doit être lancée à l'appui -> on peut l'appeler comme ça : action()
         """
-        # Initier les attributs
-
-        # Créer un attribut qui contient un bloc pygame
+        self.text = f'*{txt}*'
+        self.pos = pos
+        self.size = size
+        self.action = action
+        self.screen = pygame.Rect(larg, Long) # Créer un attribut qui contient un bloc pygame
     
     def display(self):
         """Affiche le rectangle, ses contours et le texte d'une couleur ou d'une autre si la souris passe dessus"""
@@ -163,3 +165,4 @@ if __name__ == "__main__":
         pygame.display.update()
         clock.tick(10)
     pygame.quit()
+
