@@ -137,16 +137,16 @@ class Game:
 
         self.visited = set()
     
-    def display_room(self,screen :pygame.Surface, direction:tuple,percentage=70):
+    def display_room(self,screen:pygame.Surface, percentage=70):
         room = RoomDisplay(screen, percentage)
-        direction = get_absolute_direction(self.personnage.direction, direction)
         doorL =  pygame.image.load('assets\\images\\doors\\Porte_cote.png')#.transform.flip(img, True, False)
         doorC =  pygame.image.load('assets\\images\\doors\\Porte_Face.png')
         doorR =  pygame.image.load('assets\\images\\doors\\Porte_cote.png')
         doors = [doorR, doorL, doorC]
-        dir = ['left', 'right', 'top', 'bottom']
+        dir_ = [(-1, 0), (1, 0), (0, -1)]
         room.display_bg()
         for  i in range(3):
+            direction = get_absolute_direction(self.personnage.direction, dir_[i])
             if self.map.can_move(self.personnage.position, direction):
                 doors[i] = pygame.transform.scale(doors[i], (get_size(screen, 13*(percentage/100)), get_size(screen, 71*(percentage/100), "height"))) if i != 2 else pygame.transform.scale(doors[i], (get_size(screen,(300*100/get_size(screen,100))*(percentage/100)), get_size(screen, 49*(percentage/100), "height")))
                 doors[i] = pygame.transform.flip(doors[i], True, False) if i == 0 else doors[i]
@@ -201,7 +201,7 @@ class Game:
                             else:
                                 current_texts[0].frames = len(current_texts[0].txt)
 
-            self.display_room(screen, self.personnage.position)
+            self.display_room(screen)
             self.map.draw(surface=map_surface, player = self.personnage)
             screen.blit(map_surface, map_position)
 
