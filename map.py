@@ -2,8 +2,9 @@ from typing import Optional, Union
 import pygame
 import random
 from copy import deepcopy
-from display import ChestDisplay
+import json
 
+from display import ChestDisplay
 from utils import Stack
 
 class Room:
@@ -388,6 +389,68 @@ class Map:
         }
 
         return content
+    
+    def load_dict_format(self, filename:str):
+        """
+        Crée une nouvelle map à partir d'un fichier
+
+        Formats
+        -------
+        {
+            "grid": {
+                '0,0': Room.get_content(),
+                ...
+                "size": 'width,height'
+            }
+        }
+        """
+        with open(filename, "r", encoding="utf-8") as f:
+            content = f.read()
+        grid = json.loads(content)["grid"]
+        
+        self.width, self.height = self._decode_tuple(grid["size"])
+        self.grid = []
+        for y in range(self.height):
+            self.grid.append([])
+            for _ in range(self.width):
+                empty_room = Room()
+                empty_room.chest, empty_room.monster = False, False
+                self.grid[y].append(empty_room)
+        del grid["size"]
+        print(grid)
+
+        for room_pos, room_info in grid.items():
+            room_pos = self._decode_tuple(room_pos)
+            cur_room = self.grid[room_pos[1]][room_pos[0]]
+            
+            for attr, value in room_info.items():
+                if type(value) is bool or type(value) is str:
+                    setattr(cur_room, attr, value)
+                elif type(value) is dict:
+                    if len(value) == 4:
+                        cur_room.walls = value
+                    else:
+                        for dir, val in value.items():
+                            cur_room.walls[dir] = val
+                else:
+                    raise NotImplementedError(f"{type(value)} n'est pas implémenté.")
+            
+            if cur_room.type == "none":
+                cur_room.type = "path"
+
+    def load_matrice_format(self, filename:str):
+        """
+        Format
+        ------
+        {
+            "grid": [[Room(), Room()], [Room(), Room()]],
+        }
+        """
+        pass
+
+    def _decode_tuple(self, s:str) -> tuple:
+        els = s.split(",")
+        return tuple(int(el) for el in els)
 
 def create_one_solution_map(width, height, n = 3) -> Map:
     """
@@ -441,11 +504,6 @@ def get_absolute_direction(initial_direction: tuple, relative_direction: tuple):
     return rotations[initial_direction](*relative_direction)
 
 if __name__ == "__main__":
-    # a = create_one_solution_map(25, 25, 3)
-    # print(a.can_move((0, 0), "top"))
-    # print(a.can_move((0, 0), "bottom"))
-    # a.create_image()
-    print(get_absolute_direction((0, -1), (0, 1)))
-    print(get_absolute_direction((1, 0), (0, 1)))
-    print(get_absolute_direction((0, -1), (1, 0)))
-    print(get_absolute_direction((0, 1), (1, 0)))
+    a = Map(0, 0)
+    a.load_dict_format("assets/maps/start")
+    a.create_image()
