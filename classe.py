@@ -238,6 +238,7 @@ class Game:
             if cur_room.monster:
                 if not self.combat:
                     self.combat = Combat(self.personnage, Monstre("Test", MONSTER_BASE_PV, MONSTER_BASE_ATTACK, MONSTER_BASE_RESISTANCE), self)
+                    self.current_texts.append(TextDisplay(f"Vous tombez nez à nez avec {self.combat.ennemi.nom}", self.screen, self.clock))
 
             self.display_room(self.screen)
             self.map.draw(surface=map_surface, player = self.personnage)
