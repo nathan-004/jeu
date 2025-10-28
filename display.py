@@ -177,15 +177,18 @@ class HealthBar:
         personnage:Personnage -> barre de vie reliée au personnage
         pos -> position (x, y)
         """
-        # Initier variables
+        self.personnage = personnage
+        self.pos = pos
+        self.size = size# Initier variables
 
-        # Initier le bloc de fond à taille size
+        self.fond_color = (50, 50, 50)
+        self.pv_color = (0, 255, 0)  # Initier le bloc de fond à taille size
 
     def display(self):
-        pass
-        # Afficher le rectangle du fond
+        pygame.draw.rect(surface, self.fond_color,(self.pos[0], self.pos[1], self.size[0], self.size[1]))# Afficher le rectangle du fond
 
-        # Créer un nouveau rectangle de taille (size[0] * personnage.pv / personnage.get_max_pv(), size[1])
+        rectangle_pv = self.size[0] * self.personnage.pv / self.personnage.get_max_pv()
+        pygame.draw.rect(self.pv_color, (self.pos[0], self.pos[1], rectangle_pv, self.size[1]))
         # L'afficher
         
 def get_size(surface:pygame.Surface, pourcentage:float, size:str = "width") -> float:
@@ -229,3 +232,4 @@ if __name__ == "__main__":
         pygame.display.update()
         clock.tick(10)
     pygame.quit()
+
