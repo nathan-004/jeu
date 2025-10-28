@@ -110,6 +110,9 @@ class Personnage:
         self.resistance = self.resistance_base + 20 * self.level # Modifie les attributs par attributs de base + 20 par exemple * self.level (Stocker les attributs de base dans __init__)
         self.inventaire.use(self) # (Use tous les objets de l'inventaire non consommable)
 
+    def get_max_pv(self):
+        return self.pv_base + 20 * self.level
+
 class Monstre(Personnage):
     pass
 

@@ -144,6 +144,25 @@ class RoomDisplay:
         self.screen.blit(self.bg,(self.w*(1-self.taille)/2,0))
     def display_shade(self):
         self.screen.blit(self.shade,(self.w*(1-self.taille)/2,0))
+
+class HealthBar:
+    """Barre de vie à afficher"""
+
+    def __init__(self, personnage, pos:tuple, size:tuple):
+        """
+        personnage:Personnage -> barre de vie reliée au personnage
+        pos -> position (x, y)
+        """
+        # Initier variables
+
+        # Initier le bloc de fond à taille size
+
+    def display(self):
+        pass
+        # Afficher le rectangle du fond
+
+        # Créer un nouveau rectangle de taille (size[0] * personnage.pv / personnage.get_max_pv(), size[1])
+        # L'afficher
         
 def get_size(surface:pygame.Surface, pourcentage:float, size:str = "width") -> float:
     """Renvoie la valeur en pixel qui correspond au pourcentage de la dimension de la surface"""
