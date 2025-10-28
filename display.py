@@ -148,6 +148,7 @@ class RoomDisplay:
         self.screen.blit(self.bg,(self.w*(1-self.taille)/2,0))
     def display_shade(self):
         self.screen.blit(self.shade,(self.w*(1-self.taille)/2,0))
+        
 class EnnemiDisplay:
     def __init__(self, surface:pygame.Surface, pos:tuple, size:tuple, ennemi):
         self.surface = surface
