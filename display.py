@@ -62,11 +62,15 @@ class TextDisplay:
         self.txts = [""]
 
         for mot in self.txt.split(' '):
-            if (len(mot) + cur_w ) * self.my_font.size("a")[0] >= w - 20:
+            if (len(mot) + cur_w ) * self.my_font.size("a")[0] >= w - 20 or mot == "&":
                 cur_l += 1
                 self.txts.append("")
                 self.blocliste.append(pygame.Rect((15,h/1.7+cur_l*(self.my_font.get_height()+5)), (w-20, self.my_font.get_height())))
                 cur_w = 0
+
+            if mot == "&":
+                continue
+            
             self.txts[cur_l] += mot + " "
             cur_w += len(mot) + 1
 

@@ -21,6 +21,12 @@ class Objet:
         # Midifier joueur.move pour qu'à chaque appel, reanitialise l'utilisation de l'objet consommable
         pass
 
+    def get_message(self) -> str:
+        """Renvoie les stats de l'objet sous forme de texte"""
+        # Si tu renvoie "test & test" -> ça sautera une ligne entre les deux tests
+
+        return ""
+
 class Inventaire:
     def __init__ (self):
         self.equipements = {} 
@@ -89,9 +95,10 @@ class Personnage:
     def degat_subit(self, degats):
         degat_restant = self.degat // self.resistance
         self.pv = self.pv - degat_restant
+        return degat_restant
 
     def attaque(self, ennemi):
-        ennemi.degat_subit(self.degat)
+        return ennemi.degat_subit(self.degat)
 
     def victoire(self, ennemi):
         """Ajoute de l'exp au personnage en fonction du niveau de l'ennemi"""
@@ -218,13 +225,15 @@ class Game:
             cur_room = self.map.grid[self.personnage.position[1]][self.personnage.position[0]]
             if cur_room.monster:
                 if not self.combat:
-                    self.combat = Combat(self.personnage, Monstre("Test", 10, 10, 10))
+                    self.combat = Combat(self.personnage, Monstre("Test", 10, 10, 10), self)
 
             self.display_room(self.screen)
             self.map.draw(surface=map_surface, player = self.personnage)
             self.screen.blit(map_surface, map_position)
 
             if self.combat:
+                if self.combat.tour % 2 != 0:
+                    self.combat.ennemi_turn()
                 self.combat.display_buttons(buttons_surface, button_bloc_pos=buttons_position)
                 self.screen.blit(buttons_surface, buttons_position)
             elif cur_room.type == "key":
@@ -262,20 +271,24 @@ class Game:
         map_content = self.map.get_content()
 
 class Combat:
-    def __init__(self, joueur:Joueur, ennemi:Personnage):
+    def __init__(self, joueur:Joueur, ennemi:Personnage, game: Game):
         self.joueur = joueur
         self.ennemi = ennemi
         self.tour = 0 # Pair quand c'est au tour du joueur
         self.buttons = None
+        self.game = game
 
     def joueur_utiliser(self):
         """Fait utiliser le seul consommable de l'inventaire du joueur"""
         print("Utilise un item")
         if self.tour % 2 == 0:
+            self.game.current_texts.append(TextDisplay("Vous utilisez un objet.", self.game.screen, self.game.clock))
             try:
-                self.joueur.use(self.joueur.inventaire.consommables.values()[0])
+                objet = list(self.joueur.inventaire.consommables.values())[0]
+                self.joueur.use(objet)
+                self.game.current_texts.append(TextDisplay(objet.get_message(), self.game.screen, self.game.clock))
             except IndexError:
-                pass
+                self.game.current_texts.append(TextDisplay("Vous ne possédez pas de consommables ...", self.game.screen, self.game.clock))
         else:
             return
         self.tour += 1
@@ -284,7 +297,8 @@ class Combat:
         """Attaque du joueur sur l'ennemi"""
         print("Attaque du joueur")
         if self.tour % 2 == 0:
-            self.joueur.attaque(self.ennemi)
+            att = self.joueur.attaque(self.ennemi)
+            self.game.current_texts.append(TextDisplay(f"Vous infligez {att} dégâts & Il ne lui reste plus que {self.ennemi.pv} pv", self.game.screen, self.game.clock))
         else:
             return
 
@@ -296,9 +310,12 @@ class Combat:
             return
         
         if self.ennemi.pv <= 10: # Jouer ici
-            self.ennemi.use(Objet("Soin", "potion", soin=10))
+            obj = Objet("Soin", "potion", soin=10)
+            self.ennemi.use(obj)
+            self.game.current_texts.append(TextDisplay(f"L'ennemi utilise un objet & {obj.get_message()}", self.game.screen, self.game.clock))
         else:
-            self.ennemi.attaque(self.joueur)
+            deg = self.ennemi.attaque(self.joueur)
+            self.game.current_texts.append(TextDisplay(f"Il vous inflige {deg} dégâts & Il ne vous reste plus que {self.joueur.pv} pv", self.game.screen, self.game.clock))
         self.tour += 1
 
     def display_buttons(self, surface:pygame.Surface, space_percent:int = 20, button_bloc_pos:tuple = (0, 0)):
