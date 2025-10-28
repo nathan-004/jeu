@@ -46,6 +46,11 @@ class Room:
             "monster": self.monster
         }
 
+    def load_content(self, content:dict):
+        """Modifie Room pour avoir les mêmes attributs que `content` -> même format que self.get_content"""
+        for attr, value in content.items():
+            setattr(self, attr, value)
+
 class Map:
     """Objet représentant la carte sous forme de matrice de Salles"""
 
@@ -382,7 +387,11 @@ class Map:
             return result
         else:
             raise NotImplementedError
-        
+    
+    # --------------------------------------------------------------------------------------------
+    # Export + Import d'objet Map ---------------------------------------------------------------|
+    # --------------------------------------------------------------------------------------------
+
     def get_content(self) -> dict:
         """
         Renvoie le contenu de la map sous forme de dictionnaire
@@ -400,24 +409,18 @@ class Map:
 
         return content
     
-    def load_dict_format(self, filename:str):
+    def load_dict_format(self, grid):
         """
-        Crée une nouvelle map à partir d'un fichier
+        Crée une nouvelle map à partir d'un dictionnaire de salles
 
         Formats
         -------
-        {
-            "grid": {
-                '0,0': Room.get_content(),
-                ...
-                "size": 'width,height'
-            }
+        grid:dict -> {
+            '0,0': Room.get_content(),
+            ...
+            "size": 'width,height'
         }
         """
-        with open(filename, "r", encoding="utf-8") as f:
-            content = f.read()
-        grid = json.loads(content)["grid"]
-        
         self.width, self.height = self._decode_tuple(grid["size"])
         self.grid = []
         for y in range(self.height):
@@ -427,7 +430,6 @@ class Map:
                 empty_room.chest, empty_room.monster = False, False
                 self.grid[y].append(empty_room)
         del grid["size"]
-        print(grid)
 
         for room_pos, room_info in grid.items():
             room_pos = self._decode_tuple(room_pos)
@@ -448,15 +450,24 @@ class Map:
             if cur_room.type == "none":
                 cur_room.type = "path"
 
-    def load_matrice_format(self, filename:str):
+    def load_matrice_format(self, grid:list):
         """
+        Modifie Map pour correspondre au fichier
+        Format d'export de map (self.get_content)
+
         Format
         ------
-        {
-            "grid": [[Room(), Room()], [Room(), Room()]],
-        }
+        [[Room.get_content, Room.get_content], [Room.get_content, Room.get_content]],
         """
-        pass
+        self.width, self.height = len(grid), len(grid[0])
+        self.grid = []
+        
+        for y, row in enumerate(grid):
+            self.grid.append([])
+            for room_content in row:
+                cur_room = Room()
+                cur_room.load_content(room_content)
+                self.grid[y].append(cur_room)
 
     def _decode_tuple(self, s:str) -> tuple:
         els = s.split(",")

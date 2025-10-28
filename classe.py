@@ -24,7 +24,7 @@ class Objet:
 
     def get_message(self) -> str:
         """Renvoie les stats de l'objet sous forme de texte"""
-        # Si tu renvoie "test & test" -> ça sautera une ligne entre les deux tests
+        # Si tu renvoie f"test {NEW_LINE_CHARACTER} test" -> ça sautera une ligne entre les deux tests
 
         return ""
 
