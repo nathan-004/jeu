@@ -265,6 +265,7 @@ class Game:
             if not self.combat:
                 self.personnage.move(direction)
             else:
+                self.personnage.move(direction)
                 self.current_texts.append(TextDisplay("Ne vous en allez pas si vite !", self.screen, self.clock))
     
     def save(self):

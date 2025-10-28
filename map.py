@@ -392,6 +392,18 @@ class Map:
     # Export + Import d'objet Map ---------------------------------------------------------------|
     # --------------------------------------------------------------------------------------------
 
+    def load(self, filename:str):
+        with open(filename, "r", encoding="utf-8") as f:
+            content = f.read()
+        grid = json.loads(content)["grid"]
+
+        if type(grid) is dict:
+            self.load_dict_format(grid)
+        elif type(grid) is list:
+            self.load_matrice_format(grid)
+        else:
+            raise NotImplementedError
+
     def get_content(self) -> dict:
         """
         Renvoie le contenu de la map sous forme de dictionnaire
@@ -461,7 +473,7 @@ class Map:
         """
         self.width, self.height = len(grid), len(grid[0])
         self.grid = []
-        
+
         for y, row in enumerate(grid):
             self.grid.append([])
             for room_content in row:
@@ -526,5 +538,5 @@ def get_absolute_direction(initial_direction: tuple, relative_direction: tuple):
 
 if __name__ == "__main__":
     a = Map(0, 0)
-    a.load_dict_format("assets/maps/start")
+    a.load("assets/maps/start")
     a.create_image()
