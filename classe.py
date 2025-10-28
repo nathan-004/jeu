@@ -5,7 +5,7 @@ import json
 
 from display import TextDisplay, get_size, RoomDisplay, MouseButton
 from map import create_one_solution_map, get_absolute_direction
-from constants import NEW_LINE_CHARACTER
+from constants import *
 
 class Objet:
     def __init__(self, nom, type_, soin=0, degat=0, resistance=0):
@@ -94,7 +94,7 @@ class Personnage:
         self.resistance += obj.resistance
 
     def degat_subit(self, degats):
-        degat_restant = self.degat // self.resistance
+        degat_restant = degats - (degats * self.resistance)
         self.pv = self.pv - degat_restant
         return degat_restant
 
@@ -105,24 +105,25 @@ class Personnage:
         """Ajoute de l'exp au personnage en fonction du niveau de l'ennemi"""
         self.exp = ennemi.level - self.level # Ajouter différence de niveau en exp par exemple
 
-        if self.exp // 20 > 0: # Regarder si exp // 20 par exemple est plus grand que 0
+        if self.exp // BASE_EXP_LEVEL_UP > 0: # Regarder si exp // 20 par exemple est plus grand que 0
             self.level_up()
-            self.exp = self.exp % 20 # Si c'est le cas appeler self.level_up et mettre exp à exp % 20
+            self.exp = self.exp % BASE_EXP_LEVEL_UP # Si c'est le cas appeler self.level_up et mettre exp à exp % 20
 
     def level_up(self):
         """Prend les attributs du personnage de base et ajoute un nombre * level"""
-        self.level = self.level + 1 # Augmente self.level de 1
-
-        self.pv = self.pv_base + 20 * self.level
-        self.degat = self.degat_base + 20 * self.level
-        self.resistance = self.resistance_base + 20 * self.level # Modifie les attributs par attributs de base + 20 par exemple * self.level (Stocker les attributs de base dans __init__)
-        self.inventaire.use(self) # (Use tous les objets de l'inventaire non consommable)
+        self.level = self.level + 1
 
     def get_max_pv(self):
-        return self.pv_base + 20 * self.level
+        return self.pv_base + PLAYER_LEVEL_AUGMENTATION_PV * self.level
 
 class Monstre(Personnage):
-    pass
+    def level_up(self):
+        super().level_up()
+
+        self.pv = self.pv_base + MONSTER_LEVEL_AUGMENTATION_PV * self.level
+        self.degat = self.degat_base + MONSTER_LEVEL_AUGMENTATION_ATTACK * self.level
+        self.resistance = min(self.resistance_base + MONSTER_LEVEL_AUGMENTATION_RESISTANCE * self.level, MAX_MONSTER_RESISTANCE)
+        self.inventaire.use(self)
 
 class Joueur(Personnage):
     def __init__(self, nom, pv, degats, resistance, position:tuple, inventaire:Inventaire = Inventaire() ):
@@ -137,12 +138,20 @@ class Joueur(Personnage):
     def move(self, direction:tuple):
         self.position = (self.position[0] + direction[0], self.position[1] + direction[1])
         self.direction = direction
+    
+    def level_up(self):
+        super().level_up()
+
+        self.pv = self.pv_base + PLAYER_LEVEL_AUGMENTATION_PV * self.level
+        self.degat = self.degat_base + PLAYER_LEVEL_AUGMENTATION_ATTACK * self.level
+        self.resistance = min(self.resistance_base + PLAYER_LEVEL_AUGMENTATION_RESISTANCE * self.level, MAX_PLAYER_RESISTANCE)
+        self.inventaire.use(self)
 
 class Game:
     def __init__(self):
         height, width = 15, 16
         self.map = create_one_solution_map(width, height, 4)
-        self.personnage = Joueur("Nom",50,50,1, (0, height // 2))
+        self.personnage = Joueur("Nom", PLAYER_BASE_PV, PLAYER_BASE_ATTACK, PLAYER_BASE_RESISTANCE, (0, height // 2))
 
         self.TEXTS = {
             (0, height//2): ["Ceci est un texte plutôt long pour tester le test vicieusement fait", "Ceci est un autre texte qui permet de décrire ce qui se passe dans ce jeu de manière plutôt exhaustive même si le jeu n'est pas fini car c'est le destin. Il y a du texte alors qu'on n'a pas de jeu mais c'est pas si grave. On se demande comment le jeu peut il être joué lorsque les utilisateurs ne connaîssent pas les règles donc on doit bien lui expliquer correctement en développant bien toutes les options"],
@@ -226,7 +235,7 @@ class Game:
             cur_room = self.map.grid[self.personnage.position[1]][self.personnage.position[0]]
             if cur_room.monster:
                 if not self.combat:
-                    self.combat = Combat(self.personnage, Monstre("Test", 10, 10, 10), self)
+                    self.combat = Combat(self.personnage, Monstre("Test", MONSTER_BASE_PV, MONSTER_BASE_ATTACK, MONSTER_BASE_RESISTANCE), self)
 
             self.display_room(self.screen)
             self.map.draw(surface=map_surface, player = self.personnage)
