@@ -3,7 +3,7 @@ import time
 from random import shuffle
 import json
 
-from display import TextDisplay, get_size, RoomDisplay, MouseButton
+from display import TextDisplay, get_size, RoomDisplay, MouseButton, HealthBar
 from map import create_one_solution_map, get_absolute_direction
 from constants import *
 
@@ -192,6 +192,8 @@ class Game:
         buttons_surface.fill((0, 0, 0, 180))
         buttons_position = (0, get_size(self.screen, 100, "height") - buttons_size[1])
 
+        player_health_bar = HealthBar(self.personnage, (0, 0), (150, 50), self.screen)
+
         self.combat = False
         self.clock = pygame.time.Clock()
 
@@ -253,6 +255,8 @@ class Game:
                 self.current_texts.append(TextDisplay("Une porte s'est ouverte ...", self.screen, self.clock))
             elif cur_room.chest:
                 cur_room.chest.closed = False
+
+            player_health_bar.display()
             
             if self.personnage.position in self.TEXTS and self.personnage.position not in self.visited:
                 for text in self.TEXTS[self.personnage.position]:

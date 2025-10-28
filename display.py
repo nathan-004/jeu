@@ -172,7 +172,7 @@ class EnnemiDisplay:
 class HealthBar:
     """Barre de vie à afficher"""
 
-    def __init__(self, personnage, pos:tuple, size:tuple):
+    def __init__(self, personnage, pos:tuple, size:tuple, surface:pygame.Surface):
         """
         personnage:Personnage -> barre de vie reliée au personnage
         pos -> position (x, y)
@@ -180,16 +180,16 @@ class HealthBar:
         self.personnage = personnage
         self.pos = pos
         self.size = size# Initier variables
+        self.surface = surface
 
         self.fond_color = (50, 50, 50)
         self.pv_color = (0, 255, 0)  # Initier le bloc de fond à taille size
 
     def display(self):
-        pygame.draw.rect(surface, self.fond_color,(self.pos[0], self.pos[1], self.size[0], self.size[1]))# Afficher le rectangle du fond
+        pygame.draw.rect(self.surface, self.fond_color,(self.pos[0], self.pos[1], self.size[0], self.size[1]))# Afficher le rectangle du fond
 
         rectangle_pv = self.size[0] * self.personnage.pv / self.personnage.get_max_pv()
-        pygame.draw.rect(self.pv_color, (self.pos[0], self.pos[1], rectangle_pv, self.size[1]))
-        # L'afficher
+        pygame.draw.rect(self.surface, self.pv_color, (self.pos[0], self.pos[1], rectangle_pv, self.size[1]))
         
 def get_size(surface:pygame.Surface, pourcentage:float, size:str = "width") -> float:
     """Renvoie la valeur en pixel qui correspond au pourcentage de la dimension de la surface"""
