@@ -148,7 +148,26 @@ class RoomDisplay:
         self.screen.blit(self.bg,(self.w*(1-self.taille)/2,0))
     def display_shade(self):
         self.screen.blit(self.shade,(self.w*(1-self.taille)/2,0))
+class EnnemiDisplay:
+    def __init__(self, surface:pygame.Surface, pos:tuple, size:tuple, ennemi):
+        self.surface = surface
+        self.pos = pos
+        self.size = size
+        self.ennemi = ennemi
+        self._last_loaded = None
+        self.load(self.ennemi.image)
 
+    def display(self):
+        self.load(self.ennemi.image)
+        self.surface.blit(self.ennemi_image, (self.pos[0], self.pos[1]))
+
+    def load(self, image_path):
+        if image_path == self._last_loaded:
+            return
+        self.ennemi_image = pygame.image.load(image_path)
+        self.ennemi_image = pygame.transform.scale(self.ennemi_image, (self.size[0], self.size[1]))
+        self._last_loaded = image_path
+        
 class HealthBar:
     """Barre de vie à afficher"""
 
