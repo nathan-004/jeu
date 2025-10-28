@@ -5,6 +5,7 @@ import json
 
 from display import TextDisplay, get_size, RoomDisplay, MouseButton
 from map import create_one_solution_map, get_absolute_direction
+from constants import NEW_LINE_CHARACTER
 
 class Objet:
     def __init__(self, nom, type_, soin=0, degat=0, resistance=0):
@@ -298,7 +299,7 @@ class Combat:
         print("Attaque du joueur")
         if self.tour % 2 == 0:
             att = self.joueur.attaque(self.ennemi)
-            self.game.current_texts.append(TextDisplay(f"Vous infligez {att} dégâts & Il ne lui reste plus que {self.ennemi.pv} pv", self.game.screen, self.game.clock))
+            self.game.current_texts.append(TextDisplay(f"Vous infligez {att} dégâts {NEW_LINE_CHARACTER} Il ne lui reste plus que {self.ennemi.pv} pv", self.game.screen, self.game.clock))
         else:
             return
 
@@ -312,10 +313,10 @@ class Combat:
         if self.ennemi.pv <= 10: # Jouer ici
             obj = Objet("Soin", "potion", soin=10)
             self.ennemi.use(obj)
-            self.game.current_texts.append(TextDisplay(f"L'ennemi utilise un objet & {obj.get_message()}", self.game.screen, self.game.clock))
+            self.game.current_texts.append(TextDisplay(f"L'ennemi utilise un objet {NEW_LINE_CHARACTER} {obj.get_message()}", self.game.screen, self.game.clock))
         else:
             deg = self.ennemi.attaque(self.joueur)
-            self.game.current_texts.append(TextDisplay(f"Il vous inflige {deg} dégâts & Il ne vous reste plus que {self.joueur.pv} pv", self.game.screen, self.game.clock))
+            self.game.current_texts.append(TextDisplay(f"Il vous inflige {deg} dégâts {NEW_LINE_CHARACTER} Il ne vous reste plus que {self.joueur.pv} pv", self.game.screen, self.game.clock))
         self.tour += 1
 
     def display_buttons(self, surface:pygame.Surface, space_percent:int = 20, button_bloc_pos:tuple = (0, 0)):

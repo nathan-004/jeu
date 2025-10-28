@@ -3,9 +3,19 @@ import pygame
 import random
 from copy import deepcopy
 import json
+from collections import deque
 
 from display import ChestDisplay
-from utils import Stack
+
+class Stack(deque):
+    def empty(self):
+        return len(self) == 0
+    
+    def empiler(self, el):
+        super().append(el)
+    
+    def depiler(self):
+        return super().popleft()
 
 class Room:
     DIRECTIONS = {
