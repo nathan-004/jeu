@@ -147,7 +147,7 @@ class Monstre(Personnage):
     def display(self, surface:pygame.Surface):
         if self.ennemi_display is None:
             self.ennemi_display = EnnemiDisplay(surface, (get_size(surface, 40), 125), 0.5, MONSTERS[self.nom]["image"])
-            self.health_bar = HealthBar(self, (get_size(surface, 40), get_size(surface, 70, "height")), (get_size(surface, 20), 50), surface)
+            self.health_bar = HealthBar(self, (get_size(surface, 40), get_size(surface, 5, "height")), (get_size(surface, 20), 50), surface)
         self.ennemi_display.display()
         self.health_bar.display()
 
@@ -279,10 +279,6 @@ class Game:
                     self.combat.buttons_event(event)
 
             cur_room = self.map.grid[self.personnage.position[1]][self.personnage.position[0]]
-            if cur_room.monster:
-                if not self.combat:
-                    self.combat = Combat(self.personnage, Monstre("Knight", MONSTER_BASE_PV, MONSTER_BASE_ATTACK, MONSTER_BASE_RESISTANCE), self)
-                    self.current_texts.append(TextDisplay(f"Vous tombez nez à nez avec {self.combat.ennemi.nom}", self.screen, self.clock))
 
             self.display_room(self.screen)
             self.map.draw(surface=map_surface, player = self.personnage)
@@ -308,6 +304,11 @@ class Game:
                 self.current_texts.append(TextDisplay("Une porte s'est ouverte ...", self.screen, self.clock))
             elif cur_room.chest:
                 cur_room.chest.closed = False
+
+            if cur_room.monster:
+                if not self.combat:
+                    self.combat = Combat(self.personnage, Monstre("Knight", MONSTER_BASE_PV, MONSTER_BASE_ATTACK, MONSTER_BASE_RESISTANCE), self)
+                    self.current_texts.append(TextDisplay(f"Vous tombez nez à nez avec {self.combat.ennemi.nom}", self.screen, self.clock))
 
             player_health_bar.display()
             
