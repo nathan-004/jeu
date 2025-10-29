@@ -9,25 +9,50 @@ from constants import *
 
 class Objet:
     current_room = (0, 0)
+
     def __init__(self, nom, type_, soin=0, degat=0, resistance=0):
         self.nom = nom
         self.type = type_
         self.soin = soin
         self.degat = degat
         self.resistance = resistance
-        # initier l'attribut last_used qui correspond à la dernière salle dans laquel un 
+        self.last_used = None
 
     def use(self, personnage):
-        # Vérifier que l'objet n'a pas été utilisé si c'est un consommable -> que la salle dans lequel le dernier item a été utilisé est différente de self.current_room
-        # Rajouter les attributs de l'objet au personnage (modifie Personnage.use pour appeler cette méthode à la place)
-        # Modifier self.last_used par self.current_room
-        pass
+        """
+        - Vérifie que l'objet n'a pas été utilisé dans la même salle
+        - Ajoute les attributs de l'objet au personnage
+        - Met à jour last_used
+        """
+
+        if self.last_used == self.current_room:
+            print("Objet déjà utilisé dans cette salle !")
+            return False
+
+        personnage.soin += self.soin
+        personnage.degat += self.degat
+        personnage.resistance += self.resistance
+
+        self.last_used = self.current_room
+
+        print("Objet utilisé !")
+        return True
 
     def get_message(self) -> str:
-        """Renvoie les stats de l'objet sous forme de texte"""
-        # Si tu renvoie f"test {NEW_LINE_CHARACTER} test" -> ça sautera une ligne entre les deux tests
+        """
+        Renvoie les stats de l'objet sous forme de texte.
+        """
+        message = f"{self.nom}{NEW_LINE_CHARACTER}"
+        
+        # Ajouter seulement les valeurs différentes de 0
+        if self.soin != 0:
+            message += f"Soin : +{self.soin}{NEW_LINE_CHARACTER}"
+        if self.degat != 0:
+            message += f"Dégâts : +{self.degat}{NEW_LINE_CHARACTER}"
+        if self.resistance != 0:
+            message += f"Résistance : +{self.resistance}{NEW_LINE_CHARACTER}"
 
-        return ""
+        return message
 
 class Inventaire:
     def __init__ (self):
@@ -379,4 +404,5 @@ class Combat:
 if __name__ == "__main__":
     g = Game()
     g.main()
+
     print(g.save())
