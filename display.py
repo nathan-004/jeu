@@ -43,19 +43,21 @@ class ChestDisplay:
         self._last_loaded = n
 
 class TextDisplay:
-    def __init__(self,txt, fenetre, clock, police=20):
+    def __init__(self,txt, fenetre, clock, police=20, color=(0,0,0), pos=(None,None) ):
         self.txt = f'*{txt}*'
         self.mot = self.txt.split(' ')[0]
+        self.color = color
         self.frames = 0	#len(self.txt*pygame.time.get_ticks())
         self.end = False
         self.time = 0
+        self.x,self.y = pos if pos!=(None,None) else (10,fenetre.get_height()/1.7)
         w,h = pygame.display.get_window_size()
-        self.bloc = pygame.Rect((10,h/1.7), (w-20, 1/3*h))
+        self.bloc = pygame.Rect((self.x,self.y), (w-20, 1/3*h))
 
         self.my_font = pygame.font.SysFont('Comic Sans MS', police)
         self.fenetre = fenetre
         self.clock = clock
-        self.blocliste = [pygame.Rect((15,h/1.7+5), (w-20, self.my_font.get_height()))]
+        self.blocliste = [pygame.Rect((self.x+5,self.y+5), (w-20, self.my_font.get_height()))]
         
         cur_w = 0
         cur_l = 0
@@ -65,7 +67,7 @@ class TextDisplay:
             if (len(mot) + cur_w ) * self.my_font.size("a")[0] >= w - 20 or mot == "&":
                 cur_l += 1
                 self.txts.append("")
-                self.blocliste.append(pygame.Rect((15,h/1.7+cur_l*(self.my_font.get_height()+5)), (w-20, self.my_font.get_height())))
+                self.blocliste.append(pygame.Rect((self.x+5,self.y+cur_l*(self.my_font.get_height()+5)), (w-20, self.my_font.get_height())))
                 cur_w = 0
 
             if mot == "&":
@@ -80,7 +82,7 @@ class TextDisplay:
         pygame.draw.rect(self.fenetre,(255,0,0),self.bloc)
         cur_txt_prog = 0
         for txt, bloc in zip(self.txts, self.blocliste):
-            self.fenetre.blit(self.my_font.render(txt[:max(0, min(self.frames - cur_txt_prog, len(txt) - 1))], True, (0,0,0)), bloc)
+            self.fenetre.blit(self.my_font.render(txt[:max(0, min(self.frames - cur_txt_prog, len(txt) - 1))], True, self.color), bloc)
             cur_txt_prog += len(txt)
         if self.time>=delay and not self.end:
             self.frames = self.frames+self.time//delay
