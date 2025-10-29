@@ -279,6 +279,14 @@ class Game:
 
             cur_room = self.map.grid[self.personnage.position[1]][self.personnage.position[0]]
 
+            if cur_room.type == "end" and not cur_room.locked:
+                try:
+                    self.map, self.texts = next(self.elements)
+                    self.personnage.position = self.map.get_start_position()
+                except StopIteration:
+                    if self.current_texts == []:
+                        running = False
+
             self.display_room(self.screen)
             self.map.draw(surface=map_surface, player = self.personnage)
             self.screen.blit(map_surface, map_position)
