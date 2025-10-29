@@ -326,8 +326,8 @@ class Combat:
         if self.tour % 2 == 0:
             return
         
-        if self.ennemi.pv <= 10: # Jouer ici
-            obj = Objet("Soin", "potion", soin=10)
+        if self.ennemi.pv <= self.ennemi.pv_base * 0.5: # Jouer ici
+            obj = Objet("Soin", "potion", soin=MONSTER_BASE_ITEM_SOIN)
             self.ennemi.use(obj)
             self.game.current_texts.append(TextDisplay(f"L'ennemi utilise un objet {NEW_LINE_CHARACTER} {obj.get_message()}", self.game.screen, self.game.clock))
         else:
