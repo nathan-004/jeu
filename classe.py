@@ -3,7 +3,7 @@ import time
 from random import shuffle
 import json
 
-from display import TextDisplay, get_size, RoomDisplay, MouseButton, HealthBar
+from display import TextDisplay, get_size, RoomDisplay, MouseButton, HealthBar, EnnemiDisplay
 from map import create_one_solution_map, get_absolute_direction
 from constants import *
 
@@ -118,6 +118,11 @@ class Personnage:
         return self.pv_base + PLAYER_LEVEL_AUGMENTATION_PV * self.level
 
 class Monstre(Personnage):
+    def __init__(self, nom, pv, degats, resistance):
+        super().__init__(nom, pv, degats, resistance)
+        self.ennemi_display = None
+        self.health_bar = None
+
     def level_up(self):
         super().level_up()
 
@@ -125,6 +130,13 @@ class Monstre(Personnage):
         self.degat = self.degat_base + MONSTER_LEVEL_AUGMENTATION_ATTACK * self.level
         self.resistance = min(self.resistance_base + MONSTER_LEVEL_AUGMENTATION_RESISTANCE * self.level, MAX_MONSTER_RESISTANCE)
         self.inventaire.use(self)
+
+    def display(self, surface:pygame.Surface):
+        if self.ennemi_display is None:
+            self.ennemi_display = EnnemiDisplay(surface, (get_size(surface, 40), 125), 0.5, MONSTERS[self.nom]["image"])
+            self.health_bar = HealthBar(self, (get_size(surface, 40), get_size(surface, 70, "height")), (get_size(surface, 20), 50), surface)
+        self.ennemi_display.display()
+        self.health_bar.display()
 
 class Joueur(Personnage):
     def __init__(self, nom, pv, degats, resistance, position:tuple, inventaire:Inventaire = Inventaire() ):
@@ -238,7 +250,7 @@ class Game:
             cur_room = self.map.grid[self.personnage.position[1]][self.personnage.position[0]]
             if cur_room.monster:
                 if not self.combat:
-                    self.combat = Combat(self.personnage, Monstre("Test", MONSTER_BASE_PV, MONSTER_BASE_ATTACK, MONSTER_BASE_RESISTANCE), self)
+                    self.combat = Combat(self.personnage, Monstre("Knight", MONSTER_BASE_PV, MONSTER_BASE_ATTACK, MONSTER_BASE_RESISTANCE), self)
                     self.current_texts.append(TextDisplay(f"Vous tombez nez à nez avec {self.combat.ennemi.nom}", self.screen, self.clock))
 
             self.display_room(self.screen)
@@ -250,6 +262,7 @@ class Game:
                     self.combat.ennemi_turn()
                 self.combat.display_buttons(buttons_surface, button_bloc_pos=buttons_position)
                 self.screen.blit(buttons_surface, buttons_position)
+                self.combat.ennemi.display(self.screen)
             elif cur_room.type == "key":
                 self.map.open()
                 cur_room.type = "path"

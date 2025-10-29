@@ -29,3 +29,10 @@ BASE_EXP_LEVEL_UP_AUGMENTATION_COEFF = 1.3
 # Items
 PLAYER_BASE_ITEM_SOIN = 3
 MONSTER_BASE_ITEM_SOIN = 3
+
+# Monstres
+MONSTERS = {
+    "Knight" : {
+        "image": "assets/images/monster/Perso_2.png",
+    }
+}
