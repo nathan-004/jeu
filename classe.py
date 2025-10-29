@@ -4,7 +4,7 @@ from random import shuffle, randint
 import json
 
 from display import TextDisplay, get_size, RoomDisplay, MouseButton, HealthBar, EnnemiDisplay
-from map import create_one_solution_map, get_absolute_direction
+from map import create_one_solution_map, get_absolute_direction, Map
 from constants import *
 
 class Objet:
@@ -193,15 +193,10 @@ class Joueur(Personnage):
 
 class Game:
     def __init__(self):
-        height, width = 15, 16
-        self.map = create_one_solution_map(width, height, 4)
-        self.personnage = Joueur("Nom", PLAYER_BASE_PV, PLAYER_BASE_ATTACK, PLAYER_BASE_RESISTANCE, (0, height // 2), game = self)
-
-        self.TEXTS = {
-            (0, height//2): ["Ceci est un texte plutôt long pour tester le test vicieusement fait", "Ceci est un autre texte qui permet de décrire ce qui se passe dans ce jeu de manière plutôt exhaustive même si le jeu n'est pas fini car c'est le destin. Il y a du texte alors qu'on n'a pas de jeu mais c'est pas si grave. On se demande comment le jeu peut il être joué lorsque les utilisateurs ne connaîssent pas les règles donc on doit bien lui expliquer correctement en développant bien toutes les options"],
-            (width//2 - 1, height//2): ["Test3", "Test4"],
-            (width-1, height // 2): ["Félicitation, vous êtes arrivés à la fin.", "Mais ne vous méprenez pas.", "L'aventure n'est jamais ..."]
-        }
+        self.height, self.width = 15, 16
+        self.elements = self.get_maps()
+        self.map, self.texts = next(self.elements)
+        self.personnage = Joueur("Nom", PLAYER_BASE_PV, PLAYER_BASE_ATTACK, PLAYER_BASE_RESISTANCE, self.map.get_start_position(), game = self)
 
         self.visited = set()
     
@@ -278,8 +273,8 @@ class Game:
                 if self.combat:
                     self.combat.buttons_event(event)
 
-            if self.personnage.position in self.TEXTS and self.personnage.position not in self.visited:
-                for text in self.TEXTS[self.personnage.position]:
+            if self.personnage.position in self.texts and self.personnage.position not in self.visited:
+                for text in self.texts[self.personnage.position]:
                     self.current_texts.append(TextDisplay(text, self.screen, self.clock))
 
             cur_room = self.map.grid[self.personnage.position[1]][self.personnage.position[0]]
@@ -335,6 +330,37 @@ class Game:
                 self.current_texts.append(TextDisplay("Ne vous en allez pas si vite !", self.screen, self.clock))
         Objet.current_room = self.personnage.position
     
+    def get_maps(self):
+        """Renvoie un générateur contenant un tuple map, text"""
+        yield (self._load_map("assets/maps/start"), self._load_text("assets/maps/start"))
+        base_text = {
+            (0, self.height//2): ["Ceci est un texte plutôt long pour tester le test vicieusement fait", "Ceci est un autre texte qui permet de décrire ce qui se passe dans ce jeu de manière plutôt exhaustive même si le jeu n'est pas fini car c'est le destin. Il y a du texte alors qu'on n'a pas de jeu mais c'est pas si grave. On se demande comment le jeu peut il être joué lorsque les utilisateurs ne connaîssent pas les règles donc on doit bien lui expliquer correctement en développant bien toutes les options"],
+            (self.width//2 - 1, self.height//2): ["Test3", "Test4"],
+            (self.width-1, self.height // 2): ["Félicitation, vous êtes arrivés à la fin.", "Mais ne vous méprenez pas.", "L'aventure n'est jamais ..."]
+        }
+        yield (create_one_solution_map(self.width, self.height, 4), base_text)
+        # Load la dernière partie du jeu
+
+    def _load_map(self, filename:str) -> Map:
+        """Renvoie la Map à partir du fichier donné"""
+        map = Map(0,0)
+        map.load(filename)
+        return map
+    
+    def _load_text(self, filename:str) -> dict:
+        """Renvoie le dictionnaire sous la forme {pos: ['text1']}"""
+        with open(filename, "r", encoding="utf-8") as f:
+            content = f.read()
+        text = json.loads(content)["texts"]
+
+        def decode_tuple(s) -> tuple:
+            return tuple(int(el) for el in s.split(","))
+
+        res = {}
+        for key, value in text.items():
+            res[decode_tuple(key)] = value
+        return res
+
     def save(self):
         # Sauvegarder la map
         map_content = self.map.get_content()

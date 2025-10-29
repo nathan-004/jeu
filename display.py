@@ -50,9 +50,9 @@ class TextDisplay:
         self.frames = 0	#len(self.txt*pygame.time.get_ticks())
         self.end = False
         self.time = 0
-        self.x,self.y = pos if pos!=(None,None) else (10,fenetre.get_height()/1.7)
+        self.x,self.y = pos if pos!=(None,None) else (10,fenetre.get_height()/1.5)
         w,h = pygame.display.get_window_size()
-        self.bloc = pygame.Rect((self.x,self.y), (w-20, 1/3*h))
+        self.bloc = pygame.Rect((self.x,self.y), (w, 1/3*h))
 
         self.my_font = pygame.font.SysFont('Comic Sans MS', police)
         self.fenetre = fenetre

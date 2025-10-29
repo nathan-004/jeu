@@ -252,6 +252,12 @@ class Map:
                 cell.locked = False
                 break
 
+    def get_start_position(self) -> tuple:
+        for y, row in enumerate(self.grid):
+            for x, room in enumerate(row):
+                if room.type == "start":
+                    return (x, y)
+
     # --------------------------------------------------------------------------------------------
     # Affichage de débogage du labyrinthe -------------------------------------------------------|
     # --------------------------------------------------------------------------------------------
