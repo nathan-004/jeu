@@ -215,7 +215,6 @@ class Game:
                 doors[i] = pygame.transform.flip(doors[i], True, False) if i == 0 else doors[i]
                 screen.blit(doors[i],(get_size(screen, ((99.7-percentage)/2)+((85/(100/percentage))if i == 1 else (4/(100/percentage))) ),get_size(screen, 26*(percentage/99.7), "height"))) if i != 2 else screen.blit(doors[i],(get_size(screen, ((100-percentage)/2)+((41-(10/(100/percentage)))) ),get_size(screen, 32*(percentage/99.7), "height")))
         room.display_shade()
-        print( self.map.can_move(self.personnage.position, direction) )
 
     def main(self):
         pygame.font.init()
@@ -283,6 +282,8 @@ class Game:
                 try:
                     self.map, self.texts = next(self.elements)
                     self.personnage.position = self.map.get_start_position()
+                    self.visited = set()
+                    continue
                 except StopIteration:
                     if self.current_texts == []:
                         running = False

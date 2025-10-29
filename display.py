@@ -75,8 +75,6 @@ class TextDisplay:
             
             self.txts[cur_l] += mot + " "
             cur_w += len(mot) + 1
-
-        print(self.blocliste, self.txts)
         
     def display(self,delay=20):	#delay est en milliseconde
         pygame.draw.rect(self.fenetre,(255,0,0),self.bloc)
