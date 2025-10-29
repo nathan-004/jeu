@@ -278,6 +278,10 @@ class Game:
                 if self.combat:
                     self.combat.buttons_event(event)
 
+            if self.personnage.position in self.TEXTS and self.personnage.position not in self.visited:
+                for text in self.TEXTS[self.personnage.position]:
+                    self.current_texts.append(TextDisplay(text, self.screen, self.clock))
+
             cur_room = self.map.grid[self.personnage.position[1]][self.personnage.position[0]]
 
             self.display_room(self.screen)
@@ -311,10 +315,6 @@ class Game:
                     self.current_texts.append(TextDisplay(f"Vous tombez nez à nez avec {self.combat.ennemi.nom}", self.screen, self.clock))
 
             player_health_bar.display()
-            
-            if self.personnage.position in self.TEXTS and self.personnage.position not in self.visited:
-                for text in self.TEXTS[self.personnage.position]:
-                    self.current_texts.append(TextDisplay(text, self.screen, self.clock))
             
             if self.current_texts != []:
                 self.current_texts[0].display()
@@ -407,6 +407,9 @@ class Combat:
         """
         surface.fill((0, 0, 0, 180))
 
+        if self.game.current_texts != []:
+            return
+
         if self.buttons is None:
             buttons = [("COMBAT", self.joueur_attaque), ("UTILISER", self.joueur_utiliser)]
 
@@ -423,6 +426,8 @@ class Combat:
                 button.display()
     
     def buttons_event(self, event):
+        if self.game.current_texts != []:
+            return
         if self.buttons is None or self.tour % 2 != 0:
             return
         
