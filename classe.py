@@ -28,7 +28,7 @@ class Objet:
         if self.last_used == self.current_room:
             return False
 
-        personnage.soin += self.soin
+        personnage.pv += self.soin
         personnage.degat += self.degat
         personnage.resistance += self.resistance
 
@@ -40,15 +40,15 @@ class Objet:
         """
         Renvoie les stats de l'objet sous forme de texte.
         """
-        message = f"{self.nom}{NEW_LINE_CHARACTER}"
+        message = f"{self.nom}, {self.type} {NEW_LINE_CHARACTER} "
         
         # Ajouter seulement les valeurs différentes de 0
         if self.soin != 0:
-            message += f"Soin : +{self.soin}{NEW_LINE_CHARACTER}"
+            message += f"Soin : +{self.soin} {NEW_LINE_CHARACTER} "
         if self.degat != 0:
-            message += f"Dégâts : +{self.degat}{NEW_LINE_CHARACTER}"
+            message += f"Dégâts : +{self.degat} {NEW_LINE_CHARACTER}"
         if self.resistance != 0:
-            message += f"Résistance : +{self.resistance}{NEW_LINE_CHARACTER}"
+            message += f"Résistance : +{self.resistance} {NEW_LINE_CHARACTER}"
 
         return message
 
@@ -113,9 +113,7 @@ class Personnage:
         self.inventaire = Inventaire()
 
     def use(self, obj:Objet):
-        self.pv += obj.soin
-        self.degat += obj.degat
-        self.resistance += obj.resistance
+        return obj.use(self)
 
     def degat_subit(self, degats):
         degat_restant = degats - (degats * self.resistance)
@@ -153,12 +151,18 @@ class Monstre(Personnage):
         self.ennemi_display.display()
         self.health_bar.display()
 
+    def use(self, obj:Objet):
+        self.pv += obj.soin
+        self.degat += obj.degat
+        self.resistance += obj.resistance
+
 class Joueur(Personnage):
     def __init__(self, nom, pv, degats, resistance, position:tuple, inventaire:Inventaire = Inventaire(), game = None):
         super().__init__(nom, pv, degats, resistance)
         self.position = position
         self.direction = (1, 0) # Direction de base vers la droite
         self.inventaire = inventaire
+        self.inventaire.add(Objet("Potion pour se soigner", "potion", soin=5))
         self.game = game
 
     def equipe_obj(self, obj:Objet):
@@ -347,11 +351,12 @@ class Combat:
         """Fait utiliser le seul consommable de l'inventaire du joueur"""
         print("Utilise un item")
         if self.tour % 2 == 0:
-            self.game.current_texts.append(TextDisplay("Vous utilisez un objet.", self.game.screen, self.game.clock))
             try:
                 objet = list(self.joueur.inventaire.consommables.values())[0]
-                self.joueur.use(objet)
-                self.game.current_texts.append(TextDisplay(objet.get_message(), self.game.screen, self.game.clock))
+                if not self.joueur.use(objet):
+                    self.game.current_texts.append(TextDisplay("Cet objet a déjà été utilisé.", self.game.screen, self.game.clock))
+                else:
+                    self.game.current_texts.append(TextDisplay(f"Vous utilisez l'objet : {objet.get_message()}", self.game.screen, self.game.clock))
             except IndexError:
                 self.game.current_texts.append(TextDisplay("Vous ne possédez pas de consommables ...", self.game.screen, self.game.clock))
         else:
@@ -387,9 +392,9 @@ class Combat:
             return
         
         if self.ennemi.pv <= self.ennemi.pv_base * 0.5: # Jouer ici
-            obj = Objet("Soin", "potion", soin=MONSTER_BASE_ITEM_SOIN)
+            obj = Objet("Potion de soin contenant du vice", "potion", soin=MONSTER_BASE_ITEM_SOIN)
             self.ennemi.use(obj)
-            self.game.current_texts.append(TextDisplay(f"L'ennemi utilise un objet {NEW_LINE_CHARACTER} {obj.get_message()}", self.game.screen, self.game.clock))
+            self.game.current_texts.append(TextDisplay(f"L'ennemi utilise l'objet : {NEW_LINE_CHARACTER} {obj.get_message()}", self.game.screen, self.game.clock))
         else:
             deg = self.ennemi.attaque(self.joueur)
             self.game.current_texts.append(TextDisplay(f"Il vous inflige {deg} dégâts {NEW_LINE_CHARACTER} Il ne vous reste plus que {self.joueur.pv} pv", self.game.screen, self.game.clock))
