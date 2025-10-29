@@ -36,7 +36,7 @@ class Room:
         }
         self.locked = False
         self.chest = False
-        self.monster = random.random() < 0.3
+        self.monster = random.random() < 0.3 and self.type == "path"
 
     def get_content(self) -> dict:
         """Renvoie un dictionnaire contenant les informations de la salle"""
