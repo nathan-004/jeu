@@ -8,18 +8,19 @@ from map import create_one_solution_map, get_absolute_direction
 from constants import *
 
 class Objet:
+    current_room = (0, 0)
     def __init__(self, nom, type_, soin=0, degat=0, resistance=0):
         self.nom = nom
         self.type = type_
         self.soin = soin
         self.degat = degat
         self.resistance = resistance
-        # initier la valeur d'utilisation de l'objet
+        # initier l'attribut last_used qui correspond à la dernière salle dans laquel un 
 
     def use(self, personnage):
-        # Vérifier que l'objet n'a pas été utilisé si c'est un consommable 
-        # Rajouter les attributs de l'objet au personnage (remplace Personnage.use)
-        # Midifier joueur.move pour qu'à chaque appel, reanitialise l'utilisation de l'objet consommable
+        # Vérifier que l'objet n'a pas été utilisé si c'est un consommable -> que la salle dans lequel le dernier item a été utilisé est différente de self.current_room
+        # Rajouter les attributs de l'objet au personnage (modifie Personnage.use pour appeler cette méthode à la place)
+        # Modifier self.last_used par self.current_room
         pass
 
     def get_message(self) -> str:
@@ -280,6 +281,7 @@ class Game:
                 self.personnage.move(direction)
             else:
                 self.current_texts.append(TextDisplay("Ne vous en allez pas si vite !", self.screen, self.clock))
+        Objet.current_room = self.personnage.position
     
     def save(self):
         # Sauvegarder la map
