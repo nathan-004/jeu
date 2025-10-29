@@ -36,7 +36,7 @@ class Room:
         }
         self.locked = False
         self.chest = False
-        self.monster = random.random() < 0.3 and self.type == "path"
+        self.monster = False
 
     def get_content(self) -> dict:
         """Renvoie un dictionnaire contenant les informations de la salle"""
@@ -94,7 +94,6 @@ class Map:
         self.random_path(start_pos, end_pos)
         self.create_maze(start_pos)
         self.create_chest()
-        #self.create_locked_rooms()
 
     def random_path(self, start_pos:tuple, end_pos:tuple):
         """
@@ -210,6 +209,26 @@ class Map:
                 if cell.type != "none" and (x,y) not in visited:
                     valid_cells.append((x, y))
         return random.choice(valid_cells)
+    
+    def generate_monsters(self, prob:float, center:float = 0.5):
+        """
+        Créé prob * total de monstres aléatoirement dans la map
+
+        Parameters
+        ----------
+        prob:float
+            Fraction des salles devant contenir un monstre sur le total
+        center:float
+            Pic de la distribution normale sur la hauteur
+        """
+        n = int(prob * self.width * self.height)
+        for _ in range(n):
+            x = int(random.uniform(0, self.width))
+            sigma = (self.height // 2) // 2
+            diff_y = int(random.normalvariate(self.height * center, sigma))
+            diff_y = min(max(0, diff_y), self.height // 2)
+            diff_y *= random.choice([-1, 1])
+            self.grid[self.height // 2 + diff_y][x].monster = True
 
     # --------------------------------------------------------------------------------------------
     # Utilitaires -------------------------------------------------------------------------------|
@@ -505,15 +524,20 @@ def create_one_solution_map(width, height, n = 3) -> Map:
     """
     w = width // n
     result = Map(0,0)
+    max_prob = 0.5
+    min_center_distance, max_center_distance = 0, 0.3
+    var = (max_center_distance - min_center_distance) / n
+    centers = [max_center_distance - i * var for i in range(n)]
 
-    for _ in range(n):
+    for idx in range(n):
         part_map = Map(w, height)
         part_map.random_map()
+        part_map.generate_monsters(0.3 + idx * (max_prob / n), centers[idx])
         result += part_map
 
     result.grid[result.height // 2][0].type = "start"
     result.grid[result.height // 2][0].walls["right"] = False
-    result.grid[result.height // 2][height - 1].type = "end"
+    result.grid[result.height // 2][width - 1].type = "end"
     result.generate_keys(n)
     
     return result
