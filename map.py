@@ -34,6 +34,7 @@ class Room:
             "top": True,
             "bottom": True,
         }
+        self.locked = False
         self.chest = False
         self.monster = random.random() < 0.3
 
@@ -43,7 +44,8 @@ class Room:
             "type": self.type,
             "walls": self.walls,
             "chest": not self.chest.closed if type(self.chest) is ChestDisplay else self.chest,
-            "monster": self.monster
+            "monster": self.monster,
+            "locked": self.locked
         }
 
     def load_content(self, content:dict):
@@ -85,7 +87,7 @@ class Map:
             end_pos = (self.width-1, self.height//2)
 
         self.grid = [[Room() for x in range(self.width)] for y in range(self.height)]
-        self.grid[end_pos[1]][end_pos[0]].type = "locked"
+        self.grid[end_pos[1]][end_pos[0]].locked = "right"
         self.grid[end_pos[1]][end_pos[0]].walls["right"] = False
         self.grid[start_pos[1]][start_pos[0]].walls["left"] = False
 
@@ -234,8 +236,8 @@ class Map:
             return False
 
         initial_cell = self.grid[initial_pos[1]][initial_pos[0]]
-        if initial_cell.type == "locked":
-            if Room.DIRECTIONS[direction] == "right":
+        if initial_cell.locked:
+            if Room.DIRECTIONS[direction] == initial_cell.locked:
                 return False
         if not initial_cell.walls[Room.DIRECTIONS[direction]]:
             return True
@@ -311,7 +313,7 @@ class Map:
             intensity = int(dist * 255 / max_dist)
             color = (intensity, 0, 0)
 
-        if room_type == "locked":
+        if room.locked:
             color = (125, 125, 0)
 
         px = x * cell_size_x
@@ -505,6 +507,7 @@ def create_one_solution_map(width, height, n = 3) -> Map:
 
     result.grid[result.height // 2][0].type = "start"
     result.grid[result.height // 2][0].walls["right"] = False
+    result.grid[result.height // 2][height - 1].type = "end"
     result.generate_keys(n)
     
     return result

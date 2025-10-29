@@ -93,7 +93,8 @@
                 "right": false,
                 "bottom": false,
                 "top": false
-            }
+            },
+            "locked": "right"
         },
         "3,1": {
             "walls": {
