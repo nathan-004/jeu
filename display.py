@@ -150,16 +150,15 @@ class RoomDisplay:
         self.screen.blit(self.shade,(self.w*(1-self.taille)/2,0))
         
 class EnnemiDisplay:
-    def __init__(self, surface:pygame.Surface, pos:tuple, size:tuple, ennemi):
+    def __init__(self, surface:pygame.Surface, pos:tuple, size:int, image_path:str):
         self.surface = surface
         self.pos = pos
         self.size = size
-        self.ennemi = ennemi
         self._last_loaded = None
-        self.load(self.ennemi.image)
+        self.ennemi_image = pygame.image.load(image_path)
+        self.ennemi_image = pygame.transform.scale(self.ennemi_image, (size * self.ennemi_image.get_width(), size * self.ennemi_image.get_height()))
 
     def display(self):
-        self.load(self.ennemi.image)
         self.surface.blit(self.ennemi_image, (self.pos[0], self.pos[1]))
 
     def load(self, image_path):
@@ -206,7 +205,8 @@ if __name__ == "__main__":
     fenetre = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     clock = pygame.time.Clock()
 
-    texte= 'une petite prairie jolie, et des petites fleurs y poussait. En frolant cette pelouse, vous remarquez un arbre'
+    texte = 'une petite prairie jolie, et des petites fleurs y poussait. En frolant cette pelouse, vous remarquez un arbre'
+    monstre1 = EnnemiDisplay(fenetre, (get_size(fenetre,40),100), 1, "assets\images\monster\Perso_2.png")
 
     test=TextDisplay(texte, fenetre, clock, 15)
     background = RoomDisplay(fenetre)
@@ -228,6 +228,7 @@ if __name__ == "__main__":
         #test.display()
         background.display_shade()
         button.display()
+        monstre1.display()
         #test.reset() if test.end and test.time >= 1000 else None
         pygame.display.update()
         clock.tick(10)
