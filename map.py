@@ -248,8 +248,8 @@ class Map:
         """Ouvre la prochaine porte verrouillée à height // 2"""
         for x in range(self.width):
             cell = self.grid[self.height // 2][x]
-            if cell.type == "locked":
-                cell.type = "path"
+            if cell.locked:
+                cell.locked = False
                 break
 
     # --------------------------------------------------------------------------------------------

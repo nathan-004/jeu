@@ -1,6 +1,6 @@
 import pygame
 import time
-from random import shuffle
+from random import shuffle, randint
 import json
 
 from display import TextDisplay, get_size, RoomDisplay, MouseButton, HealthBar, EnnemiDisplay
@@ -26,7 +26,6 @@ class Objet:
         """
 
         if self.last_used == self.current_room:
-            print("Objet déjà utilisé dans cette salle !")
             return False
 
         personnage.soin += self.soin
@@ -35,7 +34,6 @@ class Objet:
 
         self.last_used = self.current_room
 
-        print("Objet utilisé !")
         return True
 
     def get_message(self) -> str:
@@ -127,14 +125,6 @@ class Personnage:
     def attaque(self, ennemi):
         return ennemi.degat_subit(self.degat)
 
-    def victoire(self, ennemi):
-        """Ajoute de l'exp au personnage en fonction du niveau de l'ennemi"""
-        self.exp = ennemi.level - self.level # Ajouter différence de niveau en exp par exemple
-
-        if self.exp // BASE_EXP_LEVEL_UP > 0: # Regarder si exp // 20 par exemple est plus grand que 0
-            self.level_up()
-            self.exp = self.exp % BASE_EXP_LEVEL_UP # Si c'est le cas appeler self.level_up et mettre exp à exp % 20
-
     def level_up(self):
         """Prend les attributs du personnage de base et ajoute un nombre * level"""
         self.level = self.level + 1
@@ -154,7 +144,7 @@ class Monstre(Personnage):
         self.pv = self.pv_base + MONSTER_LEVEL_AUGMENTATION_PV * self.level
         self.degat = self.degat_base + MONSTER_LEVEL_AUGMENTATION_ATTACK * self.level
         self.resistance = min(self.resistance_base + MONSTER_LEVEL_AUGMENTATION_RESISTANCE * self.level, MAX_MONSTER_RESISTANCE)
-        self.inventaire.use(self)
+        self.inventaire.equip(self)
 
     def display(self, surface:pygame.Surface):
         if self.ennemi_display is None:
@@ -164,11 +154,12 @@ class Monstre(Personnage):
         self.health_bar.display()
 
 class Joueur(Personnage):
-    def __init__(self, nom, pv, degats, resistance, position:tuple, inventaire:Inventaire = Inventaire() ):
+    def __init__(self, nom, pv, degats, resistance, position:tuple, inventaire:Inventaire = Inventaire(), game = None):
         super().__init__(nom, pv, degats, resistance)
         self.position = position
         self.direction = (1, 0) # Direction de base vers la droite
         self.inventaire = inventaire
+        self.game = game
 
     def equipe_obj(self, obj:Objet):
         self.obj = obj
@@ -177,19 +168,30 @@ class Joueur(Personnage):
         self.position = (self.position[0] + direction[0], self.position[1] + direction[1])
         self.direction = direction
     
+    def victoire(self, ennemi):
+        """Ajoute de l'exp au personnage en fonction du niveau de l'ennemi"""
+        new_exp = BASE_EXP_REWARD + randint(-BASE_EXP_REWARD_RANGE//2, BASE_EXP_REWARD_RANGE//2)
+        self.exp += new_exp
+        self.game.current_texts.append(TextDisplay(f"Vous avez battu {ennemi.nom} vous gagnez {new_exp} exp", self.game.screen, self.game.clock))
+    
+        if self.exp // BASE_EXP_LEVEL_UP > 0:
+            self.level_up()
+            self.exp = self.exp % BASE_EXP_LEVEL_UP
+
     def level_up(self):
         super().level_up()
 
         self.pv = self.pv_base + PLAYER_LEVEL_AUGMENTATION_PV * self.level
         self.degat = self.degat_base + PLAYER_LEVEL_AUGMENTATION_ATTACK * self.level
         self.resistance = min(self.resistance_base + PLAYER_LEVEL_AUGMENTATION_RESISTANCE * self.level, MAX_PLAYER_RESISTANCE)
-        self.inventaire.use(self)
+        self.inventaire.equip(self)
+        self.game.current_texts.append(TextDisplay(f"Vous passez au niveau {self.level}", self.game.screen, self.game.clock))
 
 class Game:
     def __init__(self):
         height, width = 15, 16
         self.map = create_one_solution_map(width, height, 4)
-        self.personnage = Joueur("Nom", PLAYER_BASE_PV, PLAYER_BASE_ATTACK, PLAYER_BASE_RESISTANCE, (0, height // 2))
+        self.personnage = Joueur("Nom", PLAYER_BASE_PV, PLAYER_BASE_ATTACK, PLAYER_BASE_RESISTANCE, (0, height // 2), game = self)
 
         self.TEXTS = {
             (0, height//2): ["Ceci est un texte plutôt long pour tester le test vicieusement fait", "Ceci est un autre texte qui permet de décrire ce qui se passe dans ce jeu de manière plutôt exhaustive même si le jeu n'est pas fini car c'est le destin. Il y a du texte alors qu'on n'a pas de jeu mais c'est pas si grave. On se demande comment le jeu peut il être joué lorsque les utilisateurs ne connaîssent pas les règles donc on doit bien lui expliquer correctement en développant bien toutes les options"],
@@ -283,6 +285,13 @@ class Game:
             self.screen.blit(map_surface, map_position)
 
             if self.combat:
+                if self.combat.is_ended():
+                    if type(self.combat.winner) is Joueur:
+                        self.combat = False
+                        cur_room.monster = False
+                        continue
+                    else:
+                        running = False
                 if self.combat.tour % 2 != 0:
                     self.combat.ennemi_turn()
                 self.combat.display_buttons(buttons_surface, button_bloc_pos=buttons_position)
@@ -332,6 +341,7 @@ class Combat:
         self.tour = 0 # Pair quand c'est au tour du joueur
         self.buttons = None
         self.game = game
+        self.winner = None
 
     def joueur_utiliser(self):
         """Fait utiliser le seul consommable de l'inventaire du joueur"""
@@ -358,6 +368,18 @@ class Combat:
             return
 
         self.tour += 1
+
+    def is_ended(self) -> bool:
+        """Renvoie si le combat est terminé et modifie self.winner par le vainqueur"""
+        if not any([pers.pv <= 0 for pers in [self.ennemi, self.joueur]]):
+            return False
+        self.winner = self.joueur if self.ennemi.pv <= 0 else self.ennemi
+        other = self.ennemi if self.ennemi.pv <= 0 else self.joueur
+
+        if type(self.winner) is Joueur:
+            self.winner.victoire(other)
+
+        return True
 
     def ennemi_turn(self):
         """Tour de l'ennemi choisir action ennemi"""
@@ -404,5 +426,4 @@ class Combat:
 if __name__ == "__main__":
     g = Game()
     g.main()
-
     print(g.save())
