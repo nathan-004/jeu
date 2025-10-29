@@ -274,7 +274,7 @@ class Game:
 
             if self.personnage.position in self.texts and self.personnage.position not in self.visited:
                 for text in self.texts[self.personnage.position]:
-                    self.current_texts.append(TextDisplay(text, self.screen, self.clock))
+                    self.current_texts.append(TextDisplay(f"V.A. - {text}", self.screen, self.clock))
 
             cur_room = self.map.grid[self.personnage.position[1]][self.personnage.position[0]]
 
@@ -341,11 +341,15 @@ class Game:
     
     def get_maps(self):
         """Renvoie un générateur contenant un tuple map, text"""
-        #yield (self._load_map("assets/maps/start"), self._load_text("assets/maps/start"))
+        yield (self._load_map("assets/maps/start"), self._load_text("assets/maps/start"))
         base_text = {
-            (0, self.height//2): ["Ceci est un texte plutôt long pour tester le test vicieusement fait", "Ceci est un autre texte qui permet de décrire ce qui se passe dans ce jeu de manière plutôt exhaustive même si le jeu n'est pas fini car c'est le destin. Il y a du texte alors qu'on n'a pas de jeu mais c'est pas si grave. On se demande comment le jeu peut il être joué lorsque les utilisateurs ne connaîssent pas les règles donc on doit bien lui expliquer correctement en développant bien toutes les options"],
-            (self.width//2 - 1, self.height//2): ["Test3", "Test4"],
-            (self.width-1, self.height // 2): ["Félicitation, vous êtes arrivés à la fin.", "Mais ne vous méprenez pas.", "L'aventure n'est jamais ..."]
+            (0, self.height//2): ["Vous y êtes arrivé !", "Il ne vous reste plus qu'à trouver le chemin dans ce donjon, à battre tous les ennemis sur votre chemin, à acquérir les meilleurs statistiques.", "On ne sait jamais, ce qui semble être la fin peut parfois n'être que le début d'une plus grande aventure."],
+            (self.width//4, self.height//2): ["Vous avez l'air de bien vous en sortir", "En espérant que vous ne mourriez pas dans d'atroces souffrances.", "Un homme comme vous a déjà fait son apparition auparavant ..."],
+            (self.width//4 + 1, self.height // 2): ["Il était rempli d'espoir, il s'en est sorti pendant bien longtemps.", "Trop longtemps", "Si longtemps qu'il en a perdu la raison."],
+            (self.width//2, self.height // 2): ["Chaque monstre connaît son armure iconique. & Ils ont tous appris à la fuir", "Car lassé de cet endroit, il n'a laissé aucun témoin de son passage."],
+            (self.width//2 + 1, self.height // 2): ["Seulement un nom, une réputation, et les corps qu'il a laissé derrière lui.", "Mais n'importe qui deviendrait fou dans cet endroit. Non ?"],
+            (self.width - self.width//4, self.height//2): ["On dit de lui qu'il a finalement réussi à sortir de cet endroit.", "Et qu'il attend patiemment tout survivant pour ...", "On s'est compris & Comme ça il enlève le poids de ce traumatisme de leurs épaules, littéralement ..."],
+            (self.width - 1, self.height//2): ["Tu as finalement réussi à franchir tous ces obstacles.", "Tu y es ! La sortie est devant tes yeux !", "Ta détermination a payé.", "Mais à quel prix ................."]
         }
         yield (create_one_solution_map(self.width, self.height, 4), base_text)
         # Load la dernière partie du jeu
