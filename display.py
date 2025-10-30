@@ -4,36 +4,43 @@ import pygame
 from pygame.locals import *
 
 class ChestDisplay:
-    def __init__(self, surface:pygame.Surface, pos:tuple, size:tuple, closed:bool = True):
+    def __init__(self, surface:pygame.Surface, pos:tuple, size:tuple, closed:bool = True, clock:Optional[pygame.time.Clock] = None):
         self.surface = surface
         self.pos = pos
         self.size = size
         self.frame = 0
         self.image = 1 if closed else 15
-        self._last_loaded = None
         self.img_f = 1
+        self._last_loaded = None
         self.closed = closed
         self.load(self.image)
 
-    def display(self, surface:Optional[pygame.Surface] = None, pos:Optional[tuple] = None, size:Optional[tuple] = None):
+        self.clock = clock
+        self.time = 0
+
+    def display(self, surface:Optional[pygame.Surface] = None, pos:Optional[tuple] = None, size:Optional[tuple] = None, delay=20):
         surface = surface or self.surface
-        pos = pos or self.default_pos
+        pos = pos or self.pos
         size = size or self.size
         assert not (surface is None or pos is None or size is None), "Arguments non fournis"
 
-        if self.closed and self.image > 1:
-            self.frame += 1
-            if self.frame // self.img_f > 0:
-                self.image -= self.frame // self.img_f
+        elapsed = self.clock.get_time() if self.clock is not None else delay
+        self.time += elapsed
+
+        steps = self.time // delay
+        if steps > 0:
+            self.time = self.time % delay
+            self.frame += steps
+            n_images = self.frame // self.img_f
+            if n_images > 0:
+                if self.closed:
+                    self.image = max(1, self.image - n_images)
+                else:
+                    self.image = min(15, self.image + n_images)
                 self.frame = self.frame % self.img_f
-        if not self.closed and self.image < 15:
-            self.frame += 1
-            if self.frame // self.img_f > 0:
-                self.image += self.frame // self.img_f
-                self.frame = self.frame % self.img_f
-        
+
         self.load(self.image)
-        self.surface.blit(self.chest_image, (self.pos[0], self.pos[1]))
+        surface.blit(self.chest_image, (pos[0], pos[1]))
 
     def load(self, n):
         if n == self._last_loaded:
