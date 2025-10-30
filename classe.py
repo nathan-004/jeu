@@ -141,21 +141,68 @@ class Coffre:
             self.chest_display.closed = False # L'ouvrir
         self.chest_display.display()
 
-    def display_item_choice(self, surface:pygame.Surface, pos:tuple, size:tuple):
-        # Créer un nouvel objet - stats, type, nom 
-        # Afficher l'objet dans une "carte" complète la classe ItemDisplay
-        # Ajouter les boutons qui appelleront accept_item et decline_item
-        # Pour créer un bouton utilise la fonction make_buttons
-        pass
+    def display_item_choice(self, game, pos: tuple, size: tuple):
+        """
+        Affiche un objet aléatoire dans une carte, propose au joueur de l'accepter ou de le refuser.
+        """
+        # Création d'un objet aléatoire
+        type_objet = self.get()
+        nom = f"{type_objet.capitalize()} mystérieux"
+        soin = degat = resistance = 0
+    
+        if type_objet == "potion":
+            soin = randint(3, 8)
+        elif type_objet == "arme":
+            degat = randint(1, 4)
+        elif type_objet == "armure":
+            resistance = randint(1, 3)
 
-    def accept_item(self):
-        # Ajouter l'item avec self.game.personnage.inventaire.add(objet)
-        # Modifie self.actions_end à True
-        pass
+        self.item = Objet(nom, type_objet, soin=soin, degat=degat, resistance=resistance)
+
+        # Affichage visuel de l'objet dans une carte
+        if self.item_display is None:
+            from display import ItemDisplay  # import ici pour éviter les import circulaires
+            self.item_display = ItemDisplay(game.screen, pos, size, self.item.get_message())
+
+        self.item_display.display()
+
+        # Création des boutons "Accepter" et "Refuser"
+        actions = [
+            ("Accepter", lambda: self.accept_item(game)),
+            ("Refuser", self.decline_item)
+        ]
+        buttons_surface = pygame.Surface((size[0], 80), pygame.SRCALPHA)
+        buttons_surface.fill((0, 0, 0, 150))
+        buttons_pos = (pos[0], pos[1] + size[1] + 10)
+
+        self.buttons = make_buttons(buttons_surface, actions, space_percent=20, button_bloc_pos=buttons_pos)
+
+        # Affichage des boutons
+        for b in self.buttons:
+            b.display()
+
+        game.screen.blit(buttons_surface, buttons_pos)
+    
+       def accept_item(self, game):
+        """
+        Ajoute l'item au joueur, puis marque la fin de l'action.
+        """
+        if hasattr(self, "item") and self.item:
+            game.personnage.inventaire.add(self.item)
+            game.current_texts.append(
+                TextDisplay(f"Vous obtenez : {self.item.get_message()}", game.screen, game.clock)
+            )
+
+        self.actions_end = True
+        self.end = True
+
 
     def decline_item(self):
-        # Modifie self.actions_end à True
-        pass
+        """
+        Le joueur refuse l’objet, simplement fermer l’interface du coffre.
+        """
+        self.actions_end = True
+        self.end = True
     
     def reset(self):
         self.chest_display = None
@@ -570,3 +617,4 @@ if __name__ == "__main__":
     g.main()
 
     print(g.save())
+
