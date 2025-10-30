@@ -3,9 +3,38 @@ import time
 from random import shuffle, randint
 import json
 
-from display import TextDisplay, get_size, RoomDisplay, MouseButton, HealthBar, EnnemiDisplay
+from display import TextDisplay, get_size, RoomDisplay, MouseButton, HealthBar, EnnemiDisplay, ChestDisplay
 from map import create_one_solution_map, get_absolute_direction, Map
 from constants import *
+
+def make_buttons(surface: pygame.Surface, actions: list, space_percent: int = 20, button_bloc_pos: tuple = (0, 0)) -> list:
+    """
+    Crée et renvoie une liste de MouseButton pour la surface donnée.
+
+    Parameters
+    ----------
+    surface: pygame.Surface
+        Surface sur laquelle les boutons seront dessinés (utilisée pour calculs de taille).
+    actions: list
+        Liste de tuples (label: str, callback: Callable).
+    space_percent: int
+        Pourcentage d'espace réservé autour des boutons (voir implémentation originale).
+    button_bloc_pos: tuple
+        Position (offset) en coordonnées fenêtre où la surface contenant les boutons est blittée.
+    """
+    if not actions:
+        return []
+
+    nb = len(actions)
+    space = int(get_size(surface, space_percent) / (nb + 1))
+    size = (int(get_size(surface, 100 - space_percent) / nb), int(get_size(surface, 100, "height")))
+
+    buttons = []
+    for idx, (button_txt, button_callable) in enumerate(actions, start=1):
+        pos = (space * idx + size[0] * (idx - 1), 0)
+        buttons.append(MouseButton(button_txt, pos, size, button_callable, surface, button_bloc_pos))
+
+    return buttons
 
 class Objet:
     current_room = (0, 0)
@@ -78,16 +107,59 @@ class Coffre:
         self.types = types
         self.n = n
         self.objets = []  # Contient la liste de types d'objet aléatoires
+        
+        self.chest_display = None
+        self.item_display = None
+        self.end = False
+
+        self.actions_end = False
 
     def get(self):
         """Retourne un type d'objet aléatoire"""
+        if not self.objets:
+            self.objets = self.types * self.n
+            shuffle(self.objets)
 
-        if not self.objets:                 # Si la liste est vide, on la recrée
+        return self.objets.pop(0)
+    
+    def display(self, game, pos:tuple, size:tuple):
+        if self.chest_display is None:
+            self.open_animation(game.screen, pos, size)
+        elif not self.chest_display.ended:
+            self.open_animation(game.screen, pos, size)
+        elif not self.actions_end:
+            self.open_animation(game.screen, pos, size)
+            #self.display_item_choice(game)
+            self.end = True # à enlever quand tu auras fini
+        else:
+            self.end = True
 
-            self.objets = self.types * self.n   # Crée une nouvelle liste contenant self.n fois tous les éléments de self.types
-            shuffle(self.objets)         # Mélange la liste aléatoirement
+    def open_animation(self, surface:pygame.Surface, pos:tuple, size:tuple):
+        # La taille et la position correspondent à une bande au milieu de l'écran
+        if self.chest_display is None:
+            self.chest_display = ChestDisplay(surface, pos, size) # Initier un objet ChestDisplay dans self.chest_display
+            self.chest_display.closed = False # L'ouvrir
+        self.chest_display.display()
 
-        return self.objets.pop(0)           # Retourne le premier élément et le supprime
+    def display_item_choice(self, surface:pygame.Surface, pos:tuple, size:tuple):
+        # Créer un nouvel objet - stats, type, nom 
+        # Afficher l'objet dans une "carte" complète la classe ItemDisplay
+        # Ajouter les boutons qui appelleront accept_item et decline_item
+        # Pour créer un bouton utilise la fonction make_buttons
+        pass
+
+    def accept_item(self):
+        # Ajouter l'item avec self.game.personnage.inventaire.add(objet)
+        # Modifie self.actions_end à True
+        pass
+
+    def decline_item(self):
+        # Modifie self.actions_end à True
+        pass
+    
+    def reset(self):
+        self.chest_display = None
+        self.end = False
 
 class Personnage:
     def __init__(self, nom, pv, degats, resistance):
@@ -232,6 +304,10 @@ class Game:
 
         player_health_bar = HealthBar(self.personnage, (0, 0), (150, 50), self.screen)
 
+        item_choice_size = (get_size(self.screen, 40), get_size(self.screen, 40, "height"))
+        item_choice_pos = (get_size(self.screen, 30), get_size(self.screen, 30, "height"))
+        self.coffre = Coffre(3)
+
         self.combat = False
         self.clock = pygame.time.Clock()
 
@@ -311,7 +387,15 @@ class Game:
                 self.current_texts.append(TextDisplay("Vous avez trouvé une clé", self.screen, self.clock))
                 self.current_texts.append(TextDisplay("Une porte s'est ouverte ...", self.screen, self.clock))
             elif cur_room.chest:
-                cur_room.chest.closed = False
+                if not self.combat:
+                    if self.coffre.chest_display is None and not self.coffre.end:
+                        self.current_texts.append(TextDisplay("Vous trouvez un coffre. Vous l'ouvrez.", self.screen, self.clock))
+                    if (self.coffre.chest_display is None and not self.coffre.end) or self.current_texts != []:
+                        self.coffre.reset()
+                    self.coffre.display(self, item_choice_pos, item_choice_size)
+                    if self.coffre.end:
+                        cur_room.chest = False
+                        self.coffre.reset()
 
             if cur_room.monster:
                 if not self.combat:
@@ -451,14 +535,7 @@ class Combat:
 
         if self.buttons is None:
             buttons = [("COMBAT", self.joueur_attaque), ("UTILISER", self.joueur_utiliser)]
-
-            space = int(get_size(surface, space_percent) / (len(buttons) + 1))
-            size = (int(get_size(surface, 100 - space_percent) / len(buttons)), int(get_size(surface, 100, "height")))
-
-            self.buttons = []
-            for idx, (button_txt, button_callable) in enumerate(buttons, start=1):
-                pos = (space * idx + size[0] * (idx - 1), 0)
-                self.buttons.append(MouseButton(button_txt, pos, size, button_callable, surface, button_bloc_pos))
+            self.buttons = make_buttons(surface, buttons, space_percent, button_bloc_pos)
         
         if self.tour % 2 == 0:
             for button in self.buttons:

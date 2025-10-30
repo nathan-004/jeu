@@ -17,6 +17,7 @@ class ChestDisplay:
 
         self.clock = clock
         self.time = 0
+        self.ended = False
 
     def display(self, surface:Optional[pygame.Surface] = None, pos:Optional[tuple] = None, size:Optional[tuple] = None, delay=20):
         surface = surface or self.surface
@@ -38,7 +39,7 @@ class ChestDisplay:
                 else:
                     self.image = min(15, self.image + n_images)
                 self.frame = self.frame % self.img_f
-
+        self.ended = (self.image >= 15 and not self.closed) or (self.image <= 1 and self.closed)
         self.load(self.image)
         surface.blit(self.chest_image, (pos[0], pos[1]))
 
@@ -196,6 +197,20 @@ class HealthBar:
 
         rectangle_pv = self.size[0] * self.personnage.pv / self.personnage.get_max_pv()
         pygame.draw.rect(self.surface, self.pv_color, (self.pos[0], self.pos[1], rectangle_pv, self.size[1]))
+
+class ItemDisplay:
+    def __init__(self, surface:pygame.Surface, pos:tuple, size:tuple, object_type:str):
+        # Initie toutes les variables comme attributs
+        # Créer le fond d'écran avec pygame.Rect
+        # Créer l'image avec self._load_image Fais en sorte qu'elle soit centrée
+        pass
+
+    def display(self):
+        # Affiche le fond puis l'image
+        pass
+
+    def _load_image(self, object_type):
+        pass # Pour l'instant ne retourne que l'image de la potion
         
 def get_size(surface:pygame.Surface, pourcentage:float, size:str = "width") -> float:
     """Renvoie la valeur en pixel qui correspond au pourcentage de la dimension de la surface"""
