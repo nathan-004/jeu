@@ -144,11 +144,15 @@ class RoomDisplay:
     def __init__(self,screen,taille=70):
         self.taille=taille/100
         self.screen = screen
+
         self.bg = pygame.image.load('assets\\images\\background\\Salle_fond.png')
         self.shade = pygame.image.load('assets\\images\\background\\Shade.png')
+        self.enter = pygame.image.load('assets\\images\\background\\Porte_Ouverte.png')
+
         self.w,self.h =pygame.display.get_window_size()
         self.bg = pygame.transform.scale(self.bg, (self.w*self.taille,self.h*self.taille))
         self.shade = pygame.transform.scale(self.shade, (self.w*self.taille,self.h*self.taille))
+        self.enter = pygame.transform.scale(self.enter, (self.w*self.taille,self.h*self.taille))
 
         
     def display_bg(self):
@@ -156,6 +160,9 @@ class RoomDisplay:
         self.screen.blit(self.bg,(self.w*(1-self.taille)/2,0))
     def display_shade(self):
         self.screen.blit(self.shade,(self.w*(1-self.taille)/2,0))
+    
+    def display_enter(self):
+        self.screen.blit(self.enter,(self.w*(1-self.taille)/2,0))
         
 class EnnemiDisplay:
     def __init__(self, surface:pygame.Surface, pos:tuple, size:int, image_path:str):
