@@ -161,8 +161,10 @@ class RoomDisplay:
     def display_shade(self):
         self.screen.blit(self.shade,(self.w*(1-self.taille)/2,0))
     
-    def display_enter(self):
+    def display_enter(self,time=1000):
         self.screen.blit(self.enter,(self.w*(1-self.taille)/2,0))
+        pygame.time.delay(time)
+        
         
 class EnnemiDisplay:
     def __init__(self, surface:pygame.Surface, pos:tuple, size:int, image_path:str):
