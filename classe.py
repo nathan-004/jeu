@@ -187,13 +187,28 @@ class Personnage:
     def use(self, obj:Objet):
         return obj.use(self)
 
-    def degat_subit(self, degats):
+     def degat_subit(self, degats):
         degat_restant = degats - (degats * self.resistance)
         self.pv = self.pv - degat_restant
+
+        if self.pv < 0:
+            self.pv = 0
+
         return degat_restant
 
     def attaque(self, ennemi):
-        return ennemi.degat_subit(self.degat)
+        a = random.randint(1, 10)
+        if a >= 8:
+            return ennemi.degat_subit(self.degat)
+        else:
+            pass
+    
+     def attaque_lourde(self, ennemi):
+        a = random.randint(1, 10)
+        if a >= 5:
+             return ennemi.degat_subit(self.degat*2)
+        else:
+            pass
 
     def level_up(self):
         """Prend les attributs du personnage de base et ajoute un nombre * level"""
@@ -553,4 +568,5 @@ class Combat:
 if __name__ == "__main__":
     g = Game()
     g.main()
+
     print(g.save())
