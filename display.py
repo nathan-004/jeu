@@ -51,31 +51,33 @@ class ChestDisplay:
         self._last_loaded = n
 
 class TextDisplay:
-    def __init__(self,txt, fenetre, clock, police=20, color=(0,0,0), pos=(None,None) ):
+    def __init__(self,txt, fenetre, clock, police=20, color=(0,0,0), pos=(None,None), size=None, background_color:Optional[tuple] = None):
         self.txt = f'*{txt}*'
         self.mot = self.txt.split(' ')[0]
         self.color = color
+        self.background_color = background_color
         self.frames = 0	#len(self.txt*pygame.time.get_ticks())
         self.end = False
         self.time = 0
         self.x,self.y = pos if pos!=(None,None) else (10,fenetre.get_height()/1.5)
         w,h = pygame.display.get_window_size()
-        self.bloc = pygame.Rect((self.x,self.y), (w, 1/3*h))
+        self.size = (w, 1/3*h) if size is None else size
+        self.bloc = pygame.Rect((self.x,self.y), self.size)
 
         self.my_font = pygame.font.SysFont('Comic Sans MS', police)
         self.fenetre = fenetre
         self.clock = clock
-        self.blocliste = [pygame.Rect((self.x+5,self.y+5), (w-20, self.my_font.get_height()))]
+        self.blocliste = [pygame.Rect((self.x+5,self.y+5), (self.size[0]-20, self.my_font.get_height()))]
         
         cur_w = 0
         cur_l = 0
         self.txts = [""]
 
         for mot in self.txt.split(' '):
-            if (len(mot) + cur_w ) * self.my_font.size("a")[0] >= w - 20 or mot == "&":
+            if (len(mot) + cur_w ) * self.my_font.size("a")[0] >= self.size[0] - 20 or mot == "&":
                 cur_l += 1
                 self.txts.append("")
-                self.blocliste.append(pygame.Rect((self.x+5,self.y+cur_l*(self.my_font.get_height()+5)), (w-20, self.my_font.get_height())))
+                self.blocliste.append(pygame.Rect((self.x+5,self.y+cur_l*(self.my_font.get_height()+5)), (self.size[0]-20, self.my_font.get_height())))
                 cur_w = 0
 
             if mot == "&":
@@ -85,7 +87,10 @@ class TextDisplay:
             cur_w += len(mot) + 1
         
     def display(self,delay=20):	#delay est en milliseconde
-        pygame.draw.rect(self.fenetre,(255,0,0),self.bloc)
+        if self.background_color is not None:
+            pygame.draw.rect(self.fenetre,self.background_color,self.bloc)
+        else:
+            pygame.draw.rect(self.fenetre,(255,0,0),self.bloc)
         cur_txt_prog = 0
         for txt, bloc in zip(self.txts, self.blocliste):
             self.fenetre.blit(self.my_font.render(txt[:max(0, min(self.frames - cur_txt_prog, len(txt) - 1))], True, self.color), bloc)
@@ -164,7 +169,8 @@ class EnnemiDisplay:
         self.size = size
         self._last_loaded = None
         self.ennemi_image = pygame.image.load(image_path)
-        self.ennemi_image = pygame.transform.scale(self.ennemi_image, (size * self.ennemi_image.get_width(), size * self.ennemi_image.get_height()))
+        self.width, self.height = self.ennemi_image.get_size()
+        self.ennemi_image = pygame.transform.scale(self.ennemi_image, (size * self.width, size * self.height))
 
     def display(self):
         self.surface.blit(self.ennemi_image, (self.pos[0], self.pos[1]))
@@ -218,6 +224,14 @@ def get_size(surface:pygame.Surface, pourcentage:float, size:str = "width") -> f
     val = surface.get_size()[0 if size == "width" else 1]
 
     return pourcentage * val / 100
+
+def get_dialogue_text(text:str, monster, screen:pygame.Surface, clock:pygame.time.Clock) -> TextDisplay:
+    """monster:Monstre -> contient un attribut ennemi_display"""
+    size = (get_size(screen, 10), get_size(screen, 15, "height"))
+    pos = (get_size(screen, 55), get_size(screen, 2, "height"))
+
+    text_display = TextDisplay(text, screen, clock, pos=pos, size=size,background_color=(255, 255, 255))
+    return text_display
 
 if __name__ == "__main__":
     pygame.init()

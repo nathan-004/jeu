@@ -1,9 +1,10 @@
 import pygame
 import time
-from random import shuffle, randint
+from random import shuffle, randint, choice
 import json
+from typing import Optional
 
-from display import TextDisplay, get_size, RoomDisplay, MouseButton, HealthBar, EnnemiDisplay, ChestDisplay
+from display import TextDisplay, get_size, RoomDisplay, MouseButton, HealthBar, EnnemiDisplay, ChestDisplay, get_dialogue_text
 from map import create_one_solution_map, get_absolute_direction, Map
 from constants import *
 
@@ -35,6 +36,25 @@ def make_buttons(surface: pygame.Surface, actions: list, space_percent: int = 20
         buttons.append(MouseButton(button_txt, pos, size, button_callable, surface, button_bloc_pos))
 
     return buttons
+
+def add_random_dialogue(monster_type:str, event:str, game):
+    txt = get_random_dialogue(monster_type, event)
+
+    if txt is not None:
+        game.current_texts.append(get_dialogue_text(txt, None, game.screen, game.clock))
+
+def get_random_dialogue(monster_type:str, event:str) -> Optional[str]:
+    # Sur 10, seulement 5 fois où il y a du texte
+    max_ = 10
+    prob = 5
+    try:
+        texts = MONSTERS[monster_type]["dialogues"][event]
+    except:
+        return "..."
+    
+    if randint(1, max_) <= prob:
+        return choice(texts)
+    return None
 
 class Objet:
     current_room = (0, 0)
@@ -401,6 +421,7 @@ class Game:
                 if not self.combat:
                     self.combat = Combat(self.personnage, Monstre("Knight", MONSTER_BASE_PV, MONSTER_BASE_ATTACK, MONSTER_BASE_RESISTANCE), self)
                     self.current_texts.append(TextDisplay(f"Vous tombez nez à nez avec {self.combat.ennemi.nom}", self.screen, self.clock))
+                    add_random_dialogue(self.combat.ennemi.nom, "start", self)
 
             player_health_bar.display()
             
@@ -425,7 +446,7 @@ class Game:
     
     def get_maps(self):
         """Renvoie un générateur contenant un tuple map, text"""
-        yield (self._load_map("assets/maps/start"), self._load_text("assets/maps/start"))
+        #yield (self._load_map("assets/maps/start"), self._load_text("assets/maps/start"))
         base_text = {
             (0, self.height//2): ["Vous y êtes arrivé !", "Il ne vous reste plus qu'à trouver le chemin dans ce donjon, à battre tous les ennemis sur votre chemin, à acquérir les meilleurs statistiques.", "On ne sait jamais, ce qui semble être la fin peut parfois n'être que le début d'une plus grande aventure."],
             (self.width//4, self.height//2): ["Vous avez l'air de bien vous en sortir", "En espérant que vous ne mourriez pas dans d'atroces souffrances.", "Un homme comme vous a déjà fait son apparition auparavant ..."],
@@ -493,6 +514,8 @@ class Combat:
         if self.tour % 2 == 0:
             att = self.joueur.attaque(self.ennemi)
             self.game.current_texts.append(TextDisplay(f"Vous infligez {att} dégâts {NEW_LINE_CHARACTER} Il ne lui reste plus que {self.ennemi.pv} pv", self.game.screen, self.game.clock))
+            if self.ennemi.pv > 0:
+                add_random_dialogue(self.ennemi.nom, "receive_damage", self.game)
         else:
             return
 
@@ -507,6 +530,7 @@ class Combat:
 
         if type(self.winner) is Joueur:
             self.winner.victoire(other)
+            add_random_dialogue(self.ennemi.nom, "monster_death", self.game)
 
         return True
 
