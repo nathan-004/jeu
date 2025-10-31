@@ -316,5 +316,3 @@ if __name__ == "__main__":
         pygame.display.update()
         clock.tick(10)
     pygame.quit()
-
-

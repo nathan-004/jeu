@@ -37,7 +37,8 @@ MONSTERS = {
         "dialogues": {
             "start": ["Je ne pensais pas te revoir un jour", "... Essaye de passer derrière moi !", "Je vais pouvoir émousser ma lame", "Qui aurait cru que tu arriverais jusqu'à là"],
             "receive_damage": ["Ouch !", "Tu ne rigoles pas", "Tu ne penses quand même pas gagner ?", "Je ne tomberai pas si facilement"],
-            "monster_death": ["Pourquoi ce sourire niarquois ?", "Si facilement ...", "Cette douleur ... Il te fera comprendre un jour ..."]
+            "monster_death": ["Pourquoi ce sourire niarquois ?", "Si facilement ...", "Cette douleur ... Il te fera comprendre un jour ..."],
+            "miss_attack": ["Concentre toi, je n'aimes pas quand c'est trop facile.", "Regarde où tu vises"]
         }
     }
 }

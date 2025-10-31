@@ -282,14 +282,14 @@ class Personnage:
         if a >= 1:
             return ennemi.degat_subit(self.degat)
         else:
-            pass
+            return None
     
     def attaque_lourde(self, ennemi):
         a = randint(1, 10)
-        if a >= 5:
+        if a >= 7:
              return ennemi.degat_subit(self.degat*2)
         else:
-            pass
+            return None
 
     def level_up(self):
         """Prend les attributs du personnage de base et ajoute un nombre * level"""
@@ -602,7 +602,28 @@ class Combat:
         print("Attaque du joueur")
         if self.tour % 2 == 0:
             att = self.joueur.attaque(self.ennemi)
-            self.game.current_texts.append(TextDisplay(f"Vous infligez {att} dégâts {NEW_LINE_CHARACTER} Il ne lui reste plus que {self.ennemi.pv} pv", self.game.screen, self.game.clock))
+            if att is None:
+                self.game.current_texts.append(TextDisplay(f"Vous avez stressé et vous avez manqué votre attaque ...", self.game.screen, self.game.clock))
+                add_random_dialogue(self.ennemi.nom, "miss_attack", self.game)
+            else:
+                self.game.current_texts.append(TextDisplay(f"Vous infligez {att} dégâts {NEW_LINE_CHARACTER} Il ne lui reste plus que {self.ennemi.pv} pv", self.game.screen, self.game.clock))
+            if self.ennemi.pv > 0:
+                add_random_dialogue(self.ennemi.nom, "receive_damage", self.game)
+        else:
+            return
+
+        self.tour += 1
+
+    def joueur_attaque_lourde(self):
+        """Attaque lourde du joueur"""
+        print("Attaque lourde du joueur")
+        if self.tour % 2 == 0:
+            att = self.joueur.attaque_lourde(self.ennemi)
+            if att is None:
+                self.game.current_texts.append(TextDisplay(f"Vous avez tout risqué mais vous êtes loupé ...", self.game.screen, self.game.clock))
+                add_random_dialogue(self.ennemi.nom, "miss_attack", self.game)
+            else:
+                self.game.current_texts.append(TextDisplay(f"Vous infligez {att} dégâts {NEW_LINE_CHARACTER} Il ne lui reste plus que {self.ennemi.pv} pv", self.game.screen, self.game.clock))
             if self.ennemi.pv > 0:
                 add_random_dialogue(self.ennemi.nom, "receive_damage", self.game)
         else:
@@ -647,7 +668,7 @@ class Combat:
             return
 
         if self.buttons is None:
-            buttons = [("COMBAT", self.joueur_attaque), ("UTILISER", self.joueur_utiliser)]
+            buttons = [("ATTAQUE", self.joueur_attaque), ("TOUT RISQUER", self.joueur_attaque_lourde), ("UTILISER", self.joueur_utiliser)]
             self.buttons = make_buttons(surface, buttons, space_percent, button_bloc_pos)
         
         if self.tour % 2 == 0:
