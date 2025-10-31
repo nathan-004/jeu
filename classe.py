@@ -131,6 +131,7 @@ class Coffre:
         self.types = types
         self.n = n
         self.objets = []  # Contient la liste de types d'objet aléatoires
+        self.item = None
         
         self.chest_display = None
         self.item_display = None
@@ -153,7 +154,6 @@ class Coffre:
         elif not self.chest_display.ended:
             self.open_animation(game.screen, pos, size)
         elif not self.actions_end:
-            self.open_animation(game.screen, pos, size)
             self.display_item_choice(game, pos, size)
         else:
             self.end = True
@@ -169,19 +169,21 @@ class Coffre:
         """
         Affiche un objet aléatoire dans une carte, propose au joueur de l'accepter ou de le refuser.
         """
+        self.game = game
         # Création d'un objet aléatoire
-        type_objet = self.get()
-        nom = f"{type_objet.capitalize()} mystérieux"
-        soin = degat = resistance = 0
+        if self.item is None:
+            type_objet = self.get()
+            nom = f"{type_objet.capitalize()} mystérieux"
+            soin = degat = resistance = 0
     
-        if type_objet == "potion":
-            soin = randint(3, 8)
-        elif type_objet == "arme":
-            degat = randint(1, 4)
-        elif type_objet == "armure":
-            resistance = randint(1, 3)
+            if type_objet == "potion":
+                soin = randint(3, 8)
+            elif type_objet == "arme":
+                degat = randint(1, 4)
+            elif type_objet == "armure":
+                resistance = randint(1, 3)
 
-        self.item = Objet(nom, type_objet, soin=soin, degat=degat, resistance=resistance)
+            self.item = Objet(nom, type_objet, soin=soin, degat=degat, resistance=resistance)
 
         if self.item_display is None:
             self.item_display = ItemDisplay(game.screen, pos, size, type_objet)
@@ -189,7 +191,7 @@ class Coffre:
         self.item_display.display()
 
         actions = [
-            ("Accepter", lambda: self.accept_item(game)),
+            ("Accepter", self.accept_item),
             ("Refuser", self.decline_item)
         ]
         buttons_surface = pygame.Surface((size[0], 80), pygame.SRCALPHA)
@@ -211,20 +213,19 @@ class Coffre:
         for button in self.buttons:
             button.handle_event(event)
     
-    def accept_item(self, game):
+    def accept_item(self):
         """
         Ajoute l'item au joueur, puis marque la fin de l'action.
         """
         if hasattr(self, "item") and self.item:
-            game.personnage.inventaire.add(self.item)
-            game.personnage.reset()
-            game.current_texts.append(
-                TextDisplay(f"Vous obtenez : {self.item.get_message()}", game.screen, game.clock)
+            self.game.personnage.inventaire.add(self.item)
+            self.game.personnage.reset()
+            self.game.current_texts.append(
+                TextDisplay(f"Vous obtenez : {self.item.get_message()}", self.game.screen, self.game.clock)
             )
 
         self.actions_end = True
         self.end = True
-
 
     def decline_item(self):
         """
@@ -349,13 +350,13 @@ class Joueur(Personnage):
     def level_up(self):
         super().level_up()
         self.reset()
+        self.game.current_texts.append(TextDisplay(f"Vous passez au niveau {self.level}", self.game.screen, self.game.clock))
 
     def reset(self):
         self.pv = (self.pv_base + PLAYER_LEVEL_AUGMENTATION_PV * self.level) * (self.pv / self.pv_base)
         self.degat = self.degat_base + PLAYER_LEVEL_AUGMENTATION_ATTACK * self.level
         self.resistance = min(self.resistance_base + PLAYER_LEVEL_AUGMENTATION_RESISTANCE * self.level, MAX_PLAYER_RESISTANCE)
         self.inventaire.equip(self)
-        self.game.current_texts.append(TextDisplay(f"Vous passez au niveau {self.level}", self.game.screen, self.game.clock))
 
 class Game:
     def __init__(self):
@@ -486,7 +487,7 @@ class Game:
                 if not self.combat:
                     if self.coffre.chest_display is None and not self.coffre.end:
                         self.current_texts.append(TextDisplay("Vous trouvez un coffre. Vous l'ouvrez.", self.screen, self.clock))
-                    if (self.coffre.chest_display is None and not self.coffre.end and not self.coffre.actions_end) or self.current_texts != []:
+                    if self.current_texts != [] and (self.coffre.chest_display is None or not self.coffre.chest_display.ended):
                         self.coffre.reset()
                     self.coffre.display(self, item_choice_pos, item_choice_size)
                     if self.coffre.end:
@@ -522,7 +523,7 @@ class Game:
     
     def get_maps(self):
         """Renvoie un générateur contenant un tuple map, text"""
-        #yield (self._load_map("assets/maps/start"), self._load_text("assets/maps/start"))
+        yield (self._load_map("assets/maps/start"), self._load_text("assets/maps/start"))
         base_text = {
             (0, self.height//2): ["Vous y êtes arrivé !", "Il ne vous reste plus qu'à trouver le chemin dans ce donjon, à battre tous les ennemis sur votre chemin, à acquérir les meilleurs statistiques.", "On ne sait jamais, ce qui semble être la fin peut parfois n'être que le début d'une plus grande aventure."],
             (self.width//4, self.height//2): ["Vous avez l'air de bien vous en sortir", "En espérant que vous ne mourriez pas dans d'atroces souffrances.", "Un homme comme vous a déjà fait son apparition auparavant ..."],
