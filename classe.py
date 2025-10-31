@@ -4,9 +4,11 @@ from random import shuffle, randint, choice
 import json
 from typing import Optional
 
-from display import TextDisplay, get_size, RoomDisplay, MouseButton, HealthBar, EnnemiDisplay, ChestDisplay, get_dialogue_text
+from display import TextDisplay, get_size, RoomDisplay, MouseButton, HealthBar, EnnemiDisplay, ChestDisplay, get_dialogue_text, ItemDisplay
 from map import create_one_solution_map, get_absolute_direction, Map
 from constants import *
+
+BUTTONS = []
 
 def make_buttons(surface: pygame.Surface, actions: list, space_percent: int = 20, button_bloc_pos: tuple = (0, 0)) -> list:
     """
@@ -131,6 +133,7 @@ class Coffre:
         self.chest_display = None
         self.item_display = None
         self.end = False
+        self.buttons = None
 
         self.actions_end = False
 
@@ -149,8 +152,7 @@ class Coffre:
             self.open_animation(game.screen, pos, size)
         elif not self.actions_end:
             self.open_animation(game.screen, pos, size)
-            #self.display_item_choice(game)
-            self.end = True # à enlever quand tu auras fini
+            self.display_item_choice(game, pos, size)
         else:
             self.end = True
 
@@ -181,8 +183,7 @@ class Coffre:
 
         # Affichage visuel de l'objet dans une carte
         if self.item_display is None:
-            from display import ItemDisplay  # import ici pour éviter les import circulaires
-            self.item_display = ItemDisplay(game.screen, pos, size, self.item.get_message())
+            self.item_display = ItemDisplay(game.screen, pos, size, type_objet)
 
         self.item_display.display()
 
@@ -203,7 +204,14 @@ class Coffre:
 
         game.screen.blit(buttons_surface, buttons_pos)
     
-       def accept_item(self, game):
+    def buttons_event(self, event):
+        if self.buttons is None:
+            return
+        
+        for button in self.buttons:
+            button.handle_event(event)
+    
+    def accept_item(self, game):
         """
         Ajoute l'item au joueur, puis marque la fin de l'action.
         """
@@ -254,7 +262,7 @@ class Personnage:
     def use(self, obj:Objet):
         return obj.use(self)
 
-     def degat_subit(self, degats):
+    def degat_subit(self, degats):
         degat_restant = degats - (degats * self.resistance)
         self.pv = self.pv - degat_restant
 
@@ -264,14 +272,14 @@ class Personnage:
         return degat_restant
 
     def attaque(self, ennemi):
-        a = random.randint(1, 10)
-        if a >= 8:
+        a = randint(1, 10)
+        if a >= 1:
             return ennemi.degat_subit(self.degat)
         else:
             pass
     
-     def attaque_lourde(self, ennemi):
-        a = random.randint(1, 10)
+    def attaque_lourde(self, ennemi):
+        a = randint(1, 10)
         if a >= 5:
              return ennemi.degat_subit(self.degat*2)
         else:
@@ -429,6 +437,8 @@ class Game:
                                 self.current_texts[0].frames = len(self.current_texts[0].txt)
                 if self.combat:
                     self.combat.buttons_event(event)
+                if self.coffre:
+                    self.coffre.buttons_event(event)
 
             if self.personnage.position in self.texts and self.personnage.position not in self.visited:
                 for text in self.texts[self.personnage.position]:

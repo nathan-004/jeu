@@ -237,7 +237,7 @@ class ItemDisplay:
     def _load_image(self, object_type):
         # Pour l’instant ne retourne que l’image de la potion
         if object_type == "potion":
-            image = pygame.image.load("potion.png").convert_alpha()
+            image = pygame.image.load("assets/images/health_potion.png").convert_alpha()
         else:
             # Image par défaut si l’objet est inconnu
             image = pygame.Surface((50, 50))
