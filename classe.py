@@ -97,9 +97,9 @@ class Objet:
         if self.soin != 0:
             message += f"Soin : +{self.soin} {NEW_LINE_CHARACTER} "
         if self.degat != 0:
-            message += f"Dégâts : +{self.degat} {NEW_LINE_CHARACTER}"
+            message += f"Dégâts : +{self.degat} {NEW_LINE_CHARACTER} "
         if self.resistance != 0:
-            message += f"Résistance : +{self.resistance} {NEW_LINE_CHARACTER}"
+            message += f"Résistance : +{self.resistance} {NEW_LINE_CHARACTER} "
 
         return message
 
@@ -113,6 +113,8 @@ class Inventaire:
             self.consommables[obj.type] = obj
         else:
             self.equipements[obj.type] = obj
+        print(self.equipements)
+        print(self.consommables)
             
     def equip(self, perso):
         for objet in self.equipements.values():
@@ -181,13 +183,11 @@ class Coffre:
 
         self.item = Objet(nom, type_objet, soin=soin, degat=degat, resistance=resistance)
 
-        # Affichage visuel de l'objet dans une carte
         if self.item_display is None:
             self.item_display = ItemDisplay(game.screen, pos, size, type_objet)
 
         self.item_display.display()
 
-        # Création des boutons "Accepter" et "Refuser"
         actions = [
             ("Accepter", lambda: self.accept_item(game)),
             ("Refuser", self.decline_item)
@@ -217,6 +217,7 @@ class Coffre:
         """
         if hasattr(self, "item") and self.item:
             game.personnage.inventaire.add(self.item)
+            game.personnage.reset()
             game.current_texts.append(
                 TextDisplay(f"Vous obtenez : {self.item.get_message()}", game.screen, game.clock)
             )
@@ -235,6 +236,7 @@ class Coffre:
     def reset(self):
         self.chest_display = None
         self.end = False
+        self.actions_end = False
 
 class Personnage:
     def __init__(self, nom, pv, degats, resistance):
@@ -346,8 +348,10 @@ class Joueur(Personnage):
 
     def level_up(self):
         super().level_up()
+        self.reset()
 
-        self.pv = self.pv_base + PLAYER_LEVEL_AUGMENTATION_PV * self.level
+    def reset(self):
+        self.pv = (self.pv_base + PLAYER_LEVEL_AUGMENTATION_PV * self.level) * (self.pv / self.pv_base)
         self.degat = self.degat_base + PLAYER_LEVEL_AUGMENTATION_ATTACK * self.level
         self.resistance = min(self.resistance_base + PLAYER_LEVEL_AUGMENTATION_RESISTANCE * self.level, MAX_PLAYER_RESISTANCE)
         self.inventaire.equip(self)
@@ -482,7 +486,7 @@ class Game:
                 if not self.combat:
                     if self.coffre.chest_display is None and not self.coffre.end:
                         self.current_texts.append(TextDisplay("Vous trouvez un coffre. Vous l'ouvrez.", self.screen, self.clock))
-                    if (self.coffre.chest_display is None and not self.coffre.end) or self.current_texts != []:
+                    if (self.coffre.chest_display is None and not self.coffre.end and not self.coffre.actions_end) or self.current_texts != []:
                         self.coffre.reset()
                     self.coffre.display(self, item_choice_pos, item_choice_size)
                     if self.coffre.end:
