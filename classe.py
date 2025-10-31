@@ -7,6 +7,7 @@ from typing import Optional
 from display import TextDisplay, get_size, RoomDisplay, MouseButton, HealthBar, EnnemiDisplay, ChestDisplay, get_dialogue_text, ItemDisplay
 from map import create_one_solution_map, get_absolute_direction, Map
 from constants import *
+from son import monster_damage
 
 BUTTONS = []
 
@@ -334,6 +335,7 @@ class Monstre(Personnage):
 
     def degat_subit(self, degats):
         self.damage = True
+        monster_damage()
         return super().degat_subit(degats)
 
     def display(self, surface:pygame.Surface):
@@ -435,6 +437,7 @@ class Game:
 
     def main(self):
         pygame.font.init()
+        pygame.mixer.init()
 
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         map_size = (get_size(self.screen, 30, "height"), get_size(self.screen, 30, "height"))
@@ -741,6 +744,6 @@ class Combat:
 
 if __name__ == "__main__":
     g = Game()
-    g.load()
+    #g.load()
     g.main()
     print(g.save())
