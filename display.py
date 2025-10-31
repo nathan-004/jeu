@@ -237,11 +237,10 @@ class ItemDisplay:
         self.surface.blit(self.image, self.image_rect)
 
     def _load_image(self, object_type):
-        # Pour l’instant ne retourne que l’image de la potion
         if object_type == "potion":
             image = pygame.image.load("assets/images/health_potion.png").convert_alpha()
         elif object_type == "arme":
-            object_name = self.object.nom.lowercase()
+            object_name = self.object.nom.lower()
             if object_name == "lance":
                 image = pygame.image.load("assets/images/weapon/Spear.png").convert_alpha()
             elif object_name == "epée":
@@ -251,6 +250,19 @@ class ItemDisplay:
             image = pygame.Surface((50, 50))
             image.fill((200, 0, 0))
 
+        image = self.resize(image, self.size)
+
+        return image
+    
+    def resize(self, image:pygame.Surface, size:tuple) -> pygame.Surface:
+        iw, ih = image.get_size()
+        if iw == 0 or ih == 0:
+            target_w, target_h = size
+        else:
+            scale = min(size[0] / iw, size[1] / ih)
+            target_w = max(1, int(iw * scale))
+            target_h = max(1, int(ih * scale))
+        image = pygame.transform.scale(image, (target_w, target_h))
         return image
         
 def get_size(surface:pygame.Surface, pourcentage:float, size:str = "width") -> float:
