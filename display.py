@@ -241,7 +241,7 @@ class ItemDisplay:
         if object_type == "potion":
             image = pygame.image.load("assets/images/health_potion.png").convert_alpha()
         elif object_type == "arme":
-            object_name = self.object.nom.lowercase()
+            object_name = self.object.nom.lower()
             if object_name == "lance":
                 image = pygame.image.load("assets/images/weapon/Spear.png").convert_alpha()
             elif object_name == "epée":
