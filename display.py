@@ -1,4 +1,5 @@
 from typing import Optional, Callable
+from random import randint
 
 import pygame
 from pygame.locals import *
@@ -177,18 +178,19 @@ class EnnemiDisplay:
         self.pos = pos
         self.size = size
         self._last_loaded = None
-        self.ennemi_image = pygame.image.load(image_path)
-        self.width, self.height = self.ennemi_image.get_size()
-        self.ennemi_image = pygame.transform.scale(self.ennemi_image, (size * self.width, size * self.height))
+        self.load(image_path)
 
     def display(self):
         self.surface.blit(self.ennemi_image, (self.pos[0], self.pos[1]))
 
+    def display_damage(self):
+        self.surface.blit(self.ennemi_image, (self.pos[0] + randint(-10, 10), self.pos[1] + randint(-10, -5)))
+        self.load(self._last_loaded)
+
     def load(self, image_path):
-        if image_path == self._last_loaded:
-            return
         self.ennemi_image = pygame.image.load(image_path)
-        self.ennemi_image = pygame.transform.scale(self.ennemi_image, (self.size[0], self.size[1]))
+        self.width, self.height = self.ennemi_image.get_size()
+        self.ennemi_image = pygame.transform.scale(self.ennemi_image, (self.size * self.width, self.size * self.height))
         self._last_loaded = image_path
         
 class HealthBar:

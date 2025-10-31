@@ -302,6 +302,7 @@ class Monstre(Personnage):
         super().__init__(nom, pv, degats, resistance)
         self.ennemi_display = None
         self.health_bar = None
+        self.damage = False
 
     def level_up(self):
         super().level_up()
@@ -311,12 +312,20 @@ class Monstre(Personnage):
         self.resistance = min(self.resistance_base + MONSTER_LEVEL_AUGMENTATION_RESISTANCE * self.level, MAX_MONSTER_RESISTANCE)
         self.inventaire.equip(self)
 
+    def degat_subit(self, degats):
+        self.damage = True
+        return super().degat_subit(degats)
+
     def display(self, surface:pygame.Surface):
         if self.ennemi_display is None:
             self.ennemi_display = EnnemiDisplay(surface, (get_size(surface, 40), 125), 0.5, MONSTERS[self.nom]["image"])
             self.health_bar = HealthBar(self, (get_size(surface, 40), get_size(surface, 5, "height")), (get_size(surface, 20), 50), surface)
-        self.ennemi_display.display()
+        if self.damage:
+            self.ennemi_display.display_damage()
+        else:
+            self.ennemi_display.display()
         self.health_bar.display()
+        self.damage = False
 
     def use(self, obj:Objet):
         self.pv += obj.soin
@@ -525,7 +534,7 @@ class Game:
     
     def get_maps(self):
         """Renvoie un générateur contenant un tuple map, text"""
-        yield (self._load_map("assets/maps/start"), self._load_text("assets/maps/start"))
+        #yield (self._load_map("assets/maps/start"), self._load_text("assets/maps/start"))
         base_text = {
             (0, self.height//2): ["Vous y êtes arrivé !", "Il ne vous reste plus qu'à trouver le chemin dans ce donjon, à battre tous les ennemis sur votre chemin, à acquérir les meilleurs statistiques.", "On ne sait jamais, ce qui semble être la fin peut parfois n'être que le début d'une plus grande aventure."],
             (self.width//4, self.height//2): ["Vous avez l'air de bien vous en sortir", "En espérant que vous ne mourriez pas dans d'atroces souffrances.", "Un homme comme vous a déjà fait son apparition auparavant ..."],
