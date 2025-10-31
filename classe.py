@@ -238,6 +238,8 @@ class Coffre:
         self.chest_display = None
         self.end = False
         self.actions_end = False
+        self.item = None
+        self.item_display = None
 
 class Personnage:
     def __init__(self, nom, pv, degats, resistance):
@@ -401,7 +403,7 @@ class Game:
 
         item_choice_size = (get_size(self.screen, 40), get_size(self.screen, 40, "height"))
         item_choice_pos = (get_size(self.screen, 30), get_size(self.screen, 30, "height"))
-        self.coffre = Coffre(3)
+        self.coffre = Coffre(1)
 
         self.combat = False
         self.clock = pygame.time.Clock()
