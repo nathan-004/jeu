@@ -132,6 +132,12 @@ class Inventaire:
         }
 
         return content
+    
+    def load(self, content:dict):
+        for obj_type, obj in content["equipements"].items():
+            self.equipements[obj_type] = Objet(obj["nom"], obj_type, obj["soin"], obj["degat"], obj["resistance"])
+        for obj_type, obj in content["consommables"].items():
+            self.consommables[obj_type] = Objet(obj["nom"], obj_type, obj["soin"], obj["degat"], obj["resistance"])
 
 class Coffre:
     """Permet de renvoyer un type d'objet aléatoire en fonction de ceux déjà renvoyés"""
@@ -388,10 +394,19 @@ class Joueur(Personnage):
         content = {
             "position": self.position,
             "inventaire": self.inventaire.get_content(),
-            "level": self.level
+            "level": self.level,
+            "exp": self.exp
         }
 
         return content
+    
+    def load(self, content:dict):
+        """Modifie self.personnage pour correspondre aux valeurs de content"""
+        self.position = tuple(content["position"])
+        self.level = content["level"]
+        self.exp = content["exp"]
+        self.inventaire.load(content["inventaire"])
+        self.reset()
 
 class Game:
     def __init__(self):
@@ -609,6 +624,8 @@ class Game:
             content = json.load(f)
         
         self.visited = set([tuple(pos_list) for pos_list in content["visited"]])
+        self.map.load_matrice_format(content["map"]["grid"])
+        self.personnage.load(content["player"])
 
 class Combat:
     def __init__(self, joueur:Joueur, ennemi:Personnage, game: Game):

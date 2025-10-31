@@ -313,7 +313,7 @@ class Map:
             cell_size_x, cell_size_y = cell_size, cell_size
         else:
             cell_size_x, cell_size_y = cell_size
-
+        print(len(self.grid), y, self.height, len(self.grid[0]), x, self.width)
         room = self.grid[y][x]
         room_type = room.type
         color = (0, 0, 0)
@@ -498,7 +498,7 @@ class Map:
         ------
         [[Room.get_content, Room.get_content], [Room.get_content, Room.get_content]],
         """
-        self.width, self.height = len(grid), len(grid[0])
+        self.width, self.height = len(grid[0]), len(grid)
         self.grid = []
 
         for y, row in enumerate(grid):
