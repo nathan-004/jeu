@@ -624,7 +624,7 @@ class Combat:
 
     def ennemi_turn(self):
         """Tour de l'ennemi choisir action ennemi"""
-        if self.tour % 2 == 0:
+        if self.tour % 2 == 0 or self.game.current_texts != []:
             return
         
         if self.ennemi.pv <= self.ennemi.pv_base * 0.5: # Jouer ici
@@ -665,6 +665,4 @@ class Combat:
 if __name__ == "__main__":
     g = Game()
     g.main()
-
     print(g.save())
-
