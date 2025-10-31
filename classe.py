@@ -180,13 +180,14 @@ class Coffre:
                 soin = randint(3, 8)
             elif type_objet == "arme":
                 degat = randint(1, 4)
+                nom = choice(["Lance", "Epée"])
             elif type_objet == "armure":
                 resistance = randint(1, 3)
 
             self.item = Objet(nom, type_objet, soin=soin, degat=degat, resistance=resistance)
 
         if self.item_display is None:
-            self.item_display = ItemDisplay(game.screen, pos, size, type_objet)
+            self.item_display = ItemDisplay(game.screen, pos, size, self.item)
 
         self.item_display.display()
 

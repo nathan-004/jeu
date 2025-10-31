@@ -169,8 +169,7 @@ class RoomDisplay:
     
     def display_enter(self,time=1000):
         self.screen.blit(self.enter,(self.w*(1-self.taille)/2,0))
-        pygame.time.delay(time)
-        
+        pygame.time.delay(time) 
         
 class EnnemiDisplay:
     def __init__(self, surface:pygame.Surface, pos:tuple, size:int, image_path:str):
@@ -216,19 +215,20 @@ class HealthBar:
         pygame.draw.rect(self.surface, self.pv_color, (self.pos[0], self.pos[1], rectangle_pv, self.size[1]))
 
 class ItemDisplay:
-    def __init__(self, surface: pygame.Surface, pos: tuple, size: tuple, object_type: str):
+    def __init__(self, surface: pygame.Surface, pos: tuple, size: tuple, object):
         # Initialise toutes les variables comme attributs
         self.surface = surface
         self.pos = pos
         self.size = size
-        self.object_type = object_type
+        self.object_type = object.type
+        self.object = object
 
         # Créer le fond d’écran avec pygame.Rect
         self.background_rect = pygame.Rect(pos, size)
         self.background_color = (50, 50, 50)  # gris foncé
 
         # Créer l’image avec self._load_image, centrée dans le fond
-        self.image = self._load_image(object_type)
+        self.image = self._load_image(self.object_type)
         self.image_rect = self.image.get_rect(center=self.background_rect.center)
 
     def display(self):
@@ -240,6 +240,12 @@ class ItemDisplay:
         # Pour l’instant ne retourne que l’image de la potion
         if object_type == "potion":
             image = pygame.image.load("assets/images/health_potion.png").convert_alpha()
+        elif object_type == "arme":
+            object_name = self.object.nom.lowercase()
+            if object_name == "lance":
+                image = pygame.image.load("assets/images/weapon/Spear.png").convert_alpha()
+            elif object_name == "epée":
+                image = pygame.image.load("assets/images/weapon/Spear.png").convert_alpha()
         else:
             # Image par défaut si l’objet est inconnu
             image = pygame.Surface((50, 50))
