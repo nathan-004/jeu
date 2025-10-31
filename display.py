@@ -244,7 +244,7 @@ class ItemDisplay:
             if object_name == "lance":
                 image = pygame.image.load("assets/images/weapon/Spear.png").convert_alpha()
             elif object_name == "epée":
-                image = pygame.image.load("assets/images/weapon/Spear.png").convert_alpha()
+                image = pygame.image.load("assets/images/weapon/Sword.png").convert_alpha()
         elif object_type == "armure":
             image = pygame.image.load("assets/images/Armor.png").convert_alpha()
         else:

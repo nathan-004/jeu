@@ -120,6 +120,19 @@ class Inventaire:
         for objet in self.equipements.values():
             perso.use(objet)
 
+    def get_content(self) -> dict:
+        """Renvoie les informations à sauvegarder"""
+        content = {
+            "equipements": {
+                obj.type: {"nom": obj.nom, "soin": obj.soin, "degat": obj.degat, "resistance": obj.resistance} for obj in self.equipements.values()
+            },
+            "consommables": {
+                obj.type: {"nom": obj.nom, "soin": obj.soin, "degat": obj.degat, "resistance": obj.resistance} for obj in self.consommables.values()
+            }
+        }
+
+        return content
+
 class Coffre:
     """Permet de renvoyer un type d'objet aléatoire en fonction de ceux déjà renvoyés"""
 
@@ -370,6 +383,16 @@ class Joueur(Personnage):
         self.resistance = min(self.resistance_base + PLAYER_LEVEL_AUGMENTATION_RESISTANCE * self.level, MAX_PLAYER_RESISTANCE)
         self.inventaire.equip(self)
 
+    def get_content(self) -> dict:
+        """Renvoie les informations sous forme de dictionnaire qui pourront être transcrite au format json"""
+        content = {
+            "position": self.position,
+            "inventaire": self.inventaire.get_content(),
+            "level": self.level
+        }
+
+        return content
+
 class Game:
     def __init__(self):
         self.height, self.width = 15, 16
@@ -568,9 +591,24 @@ class Game:
             res[decode_tuple(key)] = value
         return res
 
-    def save(self):
+    def save(self, filename:str = "assets/saves/save1"):
         # Sauvegarder la map
         map_content = self.map.get_content()
+        personnage_content = self.personnage.get_content()
+        result = {
+            "map": map_content,
+            "player": personnage_content,
+            "visited": list(self.visited)
+        }
+
+        with open(filename, "w") as f:
+            json.dump(result, f, indent=4)
+
+    def load(self, filename:str = "assets/saves/save1"):
+        with open(filename, "r") as f:
+            content = json.load(f)
+        
+        self.visited = set([tuple(pos_list) for pos_list in content["visited"]])
 
 class Combat:
     def __init__(self, joueur:Joueur, ennemi:Personnage, game: Game):
@@ -686,5 +724,6 @@ class Combat:
 
 if __name__ == "__main__":
     g = Game()
+    g.load()
     g.main()
     print(g.save())

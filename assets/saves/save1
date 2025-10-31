@@ -1,0 +1,288 @@
+{
+    "map": {
+        "grid": [
+            [
+                {
+                    "type": "none",
+                    "walls": {
+                        "left": true,
+                        "right": true,
+                        "top": true,
+                        "bottom": true
+                    },
+                    "chest": false,
+                    "monster": false,
+                    "locked": false
+                },
+                {
+                    "type": "none",
+                    "walls": {
+                        "left": true,
+                        "right": true,
+                        "top": true,
+                        "bottom": true
+                    },
+                    "chest": false,
+                    "monster": false,
+                    "locked": false
+                },
+                {
+                    "type": "none",
+                    "walls": {
+                        "left": true,
+                        "right": true,
+                        "top": true,
+                        "bottom": true
+                    },
+                    "chest": false,
+                    "monster": false,
+                    "locked": false
+                },
+                {
+                    "type": "none",
+                    "walls": {
+                        "left": true,
+                        "right": true,
+                        "top": true,
+                        "bottom": true
+                    },
+                    "chest": false,
+                    "monster": false,
+                    "locked": false
+                }
+            ],
+            [
+                {
+                    "type": "path",
+                    "walls": {
+                        "left": true,
+                        "right": false,
+                        "top": true,
+                        "bottom": true
+                    },
+                    "chest": false,
+                    "monster": false,
+                    "locked": false
+                },
+                {
+                    "type": "path",
+                    "walls": {
+                        "left": false,
+                        "right": false,
+                        "top": true,
+                        "bottom": false
+                    },
+                    "chest": false,
+                    "monster": false,
+                    "locked": false
+                },
+                {
+                    "type": "path",
+                    "walls": {
+                        "left": false,
+                        "right": true,
+                        "top": true,
+                        "bottom": false
+                    },
+                    "chest": false,
+                    "monster": false,
+                    "locked": false
+                },
+                {
+                    "type": "key",
+                    "walls": {
+                        "left": true,
+                        "right": true,
+                        "top": true,
+                        "bottom": false
+                    },
+                    "chest": false,
+                    "monster": false,
+                    "locked": false
+                }
+            ],
+            [
+                {
+                    "type": "start",
+                    "walls": {
+                        "left": true,
+                        "right": false,
+                        "top": true,
+                        "bottom": true
+                    },
+                    "chest": false,
+                    "monster": false,
+                    "locked": false
+                },
+                {
+                    "type": "path",
+                    "walls": {
+                        "left": false,
+                        "right": true,
+                        "top": false,
+                        "bottom": true
+                    },
+                    "chest": false,
+                    "monster": false,
+                    "locked": false
+                },
+                {
+                    "type": "path",
+                    "walls": {
+                        "left": true,
+                        "right": true,
+                        "top": false,
+                        "bottom": false
+                    },
+                    "chest": false,
+                    "monster": false,
+                    "locked": false
+                },
+                {
+                    "type": "end",
+                    "walls": {
+                        "left": true,
+                        "right": false,
+                        "top": false,
+                        "bottom": false
+                    },
+                    "chest": false,
+                    "monster": false,
+                    "locked": "right"
+                }
+            ],
+            [
+                {
+                    "type": "path",
+                    "walls": {
+                        "left": true,
+                        "right": false,
+                        "top": true,
+                        "bottom": false
+                    },
+                    "chest": false,
+                    "monster": false,
+                    "locked": false
+                },
+                {
+                    "type": "path",
+                    "walls": {
+                        "left": false,
+                        "right": false,
+                        "top": true,
+                        "bottom": true
+                    },
+                    "chest": false,
+                    "monster": false,
+                    "locked": false
+                },
+                {
+                    "type": "path",
+                    "walls": {
+                        "left": false,
+                        "right": true,
+                        "top": false,
+                        "bottom": true
+                    },
+                    "chest": false,
+                    "monster": false,
+                    "locked": false
+                },
+                {
+                    "type": "path",
+                    "walls": {
+                        "left": true,
+                        "right": true,
+                        "top": false,
+                        "bottom": false
+                    },
+                    "chest": false,
+                    "monster": false,
+                    "locked": false
+                }
+            ],
+            [
+                {
+                    "type": "path",
+                    "walls": {
+                        "left": true,
+                        "right": false,
+                        "top": false,
+                        "bottom": true
+                    },
+                    "chest": false,
+                    "monster": false,
+                    "locked": false
+                },
+                {
+                    "type": "path",
+                    "walls": {
+                        "left": false,
+                        "right": false,
+                        "top": true,
+                        "bottom": true
+                    },
+                    "chest": false,
+                    "monster": false,
+                    "locked": false
+                },
+                {
+                    "type": "path",
+                    "walls": {
+                        "left": false,
+                        "right": false,
+                        "top": true,
+                        "bottom": true
+                    },
+                    "chest": false,
+                    "monster": false,
+                    "locked": false
+                },
+                {
+                    "type": "path",
+                    "walls": {
+                        "left": false,
+                        "right": true,
+                        "top": false,
+                        "bottom": true
+                    },
+                    "chest": false,
+                    "monster": true,
+                    "locked": false
+                }
+            ]
+        ]
+    },
+    "player": {
+        "position": [
+            1,
+            1
+        ],
+        "inventaire": {
+            "equipements": {},
+            "consommables": {
+                "potion": {
+                    "nom": "Potion pour se soigner",
+                    "soin": 5,
+                    "degat": 0,
+                    "resistance": 0
+                }
+            }
+        },
+        "level": 0
+    },
+    "visited": [
+        [
+            1,
+            1
+        ],
+        [
+            0,
+            2
+        ],
+        [
+            1,
+            2
+        ]
+    ]
+}
