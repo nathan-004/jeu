@@ -245,6 +245,8 @@ class ItemDisplay:
                 image = pygame.image.load("assets/images/weapon/Spear.png").convert_alpha()
             elif object_name == "epée":
                 image = pygame.image.load("assets/images/weapon/Spear.png").convert_alpha()
+        elif object_type == "armure":
+            image = pygame.image.load("assets/images/Armor.png").convert_alpha()
         else:
             # Image par défaut si l’objet est inconnu
             image = pygame.Surface((50, 50))
