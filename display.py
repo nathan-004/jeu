@@ -214,18 +214,36 @@ class HealthBar:
         pygame.draw.rect(self.surface, self.pv_color, (self.pos[0], self.pos[1], rectangle_pv, self.size[1]))
 
 class ItemDisplay:
-    def __init__(self, surface:pygame.Surface, pos:tuple, size:tuple, object_type:str):
-        # Initie toutes les variables comme attributs
-        # Créer le fond d'écran avec pygame.Rect
-        # Créer l'image avec self._load_image Fais en sorte qu'elle soit centrée
-        pass
+    def __init__(self, surface: pygame.Surface, pos: tuple, size: tuple, object_type: str):
+        # Initialise toutes les variables comme attributs
+        self.surface = surface
+        self.pos = pos
+        self.size = size
+        self.object_type = object_type
+
+        # Créer le fond d’écran avec pygame.Rect
+        self.background_rect = pygame.Rect(pos, size)
+        self.background_color = (50, 50, 50)  # gris foncé
+
+        # Créer l’image avec self._load_image, centrée dans le fond
+        self.image = self._load_image(object_type)
+        self.image_rect = self.image.get_rect(center=self.background_rect.center)
 
     def display(self):
-        # Affiche le fond puis l'image
-        pass
+        # Affiche le fond puis l’image
+        pygame.draw.rect(self.surface, self.background_color, self.background_rect)
+        self.surface.blit(self.image, self.image_rect)
 
     def _load_image(self, object_type):
-        pass # Pour l'instant ne retourne que l'image de la potion
+        # Pour l’instant ne retourne que l’image de la potion
+        if object_type == "potion":
+            image = pygame.image.load("potion.png").convert_alpha()
+        else:
+            # Image par défaut si l’objet est inconnu
+            image = pygame.Surface((50, 50))
+            image.fill((200, 0, 0))
+
+        return image
         
 def get_size(surface:pygame.Surface, pourcentage:float, size:str = "width") -> float:
     """Renvoie la valeur en pixel qui correspond au pourcentage de la dimension de la surface"""
@@ -278,4 +296,5 @@ if __name__ == "__main__":
         pygame.display.update()
         clock.tick(10)
     pygame.quit()
+
 
