@@ -594,8 +594,8 @@ class Game:
             keys = pygame.key.get_pressed()
             
             if keys[pygame.K_d]:
-                stats = f"*{self.personnage.get_stats_message()}*"
-                if stats != debug_text.txt:
+                stats = self.personnage.get_stats_message()
+                if f"*{stats}*" != debug_text.txt:
                     debug_text = TextDisplay(stats, self.screen, self.clock, background_color=(0, 0, 0), color=(255,255,255), pos=debug_text_pos, size=debug_text_size)
                 borders = pygame.Rect(debug_text_pos, debug_text_size)
                 debug_text.display(20)

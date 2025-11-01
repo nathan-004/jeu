@@ -256,11 +256,18 @@
     },
     "player": {
         "position": [
-            0,
-            2
+            2,
+            3
         ],
         "inventaire": {
-            "equipements": {},
+            "equipements": {
+                "arme": {
+                    "nom": "Ep\u00e9e",
+                    "soin": 0,
+                    "degat": 2,
+                    "resistance": 0
+                }
+            },
             "consommables": {
                 "potion": {
                     "nom": "Potion pour se soigner",
@@ -275,7 +282,27 @@
     },
     "visited": [
         [
+            1,
+            2
+        ],
+        [
+            2,
+            1
+        ],
+        [
+            1,
+            1
+        ],
+        [
+            2,
+            3
+        ],
+        [
             0,
+            2
+        ],
+        [
+            2,
             2
         ]
     ]
