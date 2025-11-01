@@ -355,7 +355,7 @@ class Personnage:
         return self.pv_base + PLAYER_LEVEL_AUGMENTATION_PV * self.level
     
     def get_stats_message(self) -> str:
-        content = f"{self.nom} & PV : {self.pv}/{self.pv_base} & Degats : {self.degat} & Resistance : {self.resistance}"
+        content = f"{self.nom} & PV : {self.pv}/{self.get_max_pv()} & Degats : {self.degat} & Resistance : {self.resistance} & Exp : {self.exp}/{ BASE_EXP_LEVEL_UP * (BASE_EXP_LEVEL_UP_AUGMENTATION_COEFF**self.level)} & Level : {self.level}"
         return content
 
 class Monstre(Personnage):
@@ -418,10 +418,13 @@ class Joueur(Personnage):
         new_exp = BASE_EXP_REWARD * (BASE_EXP_LEVEL_UP_AUGMENTATION_COEFF ** ennemi.level) + randint(-BASE_EXP_REWARD_RANGE//2, BASE_EXP_REWARD_RANGE//2)
         self.exp += new_exp
         self.game.current_texts.append(TextDisplay(f"Vous avez battu {ennemi.nom} vous gagnez {new_exp} exp", self.game.screen, self.game.clock))
-    
-        if self.exp // BASE_EXP_LEVEL_UP * (BASE_EXP_LEVEL_UP_AUGMENTATION_COEFF**self.level) > 0:
-            self.level_up()
-            self.exp = self.exp % BASE_EXP_LEVEL_UP
+
+        val = BASE_EXP_LEVEL_UP * (BASE_EXP_LEVEL_UP_AUGMENTATION_COEFF**self.level)
+        while self.exp >= val:
+            if self.exp >= val:
+                self.level_up()
+                self.exp -= val
+                val *= BASE_EXP_LEVEL_UP_AUGMENTATION_COEFF
 
     def level_up(self):
         super().level_up()
@@ -429,7 +432,7 @@ class Joueur(Personnage):
         self.game.current_texts.append(TextDisplay(f"Vous passez au niveau {self.level}", self.game.screen, self.game.clock))
 
     def reset(self):
-        self.pv = (self.pv_base + PLAYER_LEVEL_AUGMENTATION_PV * self.level) * (self.pv / self.pv_base)
+        self.pv = self.pv_base + PLAYER_LEVEL_AUGMENTATION_PV * self.level
         self.degat = self.degat_base + PLAYER_LEVEL_AUGMENTATION_ATTACK * self.level
         self.resistance = self.resistance_base + PLAYER_LEVEL_AUGMENTATION_RESISTANCE * self.level
         self.inventaire.equip(self)
@@ -481,6 +484,7 @@ class Game:
         room.display_shade()
 
     def start_menu(self):
+        pygame.font.init()
         # Créer les boutons (comme make_buttons mais à la vertical) + le fond
         # Boutons : Nouvelle partie (self.main), Charger (self.load() + self.main()), quitter (cherches dans main)
         # Créer la boucle de fonctionnement
@@ -652,7 +656,7 @@ class Game:
     
     def get_maps(self):
         """Renvoie un générateur contenant un tuple map, text"""
-        #yield (self._load_map("assets/maps/start"), self._load_text("assets/maps/start"))
+        yield (self._load_map("assets/maps/start"), self._load_text("assets/maps/start"))
         base_text = {
             (0, self.height//2): ["Vous y êtes arrivé !", "Il ne vous reste plus qu'à trouver le chemin dans ce donjon, à battre tous les ennemis sur votre chemin, à acquérir les meilleurs statistiques.", "On ne sait jamais, ce qui semble être la fin peut parfois n'être que le début d'une plus grande aventure."],
             (self.width//4, self.height//2): ["Vous avez l'air de bien vous en sortir", "En espérant que vous ne mourriez pas dans d'atroces souffrances.", "Un homme comme vous a déjà fait son apparition auparavant ..."],
@@ -662,7 +666,7 @@ class Game:
             (self.width - self.width//4, self.height//2): ["On dit de lui qu'il a finalement réussi à sortir de cet endroit.", "Et qu'il attend patiemment tout survivant pour ...", "On s'est compris & Comme ça il enlève le poids de ce traumatisme de leurs épaules, littéralement ..."],
             (self.width - 1, self.height//2): ["Tu as finalement réussi à franchir tous ces obstacles.", "Tu y es ! La sortie est devant tes yeux !", "Ta détermination a payé.", "Mais à quel prix ................."]
         }
-        #yield (create_one_solution_map(self.width, self.height, 4), base_text)
+        yield (create_one_solution_map(self.width, self.height, 4), base_text)
         yield (self._load_map("assets/maps/end"), self._load_text("assets/maps/end"))
 
     def _load_map(self, filename:str) -> Map:
