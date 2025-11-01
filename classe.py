@@ -730,7 +730,7 @@ class Combat:
                 add_random_dialogue(self.ennemi.nom, "miss_attack", self.game)
             else:
                 self.game.current_texts.append(TextDisplay(f"Vous infligez {att:.1f} dégâts {NEW_LINE_CHARACTER} Il ne lui reste plus que {self.ennemi.pv:.1f} pv", self.game.screen, self.game.clock))
-            if self.ennemi.pv > 0:
+            if self.ennemi.pv > 0 and not att is None:
                 add_random_dialogue(self.ennemi.nom, "receive_damage", self.game)
         else:
             return
@@ -747,7 +747,7 @@ class Combat:
                 add_random_dialogue(self.ennemi.nom, "miss_attack", self.game)
             else:
                 self.game.current_texts.append(TextDisplay(f"Vous infligez {att:.1f} dégâts {NEW_LINE_CHARACTER} Il ne lui reste plus que {self.ennemi.pv:.1f} pv", self.game.screen, self.game.clock))
-            if self.ennemi.pv > 0:
+            if self.ennemi.pv > 0 not att is None:
                 add_random_dialogue(self.ennemi.nom, "receive_damage", self.game)
         else:
             return
