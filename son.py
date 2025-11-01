@@ -45,8 +45,15 @@ if __name__ == "__main__":
         for event in pygame.event.get():
             if event.type == QUIT:
                 continuer = False
-            if event.type == KEYDOWN:
-                attaque_sword()
+            elif event.type == KEYDOWN:
+                if event.key == pygame.K_a:
+                    attaque_sword()
+                elif event.key == pygame.K_z:
+                    monster_damage()
+                elif event.key == pygame.K_e:
+                    open_door()
+                elif event.key == pygame.K_SPACE:
+                    sound.pause_music()
         sound.play_music(True)
         clock.tick(10)
     pygame.quit()
