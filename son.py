@@ -38,7 +38,7 @@ if __name__ == "__main__":
             if event.type == QUIT:
                 continuer = False
             if event.type == KEYDOWN:
-                sound.pause_music()
+                monster_damage()
         sound.play_music(True)
         clock.tick(10)
     pygame.quit()
