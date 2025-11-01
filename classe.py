@@ -333,7 +333,7 @@ class Personnage:
         return self.pv_base + PLAYER_LEVEL_AUGMENTATION_PV * self.level
     
     def get_stats_message(self) -> str:
-        content = f"{self.nom} & PV : {self.pv}/{self.pv_base} & Degats : {self.degat}/{self.degat_base} & Resistance : {self.resistance}/{self.resistance_base}"
+        content = f"{self.nom} & PV : {self.pv}/{self.pv_base} & Degats : {self.degat} & Resistance : {self.resistance}"
         return content
 
 class Monstre(Personnage):
@@ -596,7 +596,7 @@ class Game:
             if keys[pygame.K_d]:
                 stats = f"*{self.personnage.get_stats_message()}*"
                 if stats != debug_text.txt:
-                    debug_text = TextDisplay(stats, self.screen, self.clock, pos=debug_text_pos, size=debug_text_size)
+                    debug_text = TextDisplay(stats, self.screen, self.clock, background_color=(0, 0, 0), color=(255,255,255), pos=debug_text_pos, size=debug_text_size)
                 borders = pygame.Rect(debug_text_pos, debug_text_size)
                 debug_text.display(20)
                 pygame.draw.rect(self.screen, "white", borders, 2)
