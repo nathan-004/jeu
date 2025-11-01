@@ -59,7 +59,7 @@ if __name__ == "__main__":
                 continuer = False
             elif event.type == KEYDOWN:
                 if event.key == pygame.K_a:
-                    attaque_sword()
+                    attack_sword()
                 elif event.key == pygame.K_z:
                     monster_damage()
                 elif event.key == pygame.K_e:
