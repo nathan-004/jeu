@@ -9,8 +9,12 @@ def open_door():
     sound = pygame.mixer.Sound("assets/sound/porte.mp3")
     sound.play()
 
-def attaque_sword():
+def attack_sword():
     sound = pygame.mixer.Sound("assets/sound/attaque.mp3")
+    sound.play()
+
+def heavy_attack():
+    sound = pygame.mixer.Sound("assets/sound/attaque_forte.mp3")
     sound.play()
 
 class Musique:
