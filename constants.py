@@ -47,7 +47,7 @@ MONSTERS = {
         }
     },
     "Ventre d'Acier" : {
-        "image": "assets/images/monster/Perso_2.png",
+        "image": "assets/images/monster/ventre_acier.png",
         "dialogues": {
             "start": ["Je t'attendais", "Ca a du être dur tout seul ...", "dans le noir ...", "entouré par l'inconnu ...", "Mais ne t'inquiète pas", "Tout ira mieux", "lorsque JE TE TUERAIS"],
             "receive_damage": va_generator,
