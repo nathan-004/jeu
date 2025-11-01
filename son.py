@@ -9,6 +9,10 @@ def open_door():
     sound = pygame.mixer.Sound("assets/sound/porte.mp3")
     sound.play()
 
+def attaque_sword():
+    sound = pygame.mixer.Sound("assets/sound/attaque.mp3")
+    sound.play()
+
 class Musique:
     def __init__(self,path):
         self.path=path
@@ -42,7 +46,7 @@ if __name__ == "__main__":
             if event.type == QUIT:
                 continuer = False
             if event.type == KEYDOWN:
-                open_door()
+                attaque_sword()
         sound.play_music(True)
         clock.tick(10)
     pygame.quit()
