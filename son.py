@@ -45,6 +45,11 @@ class Musique:
     
     def reset_music(self):
         pygame.mixer.music.rewind()
+    
+    def music_change(self,path):
+        self.path=path
+        self.load = False
+        self.play_music()
 
 if __name__ == "__main__":
     sound=Musique("assets/sound/sound.mp3")
@@ -64,6 +69,12 @@ if __name__ == "__main__":
                     monster_damage()
                 elif event.key == pygame.K_e:
                     open_door()
+                elif event.key == pygame.K_r:
+                    heavy_attack()
+                elif event.key == pygame.K_t:
+                    key_open()
+                elif event.key == pygame.K_y:
+                    sound.music_change("assets/sound/musique_boss.mp3")
                 elif event.key == pygame.K_SPACE:
                     sound.pause_music()
         sound.play_music(True)
