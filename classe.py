@@ -528,6 +528,7 @@ class Game:
                     running = False
                 # appelle button.handle_event(event) pour chaque bouton
 
+            # Affiche les boutons
             # Rafraichis l'écran 
 
         pygame.quit()
