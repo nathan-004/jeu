@@ -7,7 +7,7 @@ from typing import Optional
 from display import TextDisplay, get_size, RoomDisplay, MouseButton, HealthBar, EnnemiDisplay, ChestDisplay, get_dialogue_text, ItemDisplay
 from map import create_one_solution_map, get_absolute_direction, Map
 from constants import *
-from son import monster_damage, attack_sword, open_door, heavy_attack, key_open, Musique
+from son import *
 
 BUTTONS = []
 
@@ -333,6 +333,7 @@ class Personnage:
             attack_sword()
             return ennemi.degat_subit(self.degat)
         else:
+            miss_attack()
             return None
     
     def attaque_lourde(self, ennemi):
@@ -341,6 +342,7 @@ class Personnage:
             heavy_attack()
             return ennemi.degat_subit(self.degat*2)
         else:
+            miss_attack()
             return None
 
     def level_up(self):

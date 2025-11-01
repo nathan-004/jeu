@@ -21,6 +21,10 @@ def key_open():
     sound = pygame.mixer.Sound("assets/sound/key_open.mp3")
     sound.play()
 
+def miss_attack():
+    sound = pygame.mixer.Sound("assets/sound/rate.wav")
+    sound.play()
+
 class Musique:
     def __init__(self,path):
         self.path=path
