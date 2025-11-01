@@ -386,13 +386,13 @@ class Joueur(Personnage):
         self.position = (self.position[0] + direction[0], self.position[1] + direction[1])
         self.direction = direction
     
-    def victoire(self, ennemi):
+    def victoire(self, ennemi:Personnage):
         """Ajoute de l'exp au personnage en fonction du niveau de l'ennemi"""
-        new_exp = BASE_EXP_REWARD + randint(-BASE_EXP_REWARD_RANGE//2, BASE_EXP_REWARD_RANGE//2)
+        new_exp = BASE_EXP_REWARD * (BASE_EXP_LEVEL_UP_AUGMENTATION_COEFF ** ennemi.level) + randint(-BASE_EXP_REWARD_RANGE//2, BASE_EXP_REWARD_RANGE//2)
         self.exp += new_exp
         self.game.current_texts.append(TextDisplay(f"Vous avez battu {ennemi.nom} vous gagnez {new_exp} exp", self.game.screen, self.game.clock))
     
-        if self.exp // BASE_EXP_LEVEL_UP > 0:
+        if self.exp // BASE_EXP_LEVEL_UP * (BASE_EXP_LEVEL_UP_AUGMENTATION_COEFF**self.level) > 0:
             self.level_up()
             self.exp = self.exp % BASE_EXP_LEVEL_UP
 
