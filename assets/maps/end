@@ -1,0 +1,84 @@
+{
+    "grid": {
+        "size": "10,1",
+        "0,0": {
+            "type": "start",
+            "walls": {
+                "right": false
+            }
+        },
+        "1,0": {
+            "type": "path",
+            "walls": {
+                "right": false,
+                "left": false
+            }
+        },
+        "2,0": {
+            "type": "path",
+            "walls": {
+                "right": false,
+                "left": false
+            }
+        },
+        "3,0": {
+            "type": "path",
+            "walls": {
+                "right": false,
+                "left": false
+            },
+            "chest": true
+        },
+        "4,0": {
+            "type": "path",
+            "walls": {
+                "right": false,
+                "left": false
+            },
+            "chest": true
+        },
+        "5,0": {
+            "type": "path",
+            "walls": {
+                "right": false,
+                "left": false
+            },
+            "chest": true
+        },
+        "6,0": {
+            "type": "path",
+            "walls": {
+                "right": false,
+                "left": false
+            }
+        },
+        "7,0": {
+            "type": "path",
+            "walls": {
+                "right": false,
+                "left": false
+            },
+            "monster": true
+        },
+        "8,0": {
+            "type": "path",
+            "walls": {
+                "right": false,
+                "left": false
+            }
+        },
+        "9,0": {
+            "type": "end",
+            "walls": {
+                "left": false
+            }
+        }
+    },
+    "texts": {
+        "0,0": ["Tu n'es toujours pas mort ...", "Il ne te reste plus qu'une dernière ligne droite et tu quitteras cet endroit"],
+        "1,0": ["Après tu n'es pas obligé d'aller plus loin", "Il y a de plus grands dangers encore."],
+        "2,0": ["Je vois ...", "Si ta décision est prise."],
+        "3,0": ["Voici les équipements que l'on peut trouver ici.", "Il faut bien que tu aies une chance de gagner ..."],
+        "6,0": ["Un pas de plus et ...", "N'oublie jamais que tant que tu te relèveras, il y aura de l'espoir ...", "C'est le moment où je te dis ADIEU ... je suppose ..."]
+    }
+}

@@ -591,7 +591,7 @@ class Game:
             (self.width - 1, self.height//2): ["Tu as finalement réussi à franchir tous ces obstacles.", "Tu y es ! La sortie est devant tes yeux !", "Ta détermination a payé.", "Mais à quel prix ................."]
         }
         yield (create_one_solution_map(self.width, self.height, 4), base_text)
-        # Load la dernière partie du jeu
+        yield (self._load_map("assets/maps/end"), self._load_text("assets/maps/end"))
 
     def _load_map(self, filename:str) -> Map:
         """Renvoie la Map à partir du fichier donné"""

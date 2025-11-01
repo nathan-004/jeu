@@ -574,5 +574,5 @@ def get_absolute_direction(initial_direction: tuple, relative_direction: tuple):
 
 if __name__ == "__main__":
     a = Map(0, 0)
-    a.load("assets/maps/start")
+    a.load("assets/maps/end")
     a.create_image()
