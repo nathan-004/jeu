@@ -7,7 +7,7 @@ from typing import Optional
 from display import TextDisplay, get_size, RoomDisplay, MouseButton, HealthBar, EnnemiDisplay, ChestDisplay, get_dialogue_text, ItemDisplay
 from map import create_one_solution_map, get_absolute_direction, Map
 from constants import *
-from son import monster_damage, attack_sword, open_door, heavy_attack, Musique
+from son import monster_damage, attack_sword, open_door, heavy_attack, key_open, Musique
 
 BUTTONS = []
 
@@ -569,6 +569,7 @@ class Game:
             elif cur_room.type == "key":
                 self.map.open()
                 cur_room.type = "path"
+                key_open()
                 self.current_texts.append(TextDisplay("Vous avez trouvé une clé", self.screen, self.clock))
                 self.current_texts.append(TextDisplay("Une porte s'est ouverte ...", self.screen, self.clock))
             elif cur_room.chest:

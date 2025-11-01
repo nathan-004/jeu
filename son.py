@@ -17,6 +17,10 @@ def heavy_attack():
     sound = pygame.mixer.Sound("assets/sound/attaque_forte.mp3")
     sound.play()
 
+def key_open():
+    sound = pygame.mixer.Sound("assets/sound/key_open.mp3")
+    sound.play()
+
 class Musique:
     def __init__(self,path):
         self.path=path
