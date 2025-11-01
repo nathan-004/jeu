@@ -34,6 +34,8 @@ PLAYER_BASE_ITEM_RES = 0.05
 MONSTER_BASE_ITEM_SOIN = 3
 
 # Monstres
+va_texts = [("Tu es un humain comme moi", "Tu es passé par les mêmes épreuves"), ("Combattre sans arrêt", "Ca n'en finit jamais"), ("On en oublie qui on est", "Et notre objectif", "Mais tu sembles différent"), ("Je vois dans tes yeux l'espoir", "Ce qui nous est enlevé dans cet endroit")]
+va_generator = (el for el in va_texts)
 MONSTERS = {
     "Chevalier" : {
         "image": "assets/images/monster/Perso_2.png",
@@ -46,6 +48,12 @@ MONSTERS = {
     },
     "Ventre d'Acier" : {
         "image": "assets/images/monster/Perso_2.png",
+        "dialogues": {
+            "start": ["Je t'attendais", "Ca a du être dur tout seul ...", "dans le noir ...", "entouré par l'inconnu ...", "Mais ne t'inquiète pas", "Tout ira mieux", "lorsque JE TE TUERAIS"],
+            "receive_damage": va_generator,
+            "miss_attack": ["Test de miss", "test de miiss2"],
+            "monster_death": ["Je l'ai vu en toi", "cette détermination à toute épreuve", "elle m'habitait moi aussi", "Et elle t'a permis de me battre", "Et j'ai voulu t'éliminer ..."]
+        }
     },
 }
 
