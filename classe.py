@@ -1,6 +1,6 @@
 import pygame
 import time
-from random import shuffle, randint, choice
+from random import shuffle, randint, choice, uniform
 import json
 from typing import Optional
 
@@ -333,7 +333,7 @@ class Personnage:
         return self.pv_base + PLAYER_LEVEL_AUGMENTATION_PV * self.level
 
 class Monstre(Personnage):
-    def __init__(self, nom, pv=MONSTER_BASE_PV, degats=MONSTER_BASE_ATTACK, resistance=MONSTER_BASE_RESISTANCE):
+    def __init__(self, nom, pv=uniform(-MONSTER_BASE_PV_RANGE/2, MONSTER_BASE_PV_RANGE/2) + MONSTER_BASE_PV, degats=uniform(-MONSTER_BASE_ATTACK_RANGE/2, MONSTER_BASE_ATTACK_RANGE/2) + MONSTER_BASE_ATTACK, resistance=uniform(-MONSTER_BASE_RESISTANCE_RANGE/2, MONSTER_BASE_RESISTANCE_RANGE/2) + MONSTER_BASE_RESISTANCE):
         super().__init__(nom, pv, degats, resistance)
         self.ennemi_display = None
         self.health_bar = None
