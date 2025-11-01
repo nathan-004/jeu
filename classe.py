@@ -388,6 +388,7 @@ class Joueur(Personnage):
         self.obj = obj
     
     def move(self, direction:tuple):
+        open_door()
         self.position = (self.position[0] + direction[0], self.position[1] + direction[1])
         self.direction = direction
     
