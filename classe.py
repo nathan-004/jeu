@@ -695,7 +695,7 @@ class Game:
     
     def get_maps(self):
         """Renvoie un générateur contenant un tuple map, text"""
-        yield (self._load_map("assets/maps/start"), self._load_text("assets/maps/start"))
+        #yield (self._load_map("assets/maps/start"), self._load_text("assets/maps/start"))
         base_text = {
             (0, self.height//2): ["Vous y êtes arrivé !", "Il ne vous reste plus qu'à trouver le chemin dans ce donjon, à battre tous les ennemis sur votre chemin, à acquérir les meilleurs statistiques.", "On ne sait jamais, ce qui semble être la fin peut parfois n'être que le début d'une plus grande aventure."],
             (self.width//4, self.height//2): ["Vous avez l'air de bien vous en sortir", "En espérant que vous ne mourriez pas dans d'atroces souffrances.", "Un homme comme vous a déjà fait son apparition auparavant ..."],
@@ -875,6 +875,6 @@ def get_level(game:Game) -> int:
 
 if __name__ == "__main__":
     g = Game()
-    #g.load()
+    g.load()
     g.main()
     print(g.save())

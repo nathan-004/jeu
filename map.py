@@ -43,7 +43,7 @@ class Room:
         return {
             "type": self.type,
             "walls": self.walls,
-            "chest": not self.chest.closed if type(self.chest) is ChestDisplay else self.chest,
+            "chest": self.chest.closed if type(self.chest) is ChestDisplay else self.chest,
             "monster": self.monster,
             "locked": self.locked
         }
