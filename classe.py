@@ -331,6 +331,10 @@ class Personnage:
 
     def get_max_pv(self):
         return self.pv_base + PLAYER_LEVEL_AUGMENTATION_PV * self.level
+    
+    def get_stats_message(self) -> str:
+        content = f"{self.nom} & PV : {self.pv}/{self.pv_base} & Degats : {self.degat}/{self.degat_base} & Resistance : {self.resistance}/{self.resistance_base}"
+        return content
 
 class Monstre(Personnage):
     def __init__(self, nom, pv=uniform(-MONSTER_BASE_PV_RANGE/2, MONSTER_BASE_PV_RANGE/2) + MONSTER_BASE_PV, degats=uniform(-MONSTER_BASE_ATTACK_RANGE/2, MONSTER_BASE_ATTACK_RANGE/2) + MONSTER_BASE_ATTACK, resistance=uniform(-MONSTER_BASE_RESISTANCE_RANGE/2, MONSTER_BASE_RESISTANCE_RANGE/2) + MONSTER_BASE_RESISTANCE):
@@ -476,6 +480,11 @@ class Game:
         self.combat = False
         self.clock = pygame.time.Clock()
 
+        debug_text_size = (75, 50)
+        debug_text_pos = (get_size(self.screen, (100 - debug_text_size[0])/2), get_size(self.screen, (100 - debug_text_size[1])/2, "height"))
+        debug_text_size = (get_size(self.screen, debug_text_size[0]), get_size(self.screen, debug_text_size[1], "height"))
+        debug_text = TextDisplay(self.personnage.get_stats_message(), self.screen, self.clock, background_color=(0,0,0), color=(255,255,255), pos=debug_text_pos, size=debug_text_size)
+
         musique = Musique("assets/sound/musique_boucle1.mp3")
 
         self.current_texts = []
@@ -512,6 +521,7 @@ class Game:
                                 self.current_texts.pop(0)
                             else:
                                 self.current_texts[0].frames = len(self.current_texts[0].txt)
+
                 if self.combat:
                     self.combat.buttons_event(event)
                 if self.coffre:
@@ -580,6 +590,16 @@ class Game:
                 self.current_texts[0].display()
             
             self.visited.add(self.personnage.position)
+
+            keys = pygame.key.get_pressed()
+            
+            if keys[pygame.K_d]:
+                stats = f"*{self.personnage.get_stats_message()}*"
+                if stats != debug_text.txt:
+                    debug_text = TextDisplay(stats, self.screen, self.clock, pos=debug_text_pos, size=debug_text_size)
+                borders = pygame.Rect(debug_text_pos, debug_text_size)
+                debug_text.display(20)
+                pygame.draw.rect(self.screen, "white", borders, 2)
 
             pygame.display.flip()
             self.clock.tick(100)
