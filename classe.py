@@ -7,7 +7,7 @@ from typing import Optional
 from display import TextDisplay, get_size, RoomDisplay, MouseButton, HealthBar, EnnemiDisplay, ChestDisplay, get_dialogue_text, ItemDisplay
 from map import create_one_solution_map, get_absolute_direction, Map
 from constants import *
-from son import monster_damage
+from son import monster_damage, Musique
 
 BUTTONS = []
 
@@ -459,6 +459,8 @@ class Game:
         self.combat = False
         self.clock = pygame.time.Clock()
 
+        musique = Musique("assets/sound/musique_boucle1.mp3")
+
         self.current_texts = []
 
         running = True
@@ -497,6 +499,8 @@ class Game:
                     self.combat.buttons_event(event)
                 if self.coffre:
                     self.coffre.buttons_event(event)
+
+            musique.play_music(True)
 
             if self.personnage.position in self.texts and self.personnage.position not in self.visited:
                 for text in self.texts[self.personnage.position]:
