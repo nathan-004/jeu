@@ -128,28 +128,28 @@
     },
     "player": {
         "position": [
-            7,
+            5,
             0
         ],
         "inventaire": {
             "equipements": {
                 "arme": {
-                    "nom": "Lance",
+                    "nom": "Ep\u00e9e",
                     "soin": 0,
-                    "degat": 4,
+                    "degat": 3,
                     "resistance": 0
                 },
                 "armure": {
                     "nom": "Armure",
                     "soin": 0,
                     "degat": 0,
-                    "resistance": 2
+                    "resistance": 1
                 }
             },
             "consommables": {
                 "potion": {
                     "nom": "Potion",
-                    "soin": 3,
+                    "soin": 4,
                     "degat": 0,
                     "resistance": 0
                 }
@@ -168,10 +168,6 @@
             0
         ],
         [
-            7,
-            0
-        ],
-        [
             2,
             0
         ],
@@ -181,10 +177,6 @@
         ],
         [
             5,
-            0
-        ],
-        [
-            6,
             0
         ],
         [

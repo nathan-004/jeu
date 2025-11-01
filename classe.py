@@ -233,9 +233,12 @@ class Coffre:
             self.item = Objet(nom, type_objet, soin=soin, degat=degat, resistance=resistance)
 
         if self.item_display is None:
-            self.item_display = ItemDisplay(game.screen, pos, size, self.item)
+            self.item_display = ItemDisplay(game.screen, pos, (size[0], size[1]/2), self.item)
+        # Fais la même chose pour self.text_display mais tu dois mettre la position en dessous de self.item_display
+        # Comme texte tu appelles self.item.get_message et tu prends une couleur verte s'il augmente les statistique et rouge s'il les diminue
 
         self.item_display.display()
+        # Appelle text_display
 
         actions = [
             ("Accepter", self.accept_item),
@@ -287,6 +290,7 @@ class Coffre:
         self.actions_end = False
         self.item = None
         self.item_display = None
+        # Réanitialise self.text_display
 
 class Personnage:
     def __init__(self, nom, pv, degats, resistance):
