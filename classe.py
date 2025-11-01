@@ -474,6 +474,16 @@ class Game:
                 screen.blit(doors[i],(get_size(screen, ((99.7-percentage)/2)+((85/(100/percentage))if i == 1 else (4/(100/percentage))) ),get_size(screen, 26*(percentage/99.7), "height"))) if i != 2 else screen.blit(doors[i],(get_size(screen, ((100-percentage)/2)+((41-(10/(100/percentage)))) ),get_size(screen, 32*(percentage/99.7), "height")))
         room.display_shade()
 
+    def start_menu(self):
+        # Créer les boutons (comme make_buttons mais à la vertical) + le fond
+        # Boutons : Nouvelle partie (self.main), Charger (self.load() + self.main()), quitter (cherches dans main)
+        # Créer la boucle de fonctionnement
+        # Dans les events appelle button.handle_event(event) pour chaque bouton
+        # Rafraichis l'écran
+
+        # Quitte pygame (en dehors de la boucle)
+        pass
+
     def main(self):
         pygame.font.init()
         pygame.mixer.init()
@@ -747,7 +757,7 @@ class Combat:
                 add_random_dialogue(self.ennemi.nom, "miss_attack", self.game)
             else:
                 self.game.current_texts.append(TextDisplay(f"Vous infligez {att:.1f} dégâts {NEW_LINE_CHARACTER} Il ne lui reste plus que {self.ennemi.pv:.1f} pv", self.game.screen, self.game.clock))
-            if self.ennemi.pv > 0 not att is None:
+            if self.ennemi.pv > 0 and not att is None:
                 add_random_dialogue(self.ennemi.nom, "receive_damage", self.game)
         else:
             return
