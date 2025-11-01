@@ -411,6 +411,7 @@ class Joueur(Personnage):
         self.resistance = self.resistance_base + PLAYER_LEVEL_AUGMENTATION_RESISTANCE * self.level
         self.inventaire.equip(self)
         self.resistance = min(self.resistance, MAX_PLAYER_RESISTANCE)
+        self.pv, self.degat, self.resistance = round(self.pv, 1), round(self.degat, 1), round(self.resistance, 3)
 
     def get_content(self) -> dict:
         """Renvoie les informations sous forme de dictionnaire qui pourront être transcrite au format json"""
