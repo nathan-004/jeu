@@ -314,7 +314,6 @@ class Map:
             cell_size_x, cell_size_y = cell_size, cell_size
         else:
             cell_size_x, cell_size_y = cell_size
-        print(len(self.grid), y, self.height, len(self.grid[0]), x, self.width)
         room = self.grid[y][x]
         room_type = room.type
         color = (0, 0, 0)

@@ -59,6 +59,18 @@ def get_random_dialogue(monster_type:str, event:str) -> Optional[str]:
         return choice(texts)
     return None
 
+def get_random_monster(game):
+    """Renvoie un monstre"""
+    if game.map.name == "start":
+        return Monstre("Chevalier", 50, 1, 0)
+    elif game.map.name == "end":
+        return Monstre("Ventre d'Acier", 100, 10, 0.6)
+    
+    monster_type = choice(MONSTERS_LIST)
+    monster = Monstre(monster_type)
+    monster.level_up(get_level(game))
+    return monster
+
 class Objet:
     current_room = (0, 0)
 
@@ -193,7 +205,7 @@ class Coffre:
         # Création d'un objet aléatoire
         if self.item is None:
             type_objet = self.get()
-            nom = f"{type_objet.capitalize()} mystérieux"
+            nom = type_objet.capitalize()
             soin = degat = resistance = 0
     
             if type_objet == "potion":
@@ -313,25 +325,29 @@ class Personnage:
 
     def level_up(self):
         """Prend les attributs du personnage de base et ajoute un nombre * level"""
+        if self.level >= MAX_LEVEL:
+            self.level = MAX_LEVEL - 1
         self.level = self.level + 1
 
     def get_max_pv(self):
         return self.pv_base + PLAYER_LEVEL_AUGMENTATION_PV * self.level
 
 class Monstre(Personnage):
-    def __init__(self, nom, pv, degats, resistance):
+    def __init__(self, nom, pv=MONSTER_BASE_PV, degats=MONSTER_BASE_ATTACK, resistance=MONSTER_BASE_RESISTANCE):
         super().__init__(nom, pv, degats, resistance)
         self.ennemi_display = None
         self.health_bar = None
         self.damage = False
 
-    def level_up(self):
-        super().level_up()
+    def level_up(self, level:int = None):
+        if level is None:
+            super().level_up()
+        else:
+            self.level = level
 
         self.pv = self.pv_base + MONSTER_LEVEL_AUGMENTATION_PV * self.level
         self.degat = self.degat_base + MONSTER_LEVEL_AUGMENTATION_ATTACK * self.level
         self.resistance = min(self.resistance_base + MONSTER_LEVEL_AUGMENTATION_RESISTANCE * self.level, MAX_MONSTER_RESISTANCE)
-        self.inventaire.equip(self)
 
     def degat_subit(self, degats):
         self.damage = True
@@ -388,8 +404,9 @@ class Joueur(Personnage):
     def reset(self):
         self.pv = (self.pv_base + PLAYER_LEVEL_AUGMENTATION_PV * self.level) * (self.pv / self.pv_base)
         self.degat = self.degat_base + PLAYER_LEVEL_AUGMENTATION_ATTACK * self.level
-        self.resistance = min(self.resistance_base + PLAYER_LEVEL_AUGMENTATION_RESISTANCE * self.level, MAX_PLAYER_RESISTANCE)
+        self.resistance = self.resistance_base + PLAYER_LEVEL_AUGMENTATION_RESISTANCE * self.level
         self.inventaire.equip(self)
+        self.resistance = min(self.resistance, MAX_PLAYER_RESISTANCE)
 
     def get_content(self) -> dict:
         """Renvoie les informations sous forme de dictionnaire qui pourront être transcrite au format json"""
@@ -553,8 +570,8 @@ class Game:
 
             if cur_room.monster:
                 if not self.combat:
-                    self.combat = Combat(self.personnage, Monstre("Knight", MONSTER_BASE_PV, MONSTER_BASE_ATTACK, MONSTER_BASE_RESISTANCE), self)
-                    self.current_texts.append(TextDisplay(f"Vous tombez nez à nez avec {self.combat.ennemi.nom}", self.screen, self.clock))
+                    self.combat = Combat(self.personnage, get_random_monster(self), self)
+                    self.current_texts.append(TextDisplay(f"Vous tombez nez à nez avec {self.combat.ennemi.nom} LV{self.combat.ennemi.level}", self.screen, self.clock))
                     add_random_dialogue(self.combat.ennemi.nom, "start", self)
 
             player_health_bar.display()
@@ -673,7 +690,7 @@ class Combat:
                 self.game.current_texts.append(TextDisplay(f"Vous avez stressé et vous avez manqué votre attaque ...", self.game.screen, self.game.clock))
                 add_random_dialogue(self.ennemi.nom, "miss_attack", self.game)
             else:
-                self.game.current_texts.append(TextDisplay(f"Vous infligez {att} dégâts {NEW_LINE_CHARACTER} Il ne lui reste plus que {self.ennemi.pv} pv", self.game.screen, self.game.clock))
+                self.game.current_texts.append(TextDisplay(f"Vous infligez {att:.1f} dégâts {NEW_LINE_CHARACTER} Il ne lui reste plus que {self.ennemi.pv:.1f} pv", self.game.screen, self.game.clock))
             if self.ennemi.pv > 0:
                 add_random_dialogue(self.ennemi.nom, "receive_damage", self.game)
         else:
@@ -690,7 +707,7 @@ class Combat:
                 self.game.current_texts.append(TextDisplay(f"Vous avez tout risqué mais vous êtes loupé ...", self.game.screen, self.game.clock))
                 add_random_dialogue(self.ennemi.nom, "miss_attack", self.game)
             else:
-                self.game.current_texts.append(TextDisplay(f"Vous infligez {att} dégâts {NEW_LINE_CHARACTER} Il ne lui reste plus que {self.ennemi.pv} pv", self.game.screen, self.game.clock))
+                self.game.current_texts.append(TextDisplay(f"Vous infligez {att:.1f} dégâts {NEW_LINE_CHARACTER} Il ne lui reste plus que {self.ennemi.pv:.1f} pv", self.game.screen, self.game.clock))
             if self.ennemi.pv > 0:
                 add_random_dialogue(self.ennemi.nom, "receive_damage", self.game)
         else:
@@ -722,7 +739,7 @@ class Combat:
             self.game.current_texts.append(TextDisplay(f"L'ennemi utilise l'objet : {NEW_LINE_CHARACTER} {obj.get_message()}", self.game.screen, self.game.clock))
         else:
             deg = self.ennemi.attaque(self.joueur)
-            self.game.current_texts.append(TextDisplay(f"Il vous inflige {deg} dégâts {NEW_LINE_CHARACTER} Il ne vous reste plus que {self.joueur.pv} pv", self.game.screen, self.game.clock))
+            self.game.current_texts.append(TextDisplay(f"Il vous inflige {deg:.1f} dégâts {NEW_LINE_CHARACTER} Il ne vous reste plus que {self.joueur.pv:.1f} pv", self.game.screen, self.game.clock))
         self.tour += 1
 
     def display_buttons(self, surface:pygame.Surface, space_percent:int = 20, button_bloc_pos:tuple = (0, 0)):
@@ -750,6 +767,13 @@ class Combat:
         
         for button in self.buttons:
             button.handle_event(event)
+
+def get_level(game:Game) -> int:
+    """
+    Utilise le niveau du joueur et l'anvancée dans le jeu pour déterminer un niveau
+    """
+    avancee_level = game.personnage.position[0] / game.map.width * MAX_LEVEL
+    return max(min(int((avancee_level + game.personnage.level)/2 + randint(-1, 1)), MAX_LEVEL), 0)
 
 if __name__ == "__main__":
     g = Game()
