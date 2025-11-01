@@ -562,7 +562,7 @@ class Game:
         debug_text_size = (get_size(self.screen, debug_text_size[0]), get_size(self.screen, debug_text_size[1], "height"))
         debug_text = TextDisplay(self.personnage.get_stats_message(), self.screen, self.clock, background_color=(0,0,0), color=(255,255,255), pos=debug_text_pos, size=debug_text_size)
 
-        musique = Musique("assets/sound/musique_boucle1.mp3")
+        self.musique = Musique("assets/sound/musique_boucle1.mp3")
 
         self.current_texts = []
 
@@ -604,7 +604,7 @@ class Game:
                 if self.coffre:
                     self.coffre.buttons_event(event)
 
-            musique.play_music(True)
+            self.musique.play_music(True)
 
             if self.personnage.position in self.texts and self.personnage.position not in self.visited:
                 for text in self.texts[self.personnage.position]:
@@ -695,7 +695,7 @@ class Game:
     
     def get_maps(self):
         """Renvoie un générateur contenant un tuple map, text"""
-        #yield (self._load_map("assets/maps/start"), self._load_text("assets/maps/start"))
+        yield (self._load_map("assets/maps/start"), self._load_text("assets/maps/start"))
         base_text = {
             (0, self.height//2): ["Vous y êtes arrivé !", "Il ne vous reste plus qu'à trouver le chemin dans ce donjon, à battre tous les ennemis sur votre chemin, à acquérir les meilleurs statistiques.", "On ne sait jamais, ce qui semble être la fin peut parfois n'être que le début d'une plus grande aventure."],
             (self.width//4, self.height//2): ["Vous avez l'air de bien vous en sortir", "En espérant que vous ne mourriez pas dans d'atroces souffrances.", "Un homme comme vous a déjà fait son apparition auparavant ..."],
@@ -875,6 +875,6 @@ def get_level(game:Game) -> int:
 
 if __name__ == "__main__":
     g = Game()
-    g.load()
+    #g.load()
     g.main()
     print(g.save())
