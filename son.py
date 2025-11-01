@@ -5,6 +5,10 @@ def monster_damage():
     sound = pygame.mixer.Sound("assets/sound/degats.mp3")
     sound.play()
 
+def open_door():
+    sound = pygame.mixer.Sound("assets/sound/porte.mp3")
+    sound.play()
+
 class Musique:
     def __init__(self,path):
         self.path=path
@@ -38,7 +42,7 @@ if __name__ == "__main__":
             if event.type == QUIT:
                 continuer = False
             if event.type == KEYDOWN:
-                monster_damage()
+                open_door()
         sound.play_music(True)
         clock.tick(10)
     pygame.quit()
