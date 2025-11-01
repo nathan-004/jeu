@@ -597,6 +597,7 @@ class Game:
         """Renvoie la Map à partir du fichier donné"""
         map = Map(0,0)
         map.load(filename)
+        map.name = filename.split("/")[-1] if "/" in filename else filename
         return map
     
     def _load_text(self, filename:str) -> dict:
@@ -631,6 +632,10 @@ class Game:
             content = json.load(f)
         
         self.visited = set([tuple(pos_list) for pos_list in content["visited"]])
+        if content["map"]["name"] is None or content["map"]["name"] == "end":
+            self.map, self.texts = next(self.elements)
+        if content["map"]["name"] == "end":
+            self.map, self.texts = next(self.elements)
         self.map.load_matrice_format(content["map"]["grid"])
         self.personnage.load(content["player"])
 

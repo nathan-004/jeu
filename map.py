@@ -61,6 +61,7 @@ class Map:
         self.width = width
         self.height = height
         self.grid = [[Room() for x in range(width)] for y in range(height)]
+        self.name = None
 
     # --------------------------------------------------------------------------------------------
     # Génération aléatoire du labyrinthe --------------------------------------------------------|
@@ -430,6 +431,7 @@ class Map:
             self.load_matrice_format(grid)
         else:
             raise NotImplementedError
+        self.name = filename.split("/")[-1] if "/" in filename else filename
 
     def get_content(self) -> dict:
         """
@@ -443,7 +445,8 @@ class Map:
         }
         """
         content = {
-            "grid": [[room.get_content() for room in row] for row in self.grid]
+            "grid": [[room.get_content() for room in row] for row in self.grid],
+            "name": self.name
         }
 
         return content
