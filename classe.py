@@ -114,6 +114,23 @@ def get_random_monster(game):
     monster.level_up(get_level(game))
     return monster
 
+def is_better(obj1, obj2) -> int:
+    """
+    Renvoi si l'objet 1 est meilleur que l'objet 2
+    < 0 si obj2 est meilleur
+    > 1 si obj1 est meilleur
+    0 s'ils sont équivalents
+    """
+    parameters = ["soin", "degat", "resistance"]
+    obj1_n = 0
+    obj2_n = 0
+
+    for obj1_val, obj2_val in zip([getattr(obj1, par) for par in parameters], [getattr(obj2, par) for par in parameters]):
+        obj1_n += int(obj1_val > obj2_val)
+        obj2_n += int(obj2_val > obj1_val)
+
+    return obj1_n - obj2_n
+
 class Objet:
     current_room = (0, 0)
 
@@ -176,6 +193,13 @@ class Inventaire:
         for objet in self.equipements.values():
             perso.use(objet)
 
+    def get(self, type_) -> Objet:
+        if type_ in self.consommables:
+            return self.consommables[type_]
+        elif type_ in self.equipements:
+            return self.equipements[type_]
+        return Objet(None, None)
+
     def get_content(self) -> dict:
         """Renvoie les informations à sauvegarder"""
         content = {
@@ -210,6 +234,7 @@ class Coffre:
         
         self.chest_display = None
         self.item_display = None
+        self.text_display = None
         self.end = False
         self.buttons = None
 
@@ -263,11 +288,18 @@ class Coffre:
 
         if self.item_display is None:
             self.item_display = ItemDisplay(game.screen, pos, (size[0], size[1]/2), self.item)
-        # Fais la même chose pour self.text_display mais tu dois mettre la position en dessous de self.item_display
-        # Comme texte tu appelles self.item.get_message et tu prends une couleur verte s'il augmente les statistique et rouge s'il les diminue
+        if self.text_display is None:
+            val = is_better(self.item, game.personnage.inventaire.get(self.item.type))
+            if val < 0:
+                color = (255, 0, 0)
+            elif val > 0:
+                color = (0, 255, 0)
+            else:
+                color = (0, 0, 0)
+            self.text_display = TextDisplay(self.item.get_message(), game.screen, game.clock, size = (size[0], size[1]/2), pos=(pos[0], pos[1] + size[1]/2), background_color=(50, 50, 50), color=color)
 
         self.item_display.display()
-        # Appelle text_display
+        self.text_display.display()
 
         actions = [
             ("Accepter", self.accept_item),
@@ -319,7 +351,7 @@ class Coffre:
         self.actions_end = False
         self.item = None
         self.item_display = None
-        # Réanitialise self.text_display
+        self.text_display = None
 
 class Personnage:
     def __init__(self, nom, pv, degats, resistance):
