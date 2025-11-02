@@ -682,7 +682,7 @@ class Game:
             if self.combat:
                 if self.combat.ennemi.nom == "Ventre d'Acier":
                     self.musique.music_change("assets/sound/musique_boss.mp3") if self.musique.path != "assets/sound/musique_boss.mp3" else None
-                if self.combat.is_ended():
+                if self.combat.is_ended() and self.current_texts == []:
                     if type(self.combat.winner) is Joueur:
                         self.combat = False
                         cur_room.monster = False
@@ -884,6 +884,8 @@ class Combat:
 
     def is_ended(self) -> bool:
         """Renvoie si le combat est terminé et modifie self.winner par le vainqueur"""
+        if self.winner != None:
+            return True
         if not any([pers.pv <= 0 for pers in [self.ennemi, self.joueur]]):
             return False
         self.winner = self.joueur if self.ennemi.pv <= 0 else self.ennemi
