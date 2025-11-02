@@ -570,7 +570,7 @@ class Game:
         debug_text_size = (get_size(self.screen, debug_text_size[0]), get_size(self.screen, debug_text_size[1], "height"))
         debug_text = TextDisplay(self.personnage.get_stats_message(), self.screen, self.clock, background_color=(0,0,0), color=(255,255,255), pos=debug_text_pos, size=debug_text_size)
 
-        musique = Musique("assets/sound/musique_boucle1.mp3")
+        self.musique = Musique("assets/sound/musique_boucle1.mp3")
 
         self.current_texts = []
 
@@ -612,7 +612,7 @@ class Game:
                 if self.coffre:
                     self.coffre.buttons_event(event)
 
-            musique.play_music(True)
+            self.musique.play_music(True)
 
             if self.personnage.position in self.texts and self.personnage.position not in self.visited:
                 for text in self.texts[self.personnage.position]:
@@ -886,5 +886,6 @@ def get_level(game:Game) -> int:
 
 if __name__ == "__main__":
     g = Game()
-    g.start_menu()
+    g.load()
+    g.main()
     print(g.save())
