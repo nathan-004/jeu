@@ -771,6 +771,7 @@ class Game:
     def _start_new_game(self):
         self.elements = self.get_maps()
         self.map, self.texts = next(self.elements)
+        self.main()
 
 class Combat:
     def __init__(self, joueur:Joueur, ennemi:Personnage, game: Game):
