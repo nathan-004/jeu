@@ -516,9 +516,11 @@ class Game:
         pygame.font.init()
         screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 
-        # Créer les boutons utilise make_buttons_vertical
-        # Boutons : Nouvelle partie (self.main), Charger (self.load() + self.main()), quitter (cherches dans main)
-        # Pour initier les boutons il faut passer une liste de cette forme [("Nouvelle partie", self.main), ("Charger", self.créer une fonction pour lancer self.load + self.main)]
+        buttons = [("Charger", self._start_loaded_game), ("Nouvelle", self.main), ("Quitter", pygame.quit)] # A modifier pour stopper l'erreur
+        buttons_size = (get_size(screen, 50), get_size(screen, 75, "height"))
+        buttons_pos = (get_size(screen, 25), get_size(screen, 12.5, "height"))
+        buttons_surface = pygame.Surface(buttons_size, pygame.SRCALPHA)
+        buttons = make_vertical_buttons(buttons_surface, buttons, 10, buttons_pos)
 
         running = True
 
@@ -526,10 +528,16 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
-                # appelle button.handle_event(event) pour chaque bouton
+                
+                for button in buttons:
+                    button.handle_event(event)
+            
+            for button in buttons:
+                button.display()
 
-            # Affiche les boutons
-            # Rafraichis l'écran 
+            screen.fill((0,0,0))
+            screen.blit(buttons_surface, buttons_pos)
+            pygame.display.flip()
 
         pygame.quit()
 
@@ -682,8 +690,6 @@ class Game:
             pygame.display.flip()
             self.clock.tick(100)
 
-        pygame.quit()
-
     def move(self, direction:tuple):
         direction = get_absolute_direction(self.personnage.direction, direction)
         if self.map.can_move(self.personnage.position, direction):
@@ -695,7 +701,7 @@ class Game:
     
     def get_maps(self):
         """Renvoie un générateur contenant un tuple map, text"""
-        #yield (self._load_map("assets/maps/start"), self._load_text("assets/maps/start"))
+        yield (self._load_map("assets/maps/start"), self._load_text("assets/maps/start"))
         base_text = {
             (0, self.height//2): ["Vous y êtes arrivé !", "Il ne vous reste plus qu'à trouver le chemin dans ce donjon, à battre tous les ennemis sur votre chemin, à acquérir les meilleurs statistiques.", "On ne sait jamais, ce qui semble être la fin peut parfois n'être que le début d'une plus grande aventure."],
             (self.width//4, self.height//2): ["Vous avez l'air de bien vous en sortir", "En espérant que vous ne mourriez pas dans d'atroces souffrances.", "Un homme comme vous a déjà fait son apparition auparavant ..."],
@@ -747,12 +753,17 @@ class Game:
             content = json.load(f)
         
         self.visited = set([tuple(pos_list) for pos_list in content["visited"]])
-        if content["map"]["name"] is None or content["map"]["name"] == "end":
+        if content["map"].get("name", None) is None or content["map"].get("name", None) == "end":
             self.map, self.texts = next(self.elements)
-        if content["map"]["name"] == "end":
+        if content["map"].get("name", None) == "end":
             self.map, self.texts = next(self.elements)
         self.map.load_matrice_format(content["map"]["grid"])
         self.personnage.load(content["player"])
+
+    def _start_loaded_game(self):
+        self.load()
+        print(self.map.name)
+        self.main()
 
 class Combat:
     def __init__(self, joueur:Joueur, ennemi:Personnage, game: Game):
@@ -875,6 +886,5 @@ def get_level(game:Game) -> int:
 
 if __name__ == "__main__":
     g = Game()
-    g.load()
-    g.main()
+    g.start_menu()
     print(g.save())
