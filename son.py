@@ -25,6 +25,10 @@ def miss_attack():
     sound = pygame.mixer.Sound("assets/sound/rate.wav")
     sound.play()
 
+def potion_use():
+    sound = pygame.mixer.Sound("assets/sound/heal.mp3")
+    sound.play()
+
 class Musique:
     def __init__(self,path):
         self.path=path

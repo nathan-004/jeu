@@ -457,8 +457,10 @@ class Monstre(Personnage):
 
     def use(self, obj:Objet):
         self.pv += obj.soin
+        potion_use() if obj.soin > 0 else None
         self.degat += obj.degat
         self.resistance += obj.resistance
+        
 
 class Joueur(Personnage):
     def __init__(self, nom, pv, degats, resistance, position:tuple, inventaire:Inventaire = Inventaire(), game = None):
