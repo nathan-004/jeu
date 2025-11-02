@@ -516,7 +516,7 @@ class Game:
         pygame.font.init()
         screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 
-        buttons = [("Charger", self._start_loaded_game), ("Nouvelle", self.main), ("Quitter", pygame.quit)] # A modifier pour stopper l'erreur
+        buttons = [("Charger", self._start_loaded_game), ("Nouvelle", self._start_new_game), ("Quitter", pygame.quit)] # A modifier pour stopper l'erreur
         buttons_size = (get_size(screen, 50), get_size(screen, 75, "height"))
         buttons_pos = (get_size(screen, 25), get_size(screen, 12.5, "height"))
         buttons_surface = pygame.Surface(buttons_size, pygame.SRCALPHA)
@@ -764,6 +764,10 @@ class Game:
         self.load()
         print(self.map.name)
         self.main()
+
+    def _start_new_game(self):
+        self.elements = self.get_maps()
+        self.map, self.texts = next(self.elements)
 
 class Combat:
     def __init__(self, joueur:Joueur, ennemi:Personnage, game: Game):
