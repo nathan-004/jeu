@@ -50,6 +50,9 @@ class Musique:
         self.path=path
         self.load = False
         self.play_music()
+        if self.pause :
+            self.pause_music()
+            self.pause=True
 
 if __name__ == "__main__":
     sound=Musique("assets/sound/sound.mp3")
