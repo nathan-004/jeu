@@ -71,7 +71,7 @@ def make_vertical_buttons(surface: pygame.Surface, actions: list, space_percent:
 
 def add_random_dialogue(monster_type:str, event:str, game):
     if monster_type == "Ventre d'Acier":
-        if event == "start" or event == "monster_death":
+        if event == "start" or event == "monster_death" or event == "player_death":
             for el in MONSTERS[monster_type]["dialogues"][event]:
                 game.current_texts.append(get_dialogue_text(el, None, game.screen, game.clock))
             return
@@ -877,6 +877,9 @@ class Combat:
         if type(self.winner) is Joueur:
             self.winner.victoire(other)
             add_random_dialogue(self.ennemi.nom, "monster_death", self.game)
+        else:
+            self.game.current_texts.append(TextDisplay(f"Vous êtes morts ...", self.game.screen, self.game.clock))
+            add_random_dialogue(self.ennemi.nom, "player_death", self.game)
 
         return True
 

@@ -43,7 +43,8 @@ MONSTERS = {
             "start": ["Je ne pensais pas te revoir un jour", "... Essaye de passer derrière moi !", "Je vais pouvoir émousser ma lame", "Qui aurait cru que tu arriverais jusqu'à là"],
             "receive_damage": ["Ouch !", "Tu ne rigoles pas", "Tu ne penses quand même pas gagner ?", "Je ne tomberai pas si facilement"],
             "monster_death": ["Pourquoi ce sourire niarquois ?", "Si facilement ...", "Cette douleur ... Il te fera comprendre un jour ..."],
-            "miss_attack": ["Concentre toi, je n'aimes pas quand c'est trop facile.", "Regarde où tu vises"]
+            "miss_attack": ["Concentre toi, je n'aimes pas quand c'est trop facile.", "Regarde où tu vises"],
+            "player_death": ["Je te l'avais dit ...", "Ne reviens plus jamais !", "C'était vraiment très simple ..."]
         }
     },
     "Ventre d'Acier" : {
@@ -52,7 +53,8 @@ MONSTERS = {
             "start": ["Je t'attendais", "Ca a du être dur tout seul ...", "dans le noir ...", "entouré par l'inconnu ...", "Mais ne t'inquiète pas", "Tout ira mieux", "lorsque JE TE TUERAIS"],
             "receive_damage": va_generator,
             "miss_attack": ["Test de miss", "test de miiss2"],
-            "monster_death": ["Je l'ai vu en toi", "cette détermination à toute épreuve", "elle m'habitait moi aussi", "Et elle t'a permis de me battre", "Et j'ai voulu t'éliminer ..."]
+            "monster_death": ["Je l'ai vu en toi", "cette détermination à toute épreuve", "elle m'habitait moi aussi", "Et elle t'a permis de me battre", "Et j'ai voulu t'éliminer ..."],
+            "player_death": ["Maintenant tu comprends", "Que l'espoir est vain", "Il est préférable de mourir.", "Peut être que moi aussi un jour je pourrais y accéder ..."]
         }
     },
 }
