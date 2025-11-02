@@ -463,7 +463,6 @@ class Joueur(Personnage):
         self.position = position
         self.direction = (1, 0) # Direction de base vers la droite
         self.inventaire = inventaire
-        self.inventaire.add(Objet("Potion pour se soigner", "potion", soin=5))
         self.game = game
 
     def equipe_obj(self, obj:Objet):
