@@ -1,27 +1,27 @@
 {
     "grid": {
-        "size": "10,1",
-        "0,0": {
+        "size": "10,5",
+        "0,2": {
             "type": "start",
             "walls": {
                 "right": false
             }
         },
-        "1,0": {
+        "1,2": {
             "type": "path",
             "walls": {
                 "right": false,
                 "left": false
             }
         },
-        "2,0": {
+        "2,2": {
             "type": "path",
             "walls": {
                 "right": false,
                 "left": false
             }
         },
-        "3,0": {
+        "3,2": {
             "type": "path",
             "walls": {
                 "right": false,
@@ -29,7 +29,7 @@
             },
             "chest": true
         },
-        "4,0": {
+        "4,2": {
             "type": "path",
             "walls": {
                 "right": false,
@@ -37,7 +37,7 @@
             },
             "chest": true
         },
-        "5,0": {
+        "5,2": {
             "type": "path",
             "walls": {
                 "right": false,
@@ -45,14 +45,14 @@
             },
             "chest": true
         },
-        "6,0": {
+        "6,2": {
             "type": "path",
             "walls": {
                 "right": false,
                 "left": false
             }
         },
-        "7,0": {
+        "7,2": {
             "type": "path",
             "walls": {
                 "right": false,
@@ -60,14 +60,14 @@
             },
             "monster": true
         },
-        "8,0": {
+        "8,2": {
             "type": "path",
             "walls": {
                 "right": false,
                 "left": false
             }
         },
-        "9,0": {
+        "9,2": {
             "type": "end",
             "walls": {
                 "left": false

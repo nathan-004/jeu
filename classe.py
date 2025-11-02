@@ -105,7 +105,7 @@ def get_random_dialogue(monster_type:str, event:str) -> Optional[str]:
 def get_random_monster(game):
     """Renvoie un monstre"""
     if game.map.name == "start":
-        return Monstre("Chevalier", 50, 1, 0)
+        return Monstre("Chevalier", 30, 1, 0)
     elif game.map.name == "end":
         return Monstre("Ventre d'Acier", 100, 10, 0.6)
     
@@ -114,7 +114,7 @@ def get_random_monster(game):
     monster.level_up(get_level(game))
     return monster
 
-def get_random_item_stats(game, type_:str) -> tuple:
+def get_random_item_stats(game, type_:str) -> tuple:    
     """Renvoie un tuple (soin, degats, resistance) basé sur l'avancement du joueur et son niveau"""
     if game.map.name == "start":
         level = 0
@@ -122,6 +122,7 @@ def get_random_item_stats(game, type_:str) -> tuple:
         level = 50
     else:
         level = get_level(game)
+
     soin, degats, resistance = 0,0,0
 
     if type_ == "potion":
@@ -392,6 +393,7 @@ class Personnage:
         self.inventaire = Inventaire()
 
     def use(self, obj:Objet):
+        potion_use() if obj.soin > 0 else None
         return obj.use(self)
 
     def degat_subit(self, degats):
@@ -475,7 +477,6 @@ class Monstre(Personnage):
         potion_use() if obj.soin > 0 else None
         self.degat += obj.degat
         self.resistance += obj.resistance
-        
 
 class Joueur(Personnage):
     def __init__(self, nom, pv, degats, resistance, position:tuple, inventaire:Inventaire = Inventaire(), game = None):
@@ -668,6 +669,8 @@ class Game:
             if self.personnage.position in self.texts and self.personnage.position not in self.visited:
                 for text in self.texts[self.personnage.position]:
                     self.current_texts.append(TextDisplay(f"V.A. - {text}", self.screen, self.clock))
+            if self.personnage.position in self.texts:
+                self.save()
 
             cur_room = self.map.grid[self.personnage.position[1]][self.personnage.position[0]]
 
@@ -953,4 +956,3 @@ def get_level(game:Game) -> int:
 if __name__ == "__main__":
     g = Game()
     g.start_menu()
-    print(g.save())
