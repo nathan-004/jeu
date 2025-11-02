@@ -644,13 +644,13 @@ class Game:
                                     self.current_texts[0].frames = len(self.current_texts[0].txt)
                         continue
                     
-                    if event.key == pygame.K_RIGHT:
+                    if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                         self.move((1, 0))
-                    elif event.key == pygame.K_UP:
+                    elif event.key == pygame.K_UP or event.key == pygame.K_z:
                         self.move((0, -1))
-                    elif event.key == pygame.K_DOWN:
+                    elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
                         self.move((0, 1))
-                    elif event.key == pygame.K_LEFT:
+                    elif event.key == pygame.K_LEFT or event.key == pygame.K_q:
                         self.move((-1, 0))
                     elif any(pygame.key.get_pressed()):
                         if self.current_texts != []:
@@ -736,7 +736,7 @@ class Game:
 
             keys = pygame.key.get_pressed()
             
-            if keys[pygame.K_d]:
+            if keys[pygame.K_e]:
                 stats = self.personnage.get_stats_message()
                 if f"*{stats}*" != debug_text.txt:
                     debug_text = TextDisplay(stats, self.screen, self.clock, background_color=(0, 0, 0), color=(255,255,255), pos=debug_text_pos, size=debug_text_size)
