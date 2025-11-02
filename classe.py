@@ -886,6 +886,5 @@ def get_level(game:Game) -> int:
 
 if __name__ == "__main__":
     g = Game()
-    g.load()
-    g.main()
+    g.start_menu()
     print(g.save())
