@@ -391,7 +391,10 @@ class Personnage:
     def attaque(self, ennemi):
         a = randint(1, 10)
         if a >= 1:
-            attack_sword()
+            if self.nom=="Ventre d'Acier":
+                heavy_attack()
+            else:
+                attack_sword()
             return ennemi.degat_subit(self.degat)
         else:
             miss_attack()
