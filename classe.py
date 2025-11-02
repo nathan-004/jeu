@@ -114,6 +114,25 @@ def get_random_monster(game):
     monster.level_up(get_level(game))
     return monster
 
+def get_random_item_stats(game, type_:str) -> tuple:
+    """Renvoie un tuple (soin, degats, resistance) basé sur l'avancement du joueur et son niveau"""
+    if game.map.name == "start":
+        level = 0
+    elif game.map.name == "end":
+        level = 50
+    else:
+        level = get_level(game)
+    soin, degats, resistance = 0,0,0
+
+    if type_ == "potion":
+        soin = PLAYER_BASE_ITEM_SOIN + level * PLAYER_ITEM_LEVEL_AUGMENTATION_SOIN
+    elif type_ == "arme":
+        degats = PLAYER_BASE_ATTACK + level * PLAYER_ITEM_LEVEL_AUGMENTATION_DEGATS
+    elif type_ == "armure":
+        resistance = PLAYER_BASE_ITEM_RES + level * PLAYER_ITEM_LEVEL_AUGMENTATION_RES
+
+    return tuple([val * (1 + uniform(-0.3, 0.3)) for val in [soin, degats, resistance]])
+
 def is_better(obj1, obj2) -> int:
     """
     Renvoi si l'objet 1 est meilleur que l'objet 2
@@ -168,11 +187,11 @@ class Objet:
         
         # Ajouter seulement les valeurs différentes de 0
         if self.soin != 0:
-            message += f"Soin : +{self.soin} {NEW_LINE_CHARACTER} "
+            message += f"Soin : +{self.soin:.1f} {NEW_LINE_CHARACTER} "
         if self.degat != 0:
-            message += f"Dégâts : +{self.degat} {NEW_LINE_CHARACTER} "
+            message += f"Dégâts : +{self.degat:.1f} {NEW_LINE_CHARACTER} "
         if self.resistance != 0:
-            message += f"Résistance : +{self.resistance} {NEW_LINE_CHARACTER} "
+            message += f"Résistance : +{self.resistance:2f} {NEW_LINE_CHARACTER} "
 
         return message
 
@@ -274,15 +293,11 @@ class Coffre:
         if self.item is None:
             type_objet = self.get()
             nom = type_objet.capitalize()
-            soin = degat = resistance = 0
     
-            if type_objet == "potion":
-                soin = randint(3, 8)
-            elif type_objet == "arme":
-                degat = randint(1, 4)
+            if type_objet == "arme":
                 nom = choice(["Lance", "Epée"])
-            elif type_objet == "armure":
-                resistance = randint(1, 3)
+
+            soin, degat, resistance = get_random_item_stats(game, type_objet)
 
             self.item = Objet(nom, type_objet, soin=soin, degat=degat, resistance=resistance)
 
