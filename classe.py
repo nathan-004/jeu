@@ -107,31 +107,12 @@ def get_random_monster(game):
     if game.map.name == "start":
         return Monstre("Chevalier", 50, 1, 0)
     elif game.map.name == "end":
-        return Monstre("Ventre d'Acier", 100, 5, 0.5)
+        return Monstre("Ventre d'Acier", 100, 10, 0.6)
     
     monster_type = choice(MONSTERS_LIST)
     monster = Monstre(monster_type)
     monster.level_up(get_level(game))
     return monster
-
-def get_random_item_stats(game, type_:str) -> tuple:
-    """Renvoie un tuple (soin, degats, resistance) basé sur l'avancement du joueur et son niveau"""
-    if game.map.name == "start":
-        level = 0
-    elif game.map.name == "end":
-        level = 50
-    else:
-        level = get_level(game)
-    soin, degats, resistance = 0,0,0
-
-    if type_ == "potion":
-        soin = PLAYER_BASE_ITEM_SOIN + level * PLAYER_ITEM_LEVEL_AUGMENTATION_SOIN
-    elif type_ == "arme":
-        degats = PLAYER_BASE_ATTACK + level * PLAYER_ITEM_LEVEL_AUGMENTATION_DEGATS
-    elif type_ == "armure":
-        resistance = PLAYER_BASE_ITEM_RES + level * PLAYER_ITEM_LEVEL_AUGMENTATION_RES
-
-    return tuple([val * (1 + uniform(-0.3, 0.3)) for val in [soin, degats, resistance]])
 
 def is_better(obj1, obj2) -> int:
     """
@@ -187,11 +168,11 @@ class Objet:
         
         # Ajouter seulement les valeurs différentes de 0
         if self.soin != 0:
-            message += f"Soin : +{self.soin:.1f} {NEW_LINE_CHARACTER} "
+            message += f"Soin : +{self.soin} {NEW_LINE_CHARACTER} "
         if self.degat != 0:
-            message += f"Dégâts : +{self.degat:.1f} {NEW_LINE_CHARACTER} "
+            message += f"Dégâts : +{self.degat} {NEW_LINE_CHARACTER} "
         if self.resistance != 0:
-            message += f"Résistance : +{self.resistance:.2f} {NEW_LINE_CHARACTER} "
+            message += f"Résistance : +{self.resistance} {NEW_LINE_CHARACTER} "
 
         return message
 
@@ -293,10 +274,15 @@ class Coffre:
         if self.item is None:
             type_objet = self.get()
             nom = type_objet.capitalize()
-            soin, degat, resistance = get_random_item_stats(game, type_objet)
+            soin = degat = resistance = 0
     
-            if type_objet == "arme":
+            if type_objet == "potion":
+                soin = randint(3, 8)
+            elif type_objet == "arme":
+                degat = randint(1, 4)
                 nom = choice(["Lance", "Epée"])
+            elif type_objet == "armure":
+                resistance = randint(1, 3)
 
             self.item = Objet(nom, type_objet, soin=soin, degat=degat, resistance=resistance)
 
@@ -554,7 +540,7 @@ class Game:
             if self.map.can_move(self.personnage.position, direction):
                 doors[i] = pygame.transform.scale(doors[i], (get_size(screen, 13*(percentage/100)), get_size(screen, 71*(percentage/100), "height"))) if i != 2 else pygame.transform.scale(doors[i], (get_size(screen,(300*100/get_size(screen,100))*(percentage/100)), get_size(screen, 49*(percentage/100), "height")))
                 doors[i] = pygame.transform.flip(doors[i], True, False) if i == 0 else doors[i]
-                screen.blit(doors[i],(get_size(screen, ((99.7-percentage)/2)+((85/(100/percentage))if i == 1 else (4/(100/percentage))) ),get_size(screen, 26*(percentage/99.7), "height"))) if i != 2 else screen.blit(doors[i],(get_size(screen, ((100-percentage)/2)+((41-(10/(100/percentage)))) ),get_size(screen, 32*(percentage/99.7), "height")))
+                screen.blit(doors[i],(get_size(screen, ((99.7-percentage)/2)+((85/(100/percentage))if i == 1 else (4/(100/percentage))) ),get_size(screen, 26*(percentage/99.7), "height"))) if i != 2 else screen.blit(doors[i],(get_size(screen, ((100-percentage)/2)+((36.3-(10/(100/percentage)))) ),get_size(screen, 32*(percentage/99.7), "height")))
         room.display_shade()
 
     def start_menu(self):
@@ -749,7 +735,7 @@ class Game:
     
     def get_maps(self):
         """Renvoie un générateur contenant un tuple map, text"""
-        yield (self._load_map("assets/maps/start"), self._load_text("assets/maps/start"))
+        #yield (self._load_map("assets/maps/start"), self._load_text("assets/maps/start"))
         base_text = {
             (0, self.height//2): ["Vous y êtes arrivé !", "Il ne vous reste plus qu'à trouver le chemin dans ce donjon, à battre tous les ennemis sur votre chemin, à acquérir les meilleurs statistiques.", "On ne sait jamais, ce qui semble être la fin peut parfois n'être que le début d'une plus grande aventure."],
             (self.width//4, self.height//2): ["Vous avez l'air de bien vous en sortir", "En espérant que vous ne mourriez pas dans d'atroces souffrances.", "Un homme comme vous a déjà fait son apparition auparavant ..."],
@@ -759,7 +745,7 @@ class Game:
             (self.width - self.width//4, self.height//2): ["On dit de lui qu'il a finalement réussi à sortir de cet endroit.", "Et qu'il attend patiemment tout survivant pour ...", "On s'est compris & Comme ça il enlève le poids de ce traumatisme de leurs épaules, littéralement ..."],
             (self.width - 1, self.height//2): ["Tu as finalement réussi à franchir tous ces obstacles.", "Tu y es ! La sortie est devant tes yeux !", "Ta détermination a payé.", "Mais à quel prix ................."]
         }
-        yield (create_one_solution_map(self.width, self.height, 4), base_text)
+        #yield (create_one_solution_map(self.width, self.height, 4), base_text)
         yield (self._load_map("assets/maps/end"), self._load_text("assets/maps/end"))
 
     def _load_map(self, filename:str) -> Map:
@@ -799,16 +785,13 @@ class Game:
     def load(self, filename:str = "assets/saves/save1"):
         with open(filename, "r") as f:
             content = json.load(f)
-        self.elements = self.get_maps()
+        
         self.visited = set([tuple(pos_list) for pos_list in content["visited"]])
-        map_name = content["map"].get("name", None)
-        if map_name is None or map_name == "end":
+        if content["map"].get("name", None) is None or content["map"].get("name", None) == "end":
             self.map, self.texts = next(self.elements)
-        if map_name == "end":
+        if content["map"].get("name", None) == "end":
             self.map, self.texts = next(self.elements)
         self.map.load_matrice_format(content["map"]["grid"])
-        self.map.name = map_name
-        print(self.map.name, [map[0].name for map in list(self.elements)])
         self.personnage.load(content["player"])
 
     def _start_loaded_game(self):

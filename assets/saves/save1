@@ -3,106 +3,6 @@
         "grid": [
             [
                 {
-                    "type": "none",
-                    "walls": {
-                        "left": true,
-                        "right": true,
-                        "top": true,
-                        "bottom": true
-                    },
-                    "chest": false,
-                    "monster": false,
-                    "locked": false
-                },
-                {
-                    "type": "none",
-                    "walls": {
-                        "left": true,
-                        "right": true,
-                        "top": true,
-                        "bottom": true
-                    },
-                    "chest": false,
-                    "monster": false,
-                    "locked": false
-                },
-                {
-                    "type": "none",
-                    "walls": {
-                        "left": true,
-                        "right": true,
-                        "top": true,
-                        "bottom": true
-                    },
-                    "chest": false,
-                    "monster": false,
-                    "locked": false
-                },
-                {
-                    "type": "none",
-                    "walls": {
-                        "left": true,
-                        "right": true,
-                        "top": true,
-                        "bottom": true
-                    },
-                    "chest": false,
-                    "monster": false,
-                    "locked": false
-                }
-            ],
-            [
-                {
-                    "type": "path",
-                    "walls": {
-                        "left": true,
-                        "right": false,
-                        "top": true,
-                        "bottom": true
-                    },
-                    "chest": false,
-                    "monster": false,
-                    "locked": false
-                },
-                {
-                    "type": "path",
-                    "walls": {
-                        "left": false,
-                        "right": false,
-                        "top": true,
-                        "bottom": false
-                    },
-                    "chest": false,
-                    "monster": false,
-                    "locked": false
-                },
-                {
-                    "type": "path",
-                    "walls": {
-                        "left": false,
-                        "right": true,
-                        "top": true,
-                        "bottom": false
-                    },
-                    "chest": false,
-                    "monster": false,
-                    "locked": false
-                },
-                {
-                    "type": "key",
-                    "walls": {
-                        "left": true,
-                        "right": true,
-                        "top": true,
-                        "bottom": false
-                    },
-                    "chest": false,
-                    "monster": false,
-                    "locked": false
-                }
-            ],
-            [
-                {
                     "type": "start",
                     "walls": {
                         "left": true,
@@ -118,8 +18,8 @@
                     "type": "path",
                     "walls": {
                         "left": false,
-                        "right": true,
-                        "top": false,
+                        "right": false,
+                        "top": true,
                         "bottom": true
                     },
                     "chest": false,
@@ -129,10 +29,82 @@
                 {
                     "type": "path",
                     "walls": {
-                        "left": true,
-                        "right": true,
-                        "top": false,
-                        "bottom": false
+                        "left": false,
+                        "right": false,
+                        "top": true,
+                        "bottom": true
+                    },
+                    "chest": false,
+                    "monster": false,
+                    "locked": false
+                },
+                {
+                    "type": "path",
+                    "walls": {
+                        "left": false,
+                        "right": false,
+                        "top": true,
+                        "bottom": true
+                    },
+                    "chest": true,
+                    "monster": false,
+                    "locked": false
+                },
+                {
+                    "type": "path",
+                    "walls": {
+                        "left": false,
+                        "right": false,
+                        "top": true,
+                        "bottom": true
+                    },
+                    "chest": true,
+                    "monster": false,
+                    "locked": false
+                },
+                {
+                    "type": "path",
+                    "walls": {
+                        "left": false,
+                        "right": false,
+                        "top": true,
+                        "bottom": true
+                    },
+                    "chest": true,
+                    "monster": false,
+                    "locked": false
+                },
+                {
+                    "type": "path",
+                    "walls": {
+                        "left": false,
+                        "right": false,
+                        "top": true,
+                        "bottom": true
+                    },
+                    "chest": false,
+                    "monster": false,
+                    "locked": false
+                },
+                {
+                    "type": "path",
+                    "walls": {
+                        "left": false,
+                        "right": false,
+                        "top": true,
+                        "bottom": true
+                    },
+                    "chest": false,
+                    "monster": true,
+                    "locked": false
+                },
+                {
+                    "type": "path",
+                    "walls": {
+                        "left": false,
+                        "right": false,
+                        "top": true,
+                        "bottom": true
                     },
                     "chest": false,
                     "monster": false,
@@ -141,123 +113,23 @@
                 {
                     "type": "end",
                     "walls": {
-                        "left": true,
-                        "right": false,
-                        "top": false,
-                        "bottom": false
-                    },
-                    "chest": false,
-                    "monster": false,
-                    "locked": "right"
-                }
-            ],
-            [
-                {
-                    "type": "path",
-                    "walls": {
-                        "left": true,
-                        "right": false,
-                        "top": true,
-                        "bottom": false
-                    },
-                    "chest": true,
-                    "monster": false,
-                    "locked": false
-                },
-                {
-                    "type": "path",
-                    "walls": {
-                        "left": false,
-                        "right": false,
-                        "top": true,
-                        "bottom": true
-                    },
-                    "chest": true,
-                    "monster": false,
-                    "locked": false
-                },
-                {
-                    "type": "path",
-                    "walls": {
                         "left": false,
                         "right": true,
-                        "top": false,
-                        "bottom": true
-                    },
-                    "chest": true,
-                    "monster": false,
-                    "locked": false
-                },
-                {
-                    "type": "path",
-                    "walls": {
-                        "left": true,
-                        "right": true,
-                        "top": false,
-                        "bottom": false
-                    },
-                    "chest": false,
-                    "monster": false,
-                    "locked": false
-                }
-            ],
-            [
-                {
-                    "type": "path",
-                    "walls": {
-                        "left": true,
-                        "right": false,
-                        "top": false,
-                        "bottom": true
-                    },
-                    "chest": false,
-                    "monster": false,
-                    "locked": false
-                },
-                {
-                    "type": "path",
-                    "walls": {
-                        "left": false,
-                        "right": false,
                         "top": true,
                         "bottom": true
                     },
                     "chest": false,
                     "monster": false,
-                    "locked": false
-                },
-                {
-                    "type": "path",
-                    "walls": {
-                        "left": false,
-                        "right": false,
-                        "top": true,
-                        "bottom": true
-                    },
-                    "chest": false,
-                    "monster": false,
-                    "locked": false
-                },
-                {
-                    "type": "path",
-                    "walls": {
-                        "left": false,
-                        "right": true,
-                        "top": false,
-                        "bottom": true
-                    },
-                    "chest": false,
-                    "monster": true,
                     "locked": false
                 }
             ]
         ],
-        "name": "start"
+        "name": "end"
     },
     "player": {
         "position": [
             1,
-            2
+            0
         ],
         "inventaire": {
             "equipements": {},
@@ -268,12 +140,12 @@
     },
     "visited": [
         [
-            0,
-            2
+            1,
+            0
         ],
         [
-            1,
-            2
+            0,
+            0
         ]
     ]
 }
