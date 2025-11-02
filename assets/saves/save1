@@ -46,7 +46,7 @@
                         "top": true,
                         "bottom": true
                     },
-                    "chest": false,
+                    "chest": true,
                     "monster": false,
                     "locked": false
                 },
@@ -58,7 +58,7 @@
                         "top": true,
                         "bottom": true
                     },
-                    "chest": false,
+                    "chest": true,
                     "monster": false,
                     "locked": false
                 },
@@ -70,7 +70,7 @@
                         "top": true,
                         "bottom": true
                     },
-                    "chest": false,
+                    "chest": true,
                     "monster": false,
                     "locked": false
                 },
@@ -132,28 +132,8 @@
             0
         ],
         "inventaire": {
-            "equipements": {
-                "armure": {
-                    "nom": "Armure",
-                    "soin": 0,
-                    "degat": 0,
-                    "resistance": 3
-                },
-                "arme": {
-                    "nom": "Lance",
-                    "soin": 0,
-                    "degat": 4,
-                    "resistance": 0
-                }
-            },
-            "consommables": {
-                "potion": {
-                    "nom": "Potion",
-                    "soin": 7,
-                    "degat": 0,
-                    "resistance": 0
-                }
-            }
+            "equipements": {},
+            "consommables": {}
         },
         "level": 0,
         "exp": 0

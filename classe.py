@@ -666,7 +666,7 @@ class Game:
             self.screen.blit(map_surface, map_position)
 
             if self.combat:
-                if self.combat.ennemi == "Ventre d'Acier":
+                if self.combat.ennemi.nom == "Ventre d'Acier":
                     self.musique.music_change("assets/sound/musique_boss.mp3") if self.musique.path != "assets/sound/musique_boss.mp3" else None
                 if self.combat.is_ended():
                     if type(self.combat.winner) is Joueur:
