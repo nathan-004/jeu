@@ -635,10 +635,13 @@ class Game:
             self.screen.blit(map_surface, map_position)
 
             if self.combat:
+                if self.combat.ennemi == "Ventre d'Acier":
+                    self.musique.music_change("assets/sound/musique_boss.mp3") if self.musique.path != "assets/sound/musique_boss.mp3" else None
                 if self.combat.is_ended():
                     if type(self.combat.winner) is Joueur:
                         self.combat = False
                         cur_room.monster = False
+                        self.musique.music_change("assets/sound/musique_boucle1.mp3") if self.musique.path != "assets/sound/musique_boucle1.mp3" else None
                         continue
                     else:
                         running = False
