@@ -2,32 +2,54 @@ import pygame
 from pygame.locals import *
 
 def monster_damage():
-    sound = pygame.mixer.Sound("assets/sound/degats.mp3")
-    sound.play()
+    try:
+        sound = pygame.mixer.Sound("assets/sound/degats.mp3")
+        sound.play()
+    except pygame.error:
+        pass
 
 def open_door():
-    sound = pygame.mixer.Sound("assets/sound/porte.mp3")
-    sound.play()
+    try:
+        sound = pygame.mixer.Sound("assets/sound/porte.mp3")
+        sound.play()
+    except pygame.error:
+        pass
 
 def attack_sword():
-    sound = pygame.mixer.Sound("assets/sound/attaque.mp3")
-    sound.play()
+    try:
+        sound = pygame.mixer.Sound("assets/sound/attaque.mp3")
+        sound.play()
+    except pygame.error:
+        pass
 
 def heavy_attack():
-    sound = pygame.mixer.Sound("assets/sound/attaque_forte.mp3")
-    sound.play()
+    try:
+        sound = pygame.mixer.Sound("assets/sound/attaque_forte.mp3")
+        sound.play()
+    except pygame.error:
+        pass
 
 def key_open():
-    sound = pygame.mixer.Sound("assets/sound/key_open.mp3")
-    sound.play()
+    try:
+        sound = pygame.mixer.Sound("assets/sound/key_open.mp3")
+        sound.play()
+    except pygame.error:
+        pass
 
 def miss_attack():
-    sound = pygame.mixer.Sound("assets/sound/rate.wav")
-    sound.play()
+    try:
+        sound = pygame.mixer.Sound("assets/sound/rate.wav")
+        sound.play()
+    except pygame.error:
+        pass
 
 def potion_use():
-    sound = pygame.mixer.Sound("assets/sound/heal.mp3")
-    sound.play()
+    try:
+        sound = pygame.mixer.Sound("assets/sound/heal.mp3")
+        sound.play()
+    except pygame.error:
+        pass
+
 
 class Musique:
     def __init__(self,path):
