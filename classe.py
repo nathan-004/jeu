@@ -206,8 +206,6 @@ class Inventaire:
             self.consommables[obj.type] = obj
         else:
             self.equipements[obj.type] = obj
-        print(self.equipements)
-        print(self.consommables)
             
     def equip(self, perso):
         for objet in self.equipements.values():
@@ -605,7 +603,7 @@ class Game:
         try:
             pygame.mixer.init()
         except pygame.error as e:
-            print(e)
+            print(RED, "Erreur lors de l'initialisation du son (vérifier si sortie audio connectée) :", e, RESET)
             MUSIQUE = False
 
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
@@ -835,7 +833,13 @@ class Game:
         self.personnage.load(content["player"])
 
     def _start_loaded_game(self):
-        self.load()
+        try:
+            self.load()
+        except Exception:
+            print(f"{RED}Erreur lors du chargement de la map{RESET}")
+            print(f"{GREEN}Création d'une nouvelle map ...{RESET}")
+            self._start_new_game()
+            return
         self.main()
 
     def _start_new_game(self):
@@ -857,7 +861,6 @@ class Combat:
 
     def joueur_utiliser(self):
         """Fait utiliser le seul consommable de l'inventaire du joueur"""
-        print("Utilise un item")
         if self.tour % 2 == 0:
             try:
                 objet = list(self.joueur.inventaire.consommables.values())[0]
@@ -873,7 +876,6 @@ class Combat:
 
     def joueur_attaque(self):
         """Attaque du joueur sur l'ennemi"""
-        print("Attaque du joueur")
         if self.tour % 2 == 0:
             att = self.joueur.attaque(self.ennemi)
             if att is None:
@@ -890,7 +892,6 @@ class Combat:
 
     def joueur_attaque_lourde(self):
         """Attaque lourde du joueur"""
-        print("Attaque lourde du joueur")
         if self.tour % 2 == 0:
             att = self.joueur.attaque_lourde(self.ennemi)
             if att is None:

@@ -101,7 +101,6 @@ class TextDisplay:
             self.time = 0
         self.time += self.clock.get_time()
         self.end = self.frames>=len(self.txt)
-        #print(self.txt[0:self.frames],self.end)
         
     def reset(self):
         self.frames = 0
@@ -140,10 +139,8 @@ class MouseButton:
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            print("Clic intercepté")
             local_pos = (event.pos[0] - self.position[0], event.pos[1] - self.position[1])
             if self.background.collidepoint(local_pos):
-                print("action réalisée")
                 self.action()
 
 class RoomDisplay:
@@ -308,7 +305,7 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
 
     texte = 'une petite prairie jolie, et des petites fleurs y poussait. En frolant cette pelouse, vous remarquez un arbre'
-    monstre1 = EnnemiDisplay(fenetre, (get_size(fenetre,40),100), 1, "assets\images\monster\Perso_2.png")
+    monstre1 = EnnemiDisplay(fenetre, (get_size(fenetre,40),100), 1, "assets/images/monster/Perso_2.png")
 
     test=TextDisplay(texte, fenetre, clock, 15)
     background = RoomDisplay(fenetre)
