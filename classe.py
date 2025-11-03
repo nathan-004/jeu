@@ -547,22 +547,28 @@ class Game:
         self.personnage = Joueur("Nom", PLAYER_BASE_PV, PLAYER_BASE_ATTACK, PLAYER_BASE_RESISTANCE, self.map.get_start_position(), game = self)
 
         self.visited = set()
+        self.last_moved = False
     
     def display_room(self,screen:pygame.Surface, percentage=70):
-        room = RoomDisplay(screen, percentage)
+        if self.room is None:
+            self.room = RoomDisplay(screen, percentage)
+        if self.last_moved:
+            self.room.start_enter()
+            self.last_moved = False
         doorL =  pygame.image.load('assets\\images\\doors\\Porte_cote.png')#.transform.flip(img, True, False)
         doorC =  pygame.image.load('assets\\images\\doors\\Porte_Face.png')
         doorR =  pygame.image.load('assets\\images\\doors\\Porte_cote.png')
         doors = [doorR, doorL, doorC]
         dir_ = [(-1, 0), (1, 0), (0, -1)]
-        room.display_bg()
+        self.room.display_bg()
         for  i in range(3):
             direction = get_absolute_direction(self.personnage.direction, dir_[i])
             if self.map.can_move(self.personnage.position, direction):
                 doors[i] = pygame.transform.scale(doors[i], (get_size(screen, 13*(percentage/100)), get_size(screen, 71*(percentage/100), "height"))) if i != 2 else pygame.transform.scale(doors[i], (get_size(screen,(300*100/get_size(screen,100))*(percentage/100)), get_size(screen, 49*(percentage/100), "height")))
                 doors[i] = pygame.transform.flip(doors[i], True, False) if i == 0 else doors[i]
                 screen.blit(doors[i],(get_size(screen, ((99.7-percentage)/2)+((85/(100/percentage))if i == 1 else (4/(100/percentage))) ),get_size(screen, 26*(percentage/99.7), "height"))) if i != 2 else screen.blit(doors[i],(get_size(screen, ((100-percentage)/2)+((36.3-(10/(100/percentage)))) ),get_size(screen, 32*(percentage/99.7), "height")))
-        room.display_shade()
+        self.room.display_shade()
+        self.room.display_enter()
 
     def start_menu(self):
         pygame.font.init()
@@ -621,6 +627,7 @@ class Game:
 
         self.combat = False
         self.clock = pygame.time.Clock()
+        self.room = None
 
         debug_text_size = (75, 50)
         debug_text_pos = (get_size(self.screen, (100 - debug_text_size[0])/2), get_size(self.screen, (100 - debug_text_size[1])/2, "height"))
@@ -720,7 +727,7 @@ class Game:
                 self.current_texts.append(TextDisplay("Vous avez trouvé une clé", self.screen, self.clock))
                 self.current_texts.append(TextDisplay("Une porte s'est ouverte ...", self.screen, self.clock))
             elif cur_room.chest:
-                if not self.combat:
+                if not self.combat and not self.room.enter_animation:
                     if self.coffre.chest_display is None and not self.coffre.end:
                         self.current_texts.append(TextDisplay("Vous trouvez un coffre. Vous l'ouvrez.", self.screen, self.clock))
                     if self.current_texts != [] and (self.coffre.chest_display is None or not self.coffre.chest_display.ended):
@@ -731,7 +738,7 @@ class Game:
                         self.coffre.reset()
 
             if cur_room.monster:
-                if not self.combat:
+                if not self.combat and not self.room.enter_animation:
                     self.combat = Combat(self.personnage, get_random_monster(self), self)
                     self.current_texts.append(TextDisplay(f"Vous tombez nez à nez avec {self.combat.ennemi.nom} LV{self.combat.ennemi.level}", self.screen, self.clock))
                     add_random_dialogue(self.combat.ennemi.nom, "start", self)

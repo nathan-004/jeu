@@ -11,7 +11,7 @@ class ChestDisplay:
         self.size = size
         self.frame = 0
         self.image = 1 if closed else 15
-        self.img_f = 1
+        self.img_f = 2
         self._last_loaded = None
         self.closed = closed
         self.load(self.image)
@@ -159,17 +159,34 @@ class RoomDisplay:
         self.bg = pygame.transform.scale(self.bg, (self.w*self.taille,self.h*self.taille))
         self.shade = pygame.transform.scale(self.shade, (self.w*self.taille,self.h*self.taille))
         self.enter = pygame.transform.scale(self.enter, (self.w*self.taille,self.h*self.taille))
-
         
+        self._enter_showing = False
+        self._enter_end_time = 0
+        self._enter_pos = (self.w*(1-self.taille)/2, 0)
+    
+    @property # Getter
+    def enter_animation(self):
+        return self._enter_showing
+
     def display_bg(self):
         self.screen.fill(('black'))
         self.screen.blit(self.bg,(self.w*(1-self.taille)/2,0))
+
     def display_shade(self):
         self.screen.blit(self.shade,(self.w*(1-self.taille)/2,0))
     
-    def display_enter(self,time=1000):
-        self.screen.blit(self.enter,(self.w*(1-self.taille)/2,0))
-        pygame.time.delay(time) 
+    def display_enter(self):
+        """Appeler chaque frame : affiche 'enter' si le timer est actif."""
+        if not self._enter_showing:
+            return
+        self.screen.blit(self.enter, self._enter_pos)
+        if pygame.time.get_ticks() >= self._enter_end_time:
+            self._enter_showing = False
+
+    def start_enter(self, duration_ms: int = 500):
+        """Commence l'affichage de l'image 'enter' pendant duration_ms millisecondes."""
+        self._enter_showing = True
+        self._enter_end_time = pygame.time.get_ticks() + int(duration_ms)
         
 class EnnemiDisplay:
     def __init__(self, surface:pygame.Surface, pos:tuple, size:int, image_path:str):
@@ -308,10 +325,13 @@ if __name__ == "__main__":
                         test.frames = len(test.txt)
                 if event.key == K_ESCAPE:
                     running = False
+                if event.key == K_a:
+                    background.start_enter()
             button.handle_event(event)
         background.display_bg()
         #test.display()
         background.display_shade()
+        background.display_enter()
         button.display()
         monstre1.display()
         #test.reset() if test.end and test.time >= 1000 else None
