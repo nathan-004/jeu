@@ -10,6 +10,7 @@ from constants import *
 from son import *
 
 BUTTONS = []
+MUSIQUE = True
 
 def make_buttons(surface: pygame.Surface, actions: list, space_percent: int = 20, button_bloc_pos: tuple = (0, 0)) -> list:
     """
@@ -547,9 +548,12 @@ class Game:
         self.personnage = Joueur("Nom", PLAYER_BASE_PV, PLAYER_BASE_ATTACK, PLAYER_BASE_RESISTANCE, self.map.get_start_position(), game = self)
 
         self.visited = set()
+        self.last_moved = False
     
     def display_room(self,screen:pygame.Surface, percentage=70):
         room = RoomDisplay(screen, percentage)
+        if self.last_moved:
+            room.display_enter()
         doorL =  pygame.image.load('assets\\images\\doors\\Porte_cote.png')#.transform.flip(img, True, False)
         doorC =  pygame.image.load('assets\\images\\doors\\Porte_Face.png')
         doorR =  pygame.image.load('assets\\images\\doors\\Porte_cote.png')
@@ -595,7 +599,10 @@ class Game:
 
     def main(self):
         pygame.font.init()
-        pygame.mixer.init()
+        try:
+            pygame.mixer.init()
+        except pygame.error:
+            MUSIQUE = False
 
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         map_size = (get_size(self.screen, 30, "height"), get_size(self.screen, 30, "height"))
@@ -622,7 +629,8 @@ class Game:
         debug_text_size = (get_size(self.screen, debug_text_size[0]), get_size(self.screen, debug_text_size[1], "height"))
         debug_text = TextDisplay(self.personnage.get_stats_message(), self.screen, self.clock, background_color=(0,0,0), color=(255,255,255), pos=debug_text_pos, size=debug_text_size)
 
-        self.musique = Musique("assets/sound/musique_boucle1.mp3")
+        if MUSIQUE:
+            self.musique = Musique("assets/sound/musique_boucle1.mp3")
 
         self.current_texts = []
 
@@ -664,7 +672,8 @@ class Game:
                 if self.coffre:
                     self.coffre.buttons_event(event)
 
-            self.musique.play_music(True)
+            if MUSIQUE:
+                self.musique.play_music(True)
 
             if self.personnage.position in self.texts and self.personnage.position not in self.visited:
                 for text in self.texts[self.personnage.position]:
@@ -690,12 +699,14 @@ class Game:
 
             if self.combat:
                 if self.combat.ennemi.nom == "Ventre d'Acier":
-                    self.musique.music_change("assets/sound/musique_boss.mp3") if self.musique.path != "assets/sound/musique_boss.mp3" else None
+                    if MUSIQUE:
+                        self.musique.music_change("assets/sound/musique_boss.mp3") if self.musique.path != "assets/sound/musique_boss.mp3" else None
                 if self.combat.is_ended() and self.current_texts == []:
                     if type(self.combat.winner) is Joueur:
                         self.combat = False
                         cur_room.monster = False
-                        self.musique.music_change("assets/sound/musique_boucle1.mp3") if self.musique.path != "assets/sound/musique_boucle1.mp3" else None
+                        if MUSIQUE:
+                            self.musique.music_change("assets/sound/musique_boucle1.mp3") if self.musique.path != "assets/sound/musique_boucle1.mp3" else None
                         continue
                     else:
                         running = False
@@ -754,6 +765,7 @@ class Game:
                 self.personnage.move(direction)
             else:
                 self.current_texts.append(TextDisplay("Ne vous en allez pas si vite !", self.screen, self.clock))
+            self.last_moved = True
         Objet.current_room = self.personnage.position
     
     def get_maps(self):

@@ -2,32 +2,53 @@ import pygame
 from pygame.locals import *
 
 def monster_damage():
-    sound = pygame.mixer.Sound("assets/sound/degats.mp3")
-    sound.play()
+    try:
+        sound = pygame.mixer.Sound("assets/sound/degats.mp3")
+        sound.play()
+    except pygame.error:
+        pass
 
 def open_door():
-    sound = pygame.mixer.Sound("assets/sound/porte.mp3")
-    sound.play()
+    try:
+        sound = pygame.mixer.Sound("assets/sound/porte.mp3")
+        sound.play()
+    except pygame.error:
+        pass
 
 def attack_sword():
-    sound = pygame.mixer.Sound("assets/sound/attaque.mp3")
-    sound.play()
+    try:
+        sound = pygame.mixer.Sound("assets/sound/attaque.mp3")
+        sound.play()
+    except pygame.error:
+        pass
 
 def heavy_attack():
-    sound = pygame.mixer.Sound("assets/sound/attaque_forte.mp3")
-    sound.play()
+    try:
+        sound = pygame.mixer.Sound("assets/sound/attaque_forte.mp3")
+        sound.play()
+    except pygame.error:
+        pass
 
 def key_open():
-    sound = pygame.mixer.Sound("assets/sound/key_open.mp3")
-    sound.play()
+    try:
+        sound = pygame.mixer.Sound("assets/sound/key_open.mp3")
+        sound.play()
+    except pygame.error:
+        pass
 
 def miss_attack():
-    sound = pygame.mixer.Sound("assets/sound/rate.wav")
-    sound.play()
+    try:
+        sound = pygame.mixer.Sound("assets/sound/rate.wav")
+        sound.play()
+    except pygame.error:
+        pass
 
 def potion_use():
-    sound = pygame.mixer.Sound("assets/sound/heal.mp3")
-    sound.play()
+    try:
+        sound = pygame.mixer.Sound("assets/sound/heal.mp3")
+        sound.play()
+    except pygame.error:
+        pass
 
 class Musique:
     def __init__(self,path):
@@ -36,6 +57,8 @@ class Musique:
         self.load = False
 
     def play_music(self,rpt=False):
+        if not MUSIQUE:
+            return
         if not self.load:
             pygame.mixer.music.load(self.path)
             pygame.mixer.music.play(-1 if rpt else 0)  
@@ -48,9 +71,13 @@ class Musique:
         self.pause=True if not self.pause else False
     
     def reset_music(self):
+        if not MUSIQUE:
+            return
         pygame.mixer.music.rewind()
     
     def music_change(self,path):
+        if not MUSIQUE:
+            return
         self.path=path
         self.load = False
         self.play_music()
