@@ -10,7 +10,6 @@ from constants import *
 from son import *
 
 BUTTONS = []
-MUSIQUE = True
 
 def make_buttons(surface: pygame.Surface, actions: list, space_percent: int = 20, button_bloc_pos: tuple = (0, 0)) -> list:
     """
@@ -548,12 +547,9 @@ class Game:
         self.personnage = Joueur("Nom", PLAYER_BASE_PV, PLAYER_BASE_ATTACK, PLAYER_BASE_RESISTANCE, self.map.get_start_position(), game = self)
 
         self.visited = set()
-        self.last_moved = False
     
     def display_room(self,screen:pygame.Surface, percentage=70):
         room = RoomDisplay(screen, percentage)
-        if self.last_moved:
-            room.display_enter()
         doorL =  pygame.image.load('assets\\images\\doors\\Porte_cote.png')#.transform.flip(img, True, False)
         doorC =  pygame.image.load('assets\\images\\doors\\Porte_Face.png')
         doorR =  pygame.image.load('assets\\images\\doors\\Porte_cote.png')
@@ -599,9 +595,11 @@ class Game:
 
     def main(self):
         pygame.font.init()
+        MUSIQUE = True
         try:
             pygame.mixer.init()
-        except pygame.error:
+        except pygame.error as e:
+            print(e)
             MUSIQUE = False
 
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
@@ -652,13 +650,13 @@ class Game:
                                     self.current_texts[0].frames = len(self.current_texts[0].txt)
                         continue
                     
-                    if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                    if event.key == pygame.K_RIGHT:
                         self.move((1, 0))
-                    elif event.key == pygame.K_UP or event.key == pygame.K_z:
+                    elif event.key == pygame.K_UP:
                         self.move((0, -1))
-                    elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                    elif event.key == pygame.K_DOWN:
                         self.move((0, 1))
-                    elif event.key == pygame.K_LEFT or event.key == pygame.K_q:
+                    elif event.key == pygame.K_LEFT:
                         self.move((-1, 0))
                     elif any(pygame.key.get_pressed()):
                         if self.current_texts != []:
@@ -747,7 +745,7 @@ class Game:
 
             keys = pygame.key.get_pressed()
             
-            if keys[pygame.K_e]:
+            if keys[pygame.K_d]:
                 stats = self.personnage.get_stats_message()
                 if f"*{stats}*" != debug_text.txt:
                     debug_text = TextDisplay(stats, self.screen, self.clock, background_color=(0, 0, 0), color=(255,255,255), pos=debug_text_pos, size=debug_text_size)
