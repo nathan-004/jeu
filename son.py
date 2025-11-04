@@ -1,12 +1,15 @@
 import pygame
 from pygame.locals import *
+import sys
+
+print(sys.path)
 
 def monster_damage():
     try:
         sound = pygame.mixer.Sound("assets/sound/degats.mp3")
         sound.play()
-    except pygame.error:
-        pass
+    except pygame.error as e:
+        print(e)
 
 def open_door():
     try:
@@ -60,18 +63,18 @@ class Musique:
     def play_music(self,rpt=False):
         if not self.load:
             pygame.mixer.music.load(self.path)
-            pygame.mixer.music.play(-1 if rpt else 0)  
+            pygame.mixer.music.play(-1 if rpt else 0)
             self.load = True
         elif not self.pause:
             pygame.mixer.music.unpause()
-    
+
     def pause_music(self):
         pygame.mixer.music.pause()
         self.pause=True if not self.pause else False
-    
+
     def reset_music(self):
         pygame.mixer.music.rewind()
-    
+
     def music_change(self,path):
         self.path=path
         self.load = False

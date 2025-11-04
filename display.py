@@ -52,7 +52,7 @@ class ChestDisplay:
         self._last_loaded = n
 
 class TextDisplay:
-    def __init__(self,txt, fenetre, clock, police=20, color=(0,0,0), pos=(None,None), size=None, background_color:Optional[tuple] = None):
+    def __init__(self,txt, fenetre, clock, police=40, color=(0,0,0), pos=(None,None), size=None, background_color:Optional[tuple] = None):
         self.txt = f'*{txt}*'
         self.mot = self.txt.split(' ')[0]
         self.color = color
@@ -61,7 +61,7 @@ class TextDisplay:
         self.end = False
         self.time = 0
         self.x,self.y = pos if pos!=(None,None) else (10,fenetre.get_height()/1.5)
-        w,h = pygame.display.get_window_size()
+        w,h = pygame.display.get_surface().get_size()
         self.size = (w, 1/3*h) if size is None else size
         self.bloc = pygame.Rect((self.x,self.y), self.size)
 
@@ -69,7 +69,7 @@ class TextDisplay:
         self.fenetre = fenetre
         self.clock = clock
         self.blocliste = [pygame.Rect((self.x+5,self.y+5), (self.size[0]-20, self.my_font.get_height()))]
-        
+
         cur_w = 0
         cur_l = 0
         self.txts = [""]
@@ -83,10 +83,10 @@ class TextDisplay:
 
             if mot == "&":
                 continue
-            
+
             self.txts[cur_l] += mot + " "
             cur_w += len(mot) + 1
-        
+
     def display(self,delay=20):	#delay est en milliseconde
         if self.background_color is not None:
             pygame.draw.rect(self.fenetre,self.background_color,self.bloc)
@@ -101,7 +101,7 @@ class TextDisplay:
             self.time = 0
         self.time += self.clock.get_time()
         self.end = self.frames>=len(self.txt)
-        
+
     def reset(self):
         self.frames = 0
         self.time = 0
@@ -120,7 +120,7 @@ class MouseButton:
         self.screen = screen
         self.background = pygame.Rect(pos, size)
         self.position = position
-    
+
     def display(self):
         """Affiche le rectangle, ses contours et le texte d'une couleur ou d'une autre si la souris passe dessus"""
         mouse_pos = pygame.mouse.get_pos()
@@ -128,7 +128,7 @@ class MouseButton:
         hovered = self.background.collidepoint(local_mouse_pos)
         color = (255, 120, 87) if not hovered else (239, 255, 94)
 
-        pygame.draw.rect(self.screen, "black", self.background)
+        pygame.draw.rect(self.screen, (0,0,0), self.background)
 
         pygame.draw.rect(self.screen, color, self.background, 2)
 
@@ -152,26 +152,26 @@ class RoomDisplay:
         self.shade = pygame.image.load('assets\\images\\background\\Shade.png')
         self.enter = pygame.image.load('assets\\images\\background\\Porte_Ouverte.png')
 
-        self.w,self.h =pygame.display.get_window_size()
-        self.bg = pygame.transform.scale(self.bg, (self.w*self.taille,self.h*self.taille))
-        self.shade = pygame.transform.scale(self.shade, (self.w*self.taille,self.h*self.taille))
-        self.enter = pygame.transform.scale(self.enter, (self.w*self.taille,self.h*self.taille))
-        
+        self.w,self.h = pygame.display.get_surface().get_size()
+        self.bg = pygame.transform.scale(self.bg, (int(self.w*self.taille),int(self.h*self.taille)))
+        self.shade = pygame.transform.scale(self.shade, (int(self.w*self.taille),int(self.h*self.taille)))
+        self.enter = pygame.transform.scale(self.enter, (int(self.w*self.taille),int(self.h*self.taille)))
+
         self._enter_showing = False
         self._enter_end_time = 0
         self._enter_pos = (self.w*(1-self.taille)/2, 0)
-    
+
     @property # Getter
     def enter_animation(self):
         return self._enter_showing
 
     def display_bg(self):
-        self.screen.fill(('black'))
+        self.screen.fill((0,0,0))
         self.screen.blit(self.bg,(self.w*(1-self.taille)/2,0))
 
     def display_shade(self):
         self.screen.blit(self.shade,(self.w*(1-self.taille)/2,0))
-    
+
     def display_enter(self):
         """Appeler chaque frame : affiche 'enter' si le timer est actif."""
         if not self._enter_showing:
@@ -184,7 +184,7 @@ class RoomDisplay:
         """Commence l'affichage de l'image 'enter' pendant duration_ms millisecondes."""
         self._enter_showing = True
         self._enter_end_time = pygame.time.get_ticks() + int(duration_ms)
-        
+
 class EnnemiDisplay:
     def __init__(self, surface:pygame.Surface, pos:tuple, size:int, image_path:str):
         self.surface = surface
@@ -203,9 +203,9 @@ class EnnemiDisplay:
     def load(self, image_path):
         self.ennemi_image = pygame.image.load(image_path)
         self.width, self.height = self.ennemi_image.get_size()
-        self.ennemi_image = pygame.transform.scale(self.ennemi_image, (self.size * self.width, self.size * self.height))
+        self.ennemi_image = pygame.transform.scale(self.ennemi_image, (int(self.size * self.width), int(self.size * self.height)))
         self._last_loaded = image_path
-        
+
 class HealthBar:
     """Barre de vie à afficher"""
 
@@ -269,7 +269,7 @@ class ItemDisplay:
         image = self.resize(image, self.size)
 
         return image
-    
+
     def resize(self, image:pygame.Surface, size:tuple) -> pygame.Surface:
         iw, ih = image.get_size()
         if iw == 0 or ih == 0:
@@ -280,20 +280,20 @@ class ItemDisplay:
             target_h = max(1, int(ih * scale))
         image = pygame.transform.scale(image, (target_w, target_h))
         return image
-        
+
 def get_size(surface:pygame.Surface, pourcentage:float, size:str = "width") -> float:
     """Renvoie la valeur en pixel qui correspond au pourcentage de la dimension de la surface"""
     assert size == "width" or size == "height", f"Dimension {size} non disponible"
     val = surface.get_size()[0 if size == "width" else 1]
 
-    return pourcentage * val / 100
+    return int(pourcentage * val / 100)
 
 def get_dialogue_text(text:str, monster, screen:pygame.Surface, clock:pygame.time.Clock) -> TextDisplay:
     """monster:Monstre -> contient un attribut ennemi_display"""
     size = (get_size(screen, 10), get_size(screen, 15, "height"))
     pos = (get_size(screen, 55), get_size(screen, 2, "height"))
 
-    text_display = TextDisplay(text, screen, clock, pos=pos, size=size,background_color=(255, 255, 255))
+    text_display = TextDisplay(text, screen, clock, pos=pos, size=size,background_color=(255, 255, 255), police=20)
     return text_display
 
 if __name__ == "__main__":
