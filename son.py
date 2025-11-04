@@ -6,49 +6,49 @@ print(sys.path)
 
 def monster_damage():
     try:
-        sound = pygame.mixer.Sound("assets/sound/degats.mp3")
+        sound = pygame.mixer.Sound("assets/sound/degats.ogg")
         sound.play()
     except pygame.error as e:
         print(e)
 
 def open_door():
     try:
-        sound = pygame.mixer.Sound("assets/sound/porte.mp3")
+        sound = pygame.mixer.Sound("assets/sound/porte.ogg")
         sound.play()
     except pygame.error:
         pass
 
 def attack_sword():
     try:
-        sound = pygame.mixer.Sound("assets/sound/attaque.mp3")
+        sound = pygame.mixer.Sound("assets/sound/attaque.ogg")
         sound.play()
     except pygame.error:
         pass
 
 def heavy_attack():
     try:
-        sound = pygame.mixer.Sound("assets/sound/attaque_forte.mp3")
+        sound = pygame.mixer.Sound("assets/sound/attaque_forte.ogg")
         sound.play()
     except pygame.error:
         pass
 
 def key_open():
     try:
-        sound = pygame.mixer.Sound("assets/sound/key_open.mp3")
+        sound = pygame.mixer.Sound("assets/sound/key_open.ogg")
         sound.play()
     except pygame.error:
         pass
 
 def miss_attack():
     try:
-        sound = pygame.mixer.Sound("assets/sound/rate.wav")
+        sound = pygame.mixer.Sound("assets/sound/rate.ogg")
         sound.play()
     except pygame.error:
         pass
 
 def potion_use():
     try:
-        sound = pygame.mixer.Sound("assets/sound/heal.mp3")
+        sound = pygame.mixer.Sound("assets/sound/heal.ogg")
         sound.play()
     except pygame.error:
         pass
@@ -96,7 +96,7 @@ if __name__ == "__main__":
                 continuer = False
             elif event.type == KEYDOWN:
                 if event.key == pygame.K_a:
-                    attack_sword()
+                    miss_attack()
                 elif event.key == pygame.K_z:
                     monster_damage()
                 elif event.key == pygame.K_e:

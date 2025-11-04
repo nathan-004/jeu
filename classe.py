@@ -97,7 +97,7 @@ def get_random_dialogue(monster_type:str, event:str) -> Optional[str]:
         texts = MONSTERS[monster_type]["dialogues"][event]
     except:
         return "..."
-    
+
     if randint(1, max_) <= prob:
         return choice(texts)
     return None
@@ -108,13 +108,13 @@ def get_random_monster(game):
         return Monstre("Chevalier", 30, 1, 0)
     elif game.map.name == "end":
         return Monstre("Ventre d'Acier", 100, 10, 0.6)
-    
+
     monster_type = choice(MONSTERS_LIST)
     monster = Monstre(monster_type)
     monster.level_up(get_level(game))
     return monster
 
-def get_random_item_stats(game, type_:str) -> tuple:    
+def get_random_item_stats(game, type_:str) -> tuple:
     """Renvoie un tuple (soin, degats, resistance) basé sur l'avancement du joueur et son niveau"""
     if game.map.name == "start":
         level = 0
@@ -185,7 +185,7 @@ class Objet:
         Renvoie les stats de l'objet sous forme de texte.
         """
         message = f"{self.nom}, {self.type} {NEW_LINE_CHARACTER} "
-        
+
         # Ajouter seulement les valeurs différentes de 0
         if self.soin != 0:
             message += f"Soin : +{self.soin:.1f} {NEW_LINE_CHARACTER} "
@@ -198,7 +198,7 @@ class Objet:
 
 class Inventaire:
     def __init__ (self):
-        self.equipements = {} 
+        self.equipements = {}
         self.consommables = {}
 
     def add(self, obj: Objet):
@@ -206,7 +206,7 @@ class Inventaire:
             self.consommables[obj.type] = obj
         else:
             self.equipements[obj.type] = obj
-            
+
     def equip(self, perso):
         for objet in self.equipements.values():
             perso.use(objet)
@@ -230,7 +230,7 @@ class Inventaire:
         }
 
         return content
-    
+
     def load(self, content:dict):
         for obj_type, obj in content["equipements"].items():
             self.equipements[obj_type] = Objet(obj["nom"], obj_type, obj["soin"], obj["degat"], obj["resistance"])
@@ -249,7 +249,7 @@ class Coffre:
         self.n = n
         self.objets = []  # Contient la liste de types d'objet aléatoires
         self.item = None
-        
+
         self.chest_display = None
         self.item_display = None
         self.text_display = None
@@ -265,7 +265,7 @@ class Coffre:
             shuffle(self.objets)
 
         return self.objets.pop(0)
-    
+
     def display(self, game, pos:tuple, size:tuple):
         if self.chest_display is None:
             self.open_animation(game.screen, pos, size)
@@ -292,7 +292,7 @@ class Coffre:
         if self.item is None:
             type_objet = self.get()
             nom = type_objet.capitalize()
-    
+
             if type_objet == "arme":
                 nom = choice(["Lance", "Epée"])
 
@@ -330,14 +330,14 @@ class Coffre:
             b.display()
 
         game.screen.blit(buttons_surface, buttons_pos)
-    
+
     def buttons_event(self, event):
         if self.buttons is None:
             return
-        
+
         for button in self.buttons:
             button.handle_event(event)
-    
+
     def accept_item(self):
         """
         Ajoute l'item au joueur, puis marque la fin de l'action.
@@ -358,7 +358,7 @@ class Coffre:
         """
         self.actions_end = True
         self.end = True
-    
+
     def reset(self):
         self.chest_display = None
         self.end = False
@@ -414,7 +414,7 @@ class Personnage:
         else:
             miss_attack()
             return None
-    
+
     def attaque_lourde(self, ennemi):
         a = randint(1, 10)
         if a >= 7:
@@ -432,7 +432,7 @@ class Personnage:
 
     def get_max_pv(self):
         return self.pv_base + PLAYER_LEVEL_AUGMENTATION_PV * self.level
-    
+
     def get_stats_message(self) -> str:
         content = f"{self.nom} & PV : {self.pv}/{self.get_max_pv()} & Degats : {self.degat} & Resistance : {self.resistance} & Exp : {self.exp}/{ BASE_EXP_LEVEL_UP * (BASE_EXP_LEVEL_UP_AUGMENTATION_COEFF**self.level)} & Level : {self.level}"
         return content
@@ -486,12 +486,12 @@ class Joueur(Personnage):
 
     def equipe_obj(self, obj:Objet):
         self.obj = obj
-    
+
     def move(self, direction:tuple):
         open_door()
         self.position = (self.position[0] + direction[0], self.position[1] + direction[1])
         self.direction = direction
-    
+
     def victoire(self, ennemi:Personnage):
         """Ajoute de l'exp au personnage en fonction du niveau de l'ennemi"""
         new_exp = BASE_EXP_REWARD * (BASE_EXP_LEVEL_UP_AUGMENTATION_COEFF ** ennemi.level) + randint(-BASE_EXP_REWARD_RANGE//2, BASE_EXP_REWARD_RANGE//2)
@@ -528,7 +528,7 @@ class Joueur(Personnage):
         }
 
         return content
-    
+
     def load(self, content:dict):
         """Modifie self.personnage pour correspondre aux valeurs de content"""
         self.position = tuple(content["position"])
@@ -546,7 +546,7 @@ class Game:
 
         self.visited = set()
         self.last_moved = False
-    
+
     def display_room(self,screen:pygame.Surface, percentage=70):
         if self.room is None:
             self.room = RoomDisplay(screen, percentage)
@@ -584,10 +584,10 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.start_running = False
-                
+
                 for button in buttons:
                     button.handle_event(event)
-            
+
             for button in buttons:
                 button.display()
 
@@ -654,14 +654,14 @@ class Game:
                                 else:
                                     self.current_texts[0].frames = len(self.current_texts[0].txt)
                         continue
-                    
-                    if event.key == pygame.K_RIGHT:
+
+                    if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                         self.move((1, 0))
-                    elif event.key == pygame.K_UP:
+                    elif event.key == pygame.K_UP or event.key == pygame.K_w:
                         self.move((0, -1))
-                    elif event.key == pygame.K_DOWN:
+                    elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
                         self.move((0, 1))
-                    elif event.key == pygame.K_LEFT:
+                    elif event.key == pygame.K_LEFT or event.key == pygame.K_a:
                         self.move((-1, 0))
                     elif any(pygame.key.get_pressed()):
                         if self.current_texts != []:
@@ -742,21 +742,21 @@ class Game:
                     add_random_dialogue(self.combat.ennemi.nom, "start", self)
 
             player_health_bar.display()
-            
+
             if self.current_texts != []:
                 self.current_texts[0].display()
-            
+
             self.visited.add(self.personnage.position)
 
             keys = pygame.key.get_pressed()
-            
+
             if keys[pygame.K_d]:
                 stats = self.personnage.get_stats_message()
                 if f"*{stats}*" != debug_text.txt:
                     debug_text = TextDisplay(stats, self.screen, self.clock, background_color=(0, 0, 0), color=(255,255,255), pos=debug_text_pos, size=debug_text_size)
                 borders = pygame.Rect(debug_text_pos, debug_text_size)
                 debug_text.display(20)
-                pygame.draw.rect(self.screen, "white", borders, 2)
+                pygame.draw.rect(self.screen, (255,255,255) , borders, 2)
 
             pygame.display.flip()
             self.clock.tick(100)
@@ -770,7 +770,7 @@ class Game:
                 self.current_texts.append(TextDisplay("Ne vous en allez pas si vite !", self.screen, self.clock))
             self.last_moved = True
         Objet.current_room = self.personnage.position
-    
+
     def get_maps(self):
         """Renvoie un générateur contenant un tuple map, text"""
         yield (self._load_map("assets/maps/start"), self._load_text("assets/maps/start"))
@@ -792,7 +792,7 @@ class Game:
         map.load(filename)
         map.name = filename.split("/")[-1] if "/" in filename else filename
         return map
-    
+
     def _load_text(self, filename:str) -> dict:
         """Renvoie le dictionnaire sous la forme {pos: ['text1']}"""
         with open(filename, "r", encoding="utf-8") as f:
@@ -823,7 +823,7 @@ class Game:
     def load(self, filename:str = "assets/saves/save1"):
         with open(filename, "r") as f:
             content = json.load(f)
-        
+
         self.visited = set([tuple(pos_list) for pos_list in content["visited"]])
         if content["map"].get("name", None) is None or content["map"].get("name", None) == "end":
             self.map, self.texts = next(self.elements)
@@ -845,8 +845,9 @@ class Game:
     def _start_new_game(self):
         self.elements = self.get_maps()
         self.map, self.texts = next(self.elements)
+        self.personnage.__init__('nom', PLAYER_BASE_PV, PLAYER_BASE_ATTACK, PLAYER_BASE_RESISTANCE, self.map.get_start_position(), game = self)
         self.main()
-    
+
     def _quit_start_menu(self):
         self.start_running = False
 
@@ -928,11 +929,32 @@ class Combat:
         """Tour de l'ennemi choisir action ennemi"""
         if self.tour % 2 == 0 or self.game.current_texts != []:
             return
-        
+        a = randint(1,10)
+
         if self.ennemi.pv <= self.ennemi.pv_base * 0.5: # Jouer ici
-            obj = Objet("Potion de soin contenant du vice", "potion", soin=MONSTER_BASE_ITEM_SOIN)
-            self.ennemi.use(obj)
-            self.game.current_texts.append(TextDisplay(f"L'ennemi utilise l'objet : {NEW_LINE_CHARACTER} {obj.get_message()}", self.game.screen, self.game.clock))
+            if self.game.personnage.pv < self.ennemi.damage:
+                deg = self.ennemi.attaque(self.joueur)
+                self.game.current_texts.append(TextDisplay(f"Il vous inflige {deg:.1f} dégâts {NEW_LINE_CHARACTER} Il ne vous reste plus que {self.joueur.pv:.1f} pv", self.game.screen, self.game.clock))
+            elif a <=3:
+                obj = Objet("Potion de soin contenant du vice", "potion", soin=MONSTER_BASE_ITEM_SOIN)
+                self.ennemi.use(obj)
+                self.game.current_texts.append(TextDisplay(f"L'ennemi utilise l'objet : {NEW_LINE_CHARACTER} {obj.get_message()}", self.game.screen, self.game.clock))
+            else:
+                deg = self.ennemi.attaque(self.joueur)
+                self.game.current_texts.append(TextDisplay(f"Il vous inflige {deg:.1f} dégâts {NEW_LINE_CHARACTER} Il ne vous reste plus que {self.joueur.pv:.1f} pv", self.game.screen, self.game.clock))
+
+        elif self.ennemi.pv <= self.ennemi.pv_base * 0.25:
+            if self.game.personnage.pv < self.ennemi.damage:
+                deg = self.ennemi.attaque(self.joueur)
+                self.game.current_texts.append(TextDisplay(f"Il vous inflige {deg:.1f} dégâts {NEW_LINE_CHARACTER} Il ne vous reste plus que {self.joueur.pv:.1f} pv", self.game.screen, self.game.clock))
+            elif a <=5:
+                obj = Objet("Potion de soin contenant du vice", "potion", soin=MONSTER_BASE_ITEM_SOIN)
+                self.ennemi.use(obj)
+                self.game.current_texts.append(TextDisplay(f"L'ennemi utilise l'objet : {NEW_LINE_CHARACTER} {obj.get_message()}", self.game.screen, self.game.clock))
+            else:
+                deg = self.ennemi.attaque(self.joueur)
+                self.game.current_texts.append(TextDisplay(f"Il vous inflige {deg:.1f} dégâts {NEW_LINE_CHARACTER} Il ne vous reste plus que {self.joueur.pv:.1f} pv", self.game.screen, self.game.clock))
+
         else:
             deg = self.ennemi.attaque(self.joueur)
             self.game.current_texts.append(TextDisplay(f"Il vous inflige {deg:.1f} dégâts {NEW_LINE_CHARACTER} Il ne vous reste plus que {self.joueur.pv:.1f} pv", self.game.screen, self.game.clock))
@@ -950,17 +972,17 @@ class Combat:
         if self.buttons is None:
             buttons = [("ATTAQUE", self.joueur_attaque), ("TOUT RISQUER", self.joueur_attaque_lourde), ("UTILISER", self.joueur_utiliser)]
             self.buttons = make_buttons(surface, buttons, space_percent, button_bloc_pos)
-        
+
         if self.tour % 2 == 0:
             for button in self.buttons:
                 button.display()
-    
+
     def buttons_event(self, event):
         if self.game.current_texts != []:
             return
         if self.buttons is None or self.tour % 2 != 0:
             return
-        
+
         for button in self.buttons:
             button.handle_event(event)
 

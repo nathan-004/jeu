@@ -41,13 +41,13 @@ PLAYER_ITEM_LEVEL_AUGMENTATION_RES = 0.01        # résistance ajoutée par nive
 MONSTER_BASE_ITEM_SOIN = 3
 
 # Monstres
-va_texts = [("Tu es un humain comme moi", "Tu es passé par les mêmes épreuves"), ("Combattre sans arrêt", "Ca n'en finit jamais"), ("On en oublie qui on est", "Et notre objectif", "Mais tu sembles différent"), ("Je vois dans tes yeux l'espoir", "Ce qui nous est enlevé dans cet endroit")]
+va_texts = [("Toi aussi tu as traversée cet épreuve", "ne t'en fais pas ton voyage",""), ("Combattre sans arrêt", "Ca n'en finit jamais"), ("On en oublie qui on est", "Et notre objectif", "Mais tu sembles différent"), ("Je vois dans tes yeux l'espoir", "Ce qui nous est enlevé dans cet endroit")]
 va_generator = (el for el in va_texts)
 MONSTERS = {
     "Chevalier" : {
         "image": "assets/images/monster/Perso_2.png",
         "dialogues": {
-            "start": ["Je ne pensais pas te revoir un jour", "... Essaye de me passer sur le corp !", "Je vais pouvoir enfin utiliser ma lame", "Qui aurait cru que tu arriverais jusqu'à là"],
+            "start": ["Je ne pensais pas te revoir un jour", "... Essaye de me passer sur le corps !", "Je vais pouvoir enfin utiliser ma lame", "Qui aurait cru que tu arriverais jusqu'à là"],
             "receive_damage": ["Ouch !", "Tu ne rigoles pas", "Tu ne penses quand même pas gagner ?", "Je ne tomberai pas si facilement"],
             "monster_death": ["Pourquoi ce sourire niarquois ?", "Si facilement ...", "Cette douleur ... Il te fera comprendre un jour ..."],
             "miss_attack": ["Concentre toi, je n'aimes pas quand c'est trop facile.", "Regarde où tu vises"],

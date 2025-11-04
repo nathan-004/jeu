@@ -296,6 +296,28 @@ def get_dialogue_text(text:str, monster, screen:pygame.Surface, clock:pygame.tim
     text_display = TextDisplay(text, screen, clock, pos=pos, size=size,background_color=(255, 255, 255), police=20)
     return text_display
 
+class Credits :
+    MAX = 60
+    def __init__(self,text:list, fenetre, clock):
+        self.text = text
+        self.fenetre = fenetre
+        self.clock = clock
+
+        self.file = []
+        self.background_rect = pygame.Rect(pos, (get_size(self.fenetre, 100), get_size(self.fenetre, 100, "height")))
+        self.background_color = (0, 0, 0)  # noir
+
+
+
+    def display(self):
+        # Affiche le fond
+        pygame.draw.rect(self.fenetre, self.background_color, self.background_rect)
+
+    def display_text(self, idx):
+        self.my_font = pygame.font.SysFont('Comic Sans MS', police)
+        self.fenetre.blit(self.my_font.render(txt, True, (255,255,255)), self.background_rect)
+
+
 if __name__ == "__main__":
     pygame.init()
     pygame.font.init()
