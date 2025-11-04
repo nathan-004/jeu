@@ -1,8 +1,5 @@
 import pygame
 from pygame.locals import *
-import sys
-
-print(sys.path)
 
 def monster_damage():
     try:

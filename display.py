@@ -297,26 +297,39 @@ def get_dialogue_text(text:str, monster, screen:pygame.Surface, clock:pygame.tim
     return text_display
 
 class Credits :
-    MAX = 60
-    def __init__(self,text:list, fenetre, clock):
-        self.text = text
+    MAX = 10
+    def __init__(self,text:list, fenetre:pygame.Surface, clock:pygame):
+        self.texts = text
         self.fenetre = fenetre
         self.clock = clock
 
-        self.file = []
-        self.background_rect = pygame.Rect(pos, (get_size(self.fenetre, 100), get_size(self.fenetre, 100, "height")))
-        self.background_color = (0, 0, 0)  # noir
+        self.scroll_speed = 10
 
-
+        self.credits_surface = pygame.Surface((get_size(self.fenetre, 100), get_size(self.fenetre, 100, "height")))
+        self.credits_surface.fill((0,0,0))
+        self.pos = (0, get_size(self.fenetre, 100, "height"))
+        self.add_text()
+        self.end = False
 
     def display(self):
-        # Affiche le fond
-        pygame.draw.rect(self.fenetre, self.background_color, self.background_rect)
+        self.fenetre.blit(self.credits_surface, self.pos)
 
-    def display_text(self, idx):
-        self.my_font = pygame.font.SysFont('Comic Sans MS', police)
-        self.fenetre.blit(self.my_font.render(txt, True, (255,255,255)), self.background_rect)
+        self.pos = (self.pos[0], self.pos[1] - self.scroll_speed)
+        if self.pos[1] <= -self.credits_surface.get_size()[1]:
+            self.end = True
 
+    def add_text(self, space_percent = 10):
+        height = get_size(self.fenetre, 100-space_percent, "height") // self.MAX
+        self.my_font = pygame.font.SysFont('Comic Sans MS', 20)
+        current_space = space_percent // self.MAX
+
+        self.credits_surface = pygame.Surface((get_size(self.fenetre, 100), (height + current_space) * (len(self.texts) + 1)))
+        self.credits_surface.fill((0,0,0))
+
+        for idx, text in enumerate(self.texts, start=1):
+            text_obj = self.my_font.render(text, True, (255,255,255))
+            text_rect = text_obj.get_rect(center=(get_size(self.credits_surface, 50), (height + current_space) * idx))
+            self.credits_surface.blit(text_obj, text_rect)
 
 if __name__ == "__main__":
     pygame.init()
@@ -332,6 +345,31 @@ if __name__ == "__main__":
     test=TextDisplay(texte, fenetre, clock, 15)
     background = RoomDisplay(fenetre)
     button = MouseButton("Test", (0,0), (100, 50), lambda : print("test"), fenetre)
+
+    # Utiliser Credits pour afficher un bloc de textes
+    credits_texts = [
+        "Crédit : Développement - VotreNom",
+        "Crédit : Graphismes - NomArtiste",
+        "Crédit : Musique - NomMusicien",
+        "TEST",
+        "TESTSV",
+        "TESTSTSTS",
+        "TESTFBFBLEFE",
+        "FHEGBIGB",
+        "ougbigb",
+        "fbeçfguibg",
+        "ugiobhrigub",
+        "oughigubheig",
+        "oegfbioeube",
+        "fiugiefeigfegveigvze",
+        "ifbifbfiuebfeiuf",
+        "ofhiouheoiefeuiofbeiuf",
+        "foemifbneofbembfebo",
+        "Merci d'avoir joué !"
+    ]
+    credits = Credits(credits_texts, fenetre, clock)
+    credits.add_text()  # remplit la surface interne des crédits
+
     while running:
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -351,9 +389,14 @@ if __name__ == "__main__":
         #test.display()
         background.display_shade()
         background.display_enter()
+        # afficher les crédits (appel par frame)
+        if credits.end:
+            print("end")
+            running = False
+        credits.display()
         button.display()
         monstre1.display()
         #test.reset() if test.end and test.time >= 1000 else None
         pygame.display.update()
-        clock.tick(10)
+        clock.tick(60)
     pygame.quit()
