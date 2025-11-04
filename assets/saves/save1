@@ -184,7 +184,7 @@
                         "top": false,
                         "bottom": true
                     },
-                    "chest": true,
+                    "chest": false,
                     "monster": false,
                     "locked": false
                 },
@@ -256,11 +256,18 @@
     },
     "player": {
         "position": [
-            0,
-            2
+            2,
+            3
         ],
         "inventaire": {
-            "equipements": {},
+            "equipements": {
+                "arme": {
+                    "nom": "Ep\u00e9e",
+                    "soin": 0.0,
+                    "degat": 5.14750321265944,
+                    "resistance": 0.0
+                }
+            },
             "consommables": {}
         },
         "level": 0,
@@ -268,7 +275,27 @@
     },
     "visited": [
         [
+            1,
+            2
+        ],
+        [
+            2,
+            1
+        ],
+        [
+            1,
+            1
+        ],
+        [
+            2,
+            3
+        ],
+        [
             0,
+            2
+        ],
+        [
+            2,
             2
         ]
     ]

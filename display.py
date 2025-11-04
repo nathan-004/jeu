@@ -65,7 +65,7 @@ class TextDisplay:
         self.size = (w, 1/3*h) if size is None else size
         self.bloc = pygame.Rect((self.x,self.y), self.size)
 
-        self.my_font = pygame.font.SysFont('Comic Sans MS', police)
+        self.my_font = pygame.font.SysFont('Consolas', police)
         self.fenetre = fenetre
         self.clock = clock
         self.blocliste = [pygame.Rect((self.x+5,self.y+5), (self.size[0]-20, self.my_font.get_height()))]
@@ -78,7 +78,7 @@ class TextDisplay:
             if (len(mot) + cur_w ) * self.my_font.size("a")[0] >= self.size[0] - 20 or mot == "&":
                 cur_l += 1
                 self.txts.append("")
-                self.blocliste.append(pygame.Rect((self.x+5,self.y+cur_l*(self.my_font.get_height()+5)), (self.size[0]-20, self.my_font.get_height())))
+                self.blocliste.append(pygame.Rect((self.x+15,self.y+cur_l*(self.my_font.get_height()+5)), (self.size[0]-20, self.my_font.get_height())))
                 cur_w = 0
 
             if mot == "&":
@@ -132,7 +132,7 @@ class MouseButton:
 
         pygame.draw.rect(self.screen, color, self.background, 2)
 
-        font = pygame.font.SysFont(None, int(self.size[1] * 0.6))
+        font = pygame.font.SysFont('Lucida Console', int(self.size[1] * 0.6))
         text_surf = font.render(self.text, True, color)
         text_rect = text_surf.get_rect(center=self.background.center)
         self.screen.blit(text_surf, text_rect)
