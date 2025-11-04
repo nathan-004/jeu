@@ -834,10 +834,13 @@ class Game:
         with open(filename, "r") as f:
             content = json.load(f)
 
+        self.elements = self.get_maps()
+        self.map, self.texts = next(self.elements)
         self.visited = set([tuple(pos_list) for pos_list in content["visited"]])
-        if content["map"].get("name", None) is None or content["map"].get("name", None) == "end":
+        map_name = content["map"].get("name", None)
+        if map_name is None or map_name == "end":
             self.map, self.texts = next(self.elements)
-        if content["map"].get("name", None) == "end":
+        if map_name == "end":
             self.map, self.texts = next(self.elements)
         self.map.load_matrice_format(content["map"]["grid"])
         self.personnage.load(content["player"])
