@@ -298,7 +298,7 @@ def get_dialogue_text(text:str, monster, screen:pygame.Surface, clock:pygame.tim
 
 class Credits :
     MAX = 10
-    def __init__(self,text:list, fenetre:pygame.Surface, clock:pygame):
+    def __init__(self,text:list, fenetre:pygame.Surface, clock:pygame.time.Clock):
         self.texts = text
         self.fenetre = fenetre
         self.clock = clock

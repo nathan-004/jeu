@@ -67,3 +67,20 @@ MONSTERS = {
 }
 
 MONSTERS_LIST = ["Chevalier"]
+
+CREDITS_TEXT = [
+    "Développeurs :",
+    "Nathan",
+    "Abel",
+    "Hugo",
+    "Lino",
+    "Génération de la map :",
+    "Nathan",
+    "Rien :",
+    "Lino",
+    "Dessin, Musique :",
+    "Abel",
+    "Items, Crédits :",
+    "Hugo",
+    "Merci d'avoir joué au jeu."
+]

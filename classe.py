@@ -4,7 +4,7 @@ from random import shuffle, randint, choice, uniform
 import json
 from typing import Optional
 
-from display import TextDisplay, get_size, RoomDisplay, MouseButton, HealthBar, EnnemiDisplay, ChestDisplay, get_dialogue_text, ItemDisplay
+from display import TextDisplay, get_size, RoomDisplay, MouseButton, HealthBar, EnnemiDisplay, ChestDisplay, get_dialogue_text, ItemDisplay, Credits
 from map import create_one_solution_map, get_absolute_direction, Map
 from constants import *
 from son import *
@@ -546,6 +546,7 @@ class Game:
 
         self.visited = set()
         self.last_moved = False
+        self.end = False
 
     def display_room(self,screen:pygame.Surface, percentage=70):
         if self.room is None:
@@ -678,6 +679,15 @@ class Game:
             if MUSIQUE:
                 self.musique.play_music(True)
 
+            if self.end:
+                self.end.display()
+                if self.end.end:
+                    self.end = False
+                    running = False
+                pygame.display.flip()
+                self.clock.tick(60)
+                continue
+
             if self.personnage.position in self.texts and self.personnage.position not in self.visited:
                 for text in self.texts[self.personnage.position]:
                     self.current_texts.append(TextDisplay(f"V.A. - {text}", self.screen, self.clock))
@@ -694,7 +704,7 @@ class Game:
                     continue
                 except StopIteration:
                     if self.current_texts == []:
-                        running = False
+                        self.end = Credits(CREDITS_TEXT, self.screen, self.clock)
 
             self.display_room(self.screen)
             self.map.draw(surface=map_surface, player = self.personnage)
@@ -766,9 +776,9 @@ class Game:
         if self.map.can_move(self.personnage.position, direction):
             if not self.combat:
                 self.personnage.move(direction)
+                self.last_moved = True
             else:
                 self.current_texts.append(TextDisplay("Ne vous en allez pas si vite !", self.screen, self.clock))
-            self.last_moved = True
         Objet.current_room = self.personnage.position
 
     def get_maps(self):
