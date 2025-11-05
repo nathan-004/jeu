@@ -1,9 +1,16 @@
+import pygame
+
 NEW_LINE_CHARACTER = "&"
 MAX_LEVEL = 10
 RED = "\033[31m"
 RESET = "\033[0m"
 GREEN = "\033[32m"
 YELLOW = '\033[33m'
+version = pygame.__version__
+if int(version.split(".")[0]) >= 2:
+    INPUT_LIST = [pygame.K_z, pygame.K_q]
+else:
+    INPUT_LIST = [pygame.K_w, pygame.K_a]
 
 PLAYER_BASE_PV = 10
 PLAYER_BASE_ATTACK = 5 # Dégâts émis

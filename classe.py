@@ -11,11 +11,6 @@ from son import *
 
 BUTTONS = []
 
-version = pygame.__version__
-if int(version.split(".")[0]) >= 2:
-    inputlist = [pygame.K_z, pygame.K_q]
-else:
-    inputlist = [pygame.K_w, pygame.K_a]
 
 def make_buttons(surface: pygame.Surface, actions: list, space_percent: int = 20, button_bloc_pos: tuple = (0, 0)) -> list:
     """
@@ -664,11 +659,11 @@ class Game:
 
                     if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                         self.move((1, 0))
-                    elif event.key == pygame.K_UP or event.key == inputlist[0]:
+                    elif event.key == pygame.K_UP or event.key == INPUT_LIST[0]:
                         self.move((0, -1))
                     elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
                         self.move((0, 1))
-                    elif event.key == pygame.K_LEFT or event.key == inputlist[1]:
+                    elif event.key == pygame.K_LEFT or event.key == INPUT_LIST[1]:
                         self.move((-1, 0))
                     elif any(pygame.key.get_pressed()):
                         if self.current_texts != []:
