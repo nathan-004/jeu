@@ -78,7 +78,7 @@ CREDITS_TEXT = [
     "Nathan",
     "Rien :",
     "Lino",
-    "Dessin, Musique :",
+    "Dessin :",
     "Abel",
     "Items, Crédits :",
     "Hugo",
