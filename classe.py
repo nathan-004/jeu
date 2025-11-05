@@ -11,6 +11,12 @@ from son import *
 
 BUTTONS = []
 
+version = pygame.__version__
+if int(version.split(".")[0]) >= 2:
+    inputlist = [pygame.K_z, pygame.K_q]
+else:
+    inputlist = [pygame.K_w, pygame.K_a]
+
 def make_buttons(surface: pygame.Surface, actions: list, space_percent: int = 20, button_bloc_pos: tuple = (0, 0)) -> list:
     """
     Crée et renvoie une liste de MouseButton pour la surface donnée.
@@ -658,11 +664,11 @@ class Game:
 
                     if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                         self.move((1, 0))
-                    elif event.key == pygame.K_UP or event.key == pygame.K_w:
+                    elif event.key == pygame.K_UP or event.key == inputlist[0]:
                         self.move((0, -1))
                     elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
                         self.move((0, 1))
-                    elif event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                    elif event.key == pygame.K_LEFT or event.key == inputlist[1]:
                         self.move((-1, 0))
                     elif any(pygame.key.get_pressed()):
                         if self.current_texts != []:
@@ -760,7 +766,7 @@ class Game:
 
             keys = pygame.key.get_pressed()
 
-            if keys[pygame.K_d]:
+            if keys[pygame.K_e]:
                 stats = self.personnage.get_stats_message()
                 if f"*{stats}*" != debug_text.txt:
                     debug_text = TextDisplay(stats, self.screen, self.clock, background_color=(0, 0, 0), color=(255,255,255), pos=debug_text_pos, size=debug_text_size)
