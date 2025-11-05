@@ -1,0 +1,69 @@
+{
+    "grid": {
+        "size": "10,5",
+        "0,0": {
+            "type": "start",
+            "walls": {
+                "right": false,
+                "bottom": false
+            }
+        },
+        "1,0" : {
+            "walls" : {
+                "right": false,
+                "left": false
+            }
+        },
+        "2,0" : {
+            "walls" : {
+                "right": false,
+                "left": false
+            }
+        },
+        "3,0" : {
+            "walls" : {
+                "right": false,
+                "left": false
+            }
+        },
+        "4,0" : {
+            "walls" : {
+                "right": false,
+                "left": false
+            }
+        },
+        "5,0" : {
+            "walls" : {
+                "right": false,
+                "left": false
+            }
+        },
+        "6,0" : {
+            "walls" : {
+                "right": false,
+                "left": false
+            }
+        },
+        "7,0" : {
+            "walls" : {
+                "right": false,
+                "left": false
+            }
+        },
+        "8,0" : {
+            "walls" : {
+                "right": false,
+                "left": false
+            }
+        },
+        "9,0" : {
+            "walls" : {
+                "left": false
+            },
+            "type": "key"
+        },
+        "9,2": {
+            "locked": "right"
+        }
+    }
+}
