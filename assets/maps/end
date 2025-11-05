@@ -75,10 +75,10 @@
         }
     },
     "texts": {
-        "0,0": ["Tu n'es toujours pas mort ...", "Il ne te reste plus qu'une dernière ligne droite et tu quitteras cet endroit"],
-        "1,0": ["Après tu n'es pas obligé d'aller plus loin", "Il y a de plus grands dangers encore."],
-        "2,0": ["Je vois ...", "Si ta décision est prise."],
-        "3,0": ["Voici les équipements que l'on peut trouver ici.", "Il faut bien que tu aies une chance de gagner ..."],
-        "6,0": ["Un pas de plus et ...", "N'oublie jamais que tant que tu te relèveras, il y aura de l'espoir ...", "C'est le moment où je te dis ADIEU ... je suppose ..."]
+        "0,2": ["Tu n'es toujours pas mort ...", "Il ne te reste plus qu'une dernière ligne droite et tu quitteras cet endroit"],
+        "1,2": ["Après tu n'es pas obligé d'aller plus loin", "Il y a de plus grands dangers encore."],
+        "2,2": ["Je vois ...", "Si ta décision est prise."],
+        "3,2": ["Voici les équipements que l'on peut trouver ici.", "Il faut bien que tu aies une chance de gagner ..."],
+        "6,2": ["Un pas de plus et ...", "N'oublie jamais que tant que tu te relèveras, il y aura de l'espoir ...", "C'est le moment où je te dis ADIEU ... je suppose ..."]
     }
 }
