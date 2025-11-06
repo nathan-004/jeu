@@ -290,6 +290,7 @@ class Map:
         """
         w, h = surface.get_size()
         cell_size_x, cell_size_y = w // self.width, h // self.height
+        surface.fill((0,0,0))
 
         self.key_img = pygame.image.load("assets/images/key.png").convert_alpha()
         self.key_img = pygame.transform.smoothscale(self.key_img, (cell_size_x, cell_size_y))
