@@ -71,6 +71,18 @@ def make_vertical_buttons(surface: pygame.Surface, actions: list, space_percent:
     return buttons
 
 def add_random_dialogue(monster_type:str, event:str, game):
+    """
+    Créé un dialogue aléatoire en fonction du type de monstre, de l'évènement et de la classe `Game`
+    
+    Parameters
+    ----------
+    monster_type:str
+        Type de monstre -> 'Ventre d'acier', 'Chevalier'
+    event:str
+        Evènements -> degats reçus, mort du joueur/monstre, début du combat, ...
+    game:Game
+        Contient les informations de la partie en cours
+    """
     if monster_type == "Ventre d'Acier":
         if event == "start" or event == "monster_death" or event == "player_death":
             for el in MONSTERS[monster_type]["dialogues"][event]:
@@ -91,6 +103,16 @@ def add_random_dialogue(monster_type:str, event:str, game):
         game.current_texts.append(get_dialogue_text(txt, None, game.screen, game.clock))
 
 def get_random_dialogue(monster_type:str, event:str) -> Optional[str]:
+    """
+    Créé un dialogue aléatoire en fonction du type de monstre, de l'évènement et de la classe `Game`
+    
+    Parameters
+    ----------
+    monster_type:str
+        Type de monstre -> 'Ventre d'acier', 'Chevalier'
+    event:str
+        Evènements -> degats reçus, mort du joueur/monstre, début du combat, ...
+    """
     # Sur 10, seulement 5 fois où il y a du texte
     max_ = 10
     prob = 5
@@ -104,7 +126,10 @@ def get_random_dialogue(monster_type:str, event:str) -> Optional[str]:
     return None
 
 def get_random_monster(game):
-    """Renvoie un monstre"""
+    """
+    Renvoie un monstre aléatoire en fonction de la map où se situe le joueur
+    Si la map est celle de base, calcule les statistiques en fonction du niveau et de la position du joueur
+    """
     if game.map.name == "start":
         return Monstre("Chevalier", 30, 1, 0)
     elif game.map.name == "end":
@@ -550,6 +575,7 @@ class Game:
         self.end = False
 
     def display_room(self,screen:pygame.Surface, percentage=70):
+        """Affiche la Salle et les portes en fonction des directions où il est possible de se diriger"""
         if self.room is None:
             self.room = RoomDisplay(screen, percentage)
         if self.last_moved:
@@ -571,6 +597,10 @@ class Game:
         self.room.display_enter()
 
     def start_menu(self):
+        """
+        Affiche le menu de départ qui contient les boutons pour charger, réanitialiser, ou quitter une partie
+        Permet aussi de lancer la démo
+        """
         pygame.font.init()
         screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 
@@ -600,6 +630,10 @@ class Game:
         pygame.quit()
 
     def main(self):
+        """
+        Lance la boucle principale du jeu.
+        Gère l'affichage et la logique du jeu
+        """
         pygame.font.init()
         MUSIQUE = True
         try:
@@ -835,6 +869,9 @@ class Game:
             json.dump(result, f, indent=4)
 
     def load(self, filename:str = "assets/saves/save1"):
+        """
+        Gère le chargement d'une partie depuis une sauvegarde
+        """
         with open(filename, "r") as f:
             content = json.load(f)
 

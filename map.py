@@ -18,6 +18,16 @@ class Stack(deque):
         return super().popleft()
 
 class Room:
+    """
+    Objet Room
+    
+    Contenu dans Map.grid, permet de stocker les informations telles que :
+    - les portes/murs
+    - le type de salle (fin, début)
+    - l'affichage du coffre dans la map
+    - si la salle contient un monstre
+    - si la map est verrouillée
+    """
     DIRECTIONS = {
         (0, -1): "top",
         (0, 1): "bottom",
@@ -34,8 +44,8 @@ class Room:
             "top": True,
             "bottom": True,
         }
-        self.locked = False
-        self.chest = False
+        self.locked = False # Peut être transformé en "right" pour verrouiller vers la droite par exemple
+        self.chest = False # Peut être False, True ou une classe ChestDisplay -> affichage du coffre dans la map
         self.monster = False
 
     def get_content(self) -> dict:
@@ -404,6 +414,7 @@ class Map:
     # --------------------------------------------------------------------------------------------
 
     def __add__(self, other):
+        """Permet d'additionner deux map de même hauteur"""
         if isinstance(other, Map):
             result = Map(self.width + other.width, other.height)
             if self.grid == []:
@@ -421,6 +432,9 @@ class Map:
     # --------------------------------------------------------------------------------------------
 
     def load(self, filename:str):
+        """
+        Modifie les attributs de `Map` pour correspondre au contenu du fichier
+        """
         with open(filename, "r", encoding="utf-8") as f:
             content = f.read()
         grid = json.loads(content)["grid"]
