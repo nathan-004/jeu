@@ -52,6 +52,18 @@ class ChestDisplay:
         self._last_loaded = n
 
 class TextDisplay:
+    """
+    Affiche du texte progressivement à l'écran.
+    Attributes:
+        txt (str): Le texte à afficher.
+        fenetre (pygame.Surface): La surface sur laquelle afficher le texte.
+        clock (pygame.time.Clock): L'horloge pour gérer le timing.
+        police (int): La taille de la police.
+        color (tuple): La couleur du texte.
+        pos (tuple): La position d'affichage.
+        size (tuple): La taille de la zone d'affichage.
+        background_color (tuple, optional): La couleur de fond de la zone d'affichage.
+    """
     def __init__(self,txt, fenetre, clock, police=40, color=(0,0,0), pos=(None,None), size=None, background_color:Optional[tuple] = None):
         self.txt = f'*{txt}*'
         self.mot = self.txt.split(' ')[0]
@@ -87,7 +99,7 @@ class TextDisplay:
             self.txts[cur_l] += mot + " "
             cur_w += len(mot) + 1
 
-    def display(self,delay=20):	#delay est en milliseconde
+    def display(self,delay=20):	#affiche le texte progressivement, delay est le temps entre chaque caractère en ms
         if self.background_color is not None:
             pygame.draw.rect(self.fenetre,self.background_color,self.bloc)
         else:
@@ -102,7 +114,7 @@ class TextDisplay:
         self.time += self.clock.get_time()
         self.end = self.frames>=len(self.txt)
 
-    def reset(self):
+    def reset(self):    #remet le texte à zéro
         self.frames = 0
         self.time = 0
         self.end = False
@@ -144,6 +156,12 @@ class MouseButton:
                 self.action()
 
 class RoomDisplay:
+    """
+    Classe gérant l'affichage du fond de la salle, de l'ombre et de l'animation de la porte.
+    Attributes:
+        screen (pygame.Surface): La surface sur laquelle afficher les éléments.
+        taille (float): Le pourcentage de la taille de l'écran à utiliser pour l'affichage.
+    """
     def __init__(self,screen,taille=70):
         self.taille=taille/100
         self.screen = screen
@@ -162,14 +180,14 @@ class RoomDisplay:
         self._enter_pos = (self.w*(1-self.taille)/2, 0)
 
     @property # Getter
-    def enter_animation(self):
+    def enter_animation(self):  
         return self._enter_showing
 
-    def display_bg(self):
+    def display_bg(self):   #affiche le fond de la salle
         self.screen.fill((0,0,0))
         self.screen.blit(self.bg,(self.w*(1-self.taille)/2,0))
 
-    def display_shade(self):
+    def display_shade(self):    #affiche l'ombre de la salle
         self.screen.blit(self.shade,(self.w*(1-self.taille)/2,0))
 
     def display_enter(self):
@@ -193,14 +211,14 @@ class EnnemiDisplay:
         self._last_loaded = None
         self.load(image_path)
 
-    def display(self):
+    def display(self):  #affiche l'ennemi
         self.surface.blit(self.ennemi_image, (self.pos[0], self.pos[1]))
 
-    def display_damage(self):
+    def display_damage(self):   #affiche l'ennemi en train de subir des dégats
         self.surface.blit(self.ennemi_image, (self.pos[0] + randint(-10, 10), self.pos[1] + randint(-10, -5)))
         self.load(self._last_loaded)
 
-    def load(self, image_path):
+    def load(self, image_path): #charge l'image de l'ennemi
         self.ennemi_image = pygame.image.load(image_path)
         self.width, self.height = self.ennemi_image.get_size()
         self.ennemi_image = pygame.transform.scale(self.ennemi_image, (int(self.size * self.width), int(self.size * self.height)))
@@ -270,7 +288,7 @@ class ItemDisplay:
 
         return image
 
-    def resize(self, image:pygame.Surface, size:tuple) -> pygame.Surface:
+    def resize(self, image:pygame.Surface, size:tuple) -> pygame.Surface:   #redimensionne une image en gardant les proportions
         iw, ih = image.get_size()
         if iw == 0 or ih == 0:
             target_w, target_h = size
