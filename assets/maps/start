@@ -108,7 +108,7 @@
         }
     },
     "texts": {
-        "0,2": ["Tu es dans un endroit nommé Endroit Test", "Pour en sortir, il faut se diriger vers la sortie", "Utilise les flèches directionnelles ou ZQSD pour ouvrir une porte", "Avance tout droit"],
+        "0,2": ["Tu es dans un endroit nommé Endroit Test", "Pour en sortir, il faut se diriger vers la sortie", "Utilise les flèches directionnelles ou ZQSD pour ouvrir une porte", "Appuie sur E pour afficher tes stats", "Avance tout droit"],
         "1,2": ["Dirige toi vers la gauche"],
         "1,1": ["Va à droite"],
         "0,1": ["A droite j'ai dit, tu es allé à gauche là ..."],
