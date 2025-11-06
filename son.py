@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 """
 Module gérant les sons et la musique de fond du jeu.
+----------
 """
 def monster_damage():
     try:
@@ -56,10 +57,14 @@ def potion_use():
 class Musique:
     """
     Classe gérant la musique de fond du jeu.
+
     Attributes:
+    ----------
+
         path (str): Le chemin du fichier de musique.
         pause (bool): Indique si la musique est en pause.
         load (bool): Indique si la musique a été chargée.
+
     """
     def __init__(self,path):
         self.path=path

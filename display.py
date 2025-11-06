@@ -54,7 +54,9 @@ class ChestDisplay:
 class TextDisplay:
     """
     Affiche du texte progressivement à l'écran.
+
     Attributes:
+    ----------
         txt (str): Le texte à afficher.
         fenetre (pygame.Surface): La surface sur laquelle afficher le texte.
         clock (pygame.time.Clock): L'horloge pour gérer le timing.
@@ -158,7 +160,9 @@ class MouseButton:
 class RoomDisplay:
     """
     Classe gérant l'affichage du fond de la salle, de l'ombre et de l'animation de la porte.
+
     Attributes:
+    ----------
         screen (pygame.Surface): La surface sur laquelle afficher les éléments.
         taille (float): Le pourcentage de la taille de l'écran à utiliser pour l'affichage.
     """
