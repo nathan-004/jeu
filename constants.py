@@ -48,7 +48,8 @@ PLAYER_ITEM_LEVEL_AUGMENTATION_RES = 0.01        # résistance ajoutée par nive
 MONSTER_BASE_ITEM_SOIN = 3
 
 # Monstres
-va_texts = [("Je le sens", "Pour toi aussi cette épreuve à était compliqué"), ("Je ne m'arrèterais jamais de combattre"), ("On en oublie qui on est", "Et notre objectif", "Mais tu sembles différent"), ("Je vois dans tes yeux l'espoir", "Ce qui nous est enlevé dans cet endroit")]
+# Linoooooooooooooooo, quand tu fais les textes dans va_texts dans la liste de tuples, si tu mets juste ("test") qui ne contient qu'un élément, c'est juste une chaîne de caractères au lieu d'être un tuple. Il faut que tu fasses ("test",) pour que ce soit considéré comme un tuple 
+va_texts = [("Je le sens", "Pour toi aussi cette épreuve à était compliqué"), ("Je ne m'arrèterais jamais de combattre",), ("On en oublie qui on est", "Et notre objectif", "Mais tu sembles différent"), ("Je vois dans tes yeux l'espoir", "Ce qui nous est enlevé dans cet endroit")]
 va_generator = (el for el in va_texts)
 MONSTERS = {
     "Chevalier" : {
