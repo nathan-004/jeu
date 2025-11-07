@@ -208,6 +208,16 @@ class RoomDisplay:
         self._enter_end_time = pygame.time.get_ticks() + int(duration_ms)
 
 class EnnemiDisplay:
+    """
+    Classe gérant l'affichage d'un ennemi.
+
+    Attributes:
+    ----------
+        surface (pygame.Surface): La surface sur laquelle afficher les éléments.
+        pos (tuple): La position à laquelle l'image doit être affichée.
+        size (float): Le pourcentage de la taille de l'écran à utiliser pour l'affichage de l'image.
+        image_path (str): Le chemin de l'image.
+    """
     def __init__(self, surface:pygame.Surface, pos:tuple, size:int, image_path:str):
         self.surface = surface
         self.pos = pos

@@ -48,7 +48,7 @@ PLAYER_ITEM_LEVEL_AUGMENTATION_RES = 0.01        # résistance ajoutée par nive
 MONSTER_BASE_ITEM_SOIN = 3
 
 # Monstres
-va_texts = [("Toi aussi tu as traversée cet épreuve", "ne t'en fais pas ton voyage",""), ("Combattre sans arrêt", "Ca n'en finit jamais"), ("On en oublie qui on est", "Et notre objectif", "Mais tu sembles différent"), ("Je vois dans tes yeux l'espoir", "Ce qui nous est enlevé dans cet endroit")]
+va_texts = [("Je le sens", "Pour toi aussi cette épreuve à était compliqué"), ("Je ne m'arrèterais jamais de combattre"), ("On en oublie qui on est", "Et notre objectif", "Mais tu sembles différent"), ("Je vois dans tes yeux l'espoir", "Ce qui nous est enlevé dans cet endroit")]
 va_generator = (el for el in va_texts)
 MONSTERS = {
     "Chevalier" : {
@@ -64,7 +64,7 @@ MONSTERS = {
     "Ventre d'Acier" : {
         "image": "assets/images/monster/ventre_acier.png",
         "dialogues": {
-            "start": ["Je t'attendais", "Ca a du être dur tout seul ...", "dans le noir ...", "entouré par l'inconnu ...", "Mais ne t'inquiète pas", "Tout ira mieux", "lorsque JE TE TUERAIS"],
+            "start": ["Bravo chevalier, tu a réussi a passer les épreuves de ce donjon", "Mais maintenant que tu les as tous tués", "JE VAIS LES VENGER"],
             "receive_damage": va_generator,
             "miss_attack": ["Test de miss", "test de miss2"],
             "monster_death": ["Je l'ai vu en toi", "cette détermination à toute épreuve", "elle m'habitait moi aussi", "Et elle t'a permis de me battre", "Et j'ai voulu t'éliminer ..."],

@@ -402,6 +402,14 @@ class Personnage:
             - pv : entier positif ou nul qui représente les point de vie du personnage
             - degats : entier positif qui agit comme quantité de degats qu'inflige le personnage
             - resistance : entier soustrayant les degats subit pour connaitre le nombre de point de vie retirée
+            
+            - pv_base : entier positif représentant les points de vie max des personnages, il sert à calculer les pv restants 
+            - degats_base : entier représentant la statistique de dégats des personnage, il sert à calculer les dégats restants après qu'il soit soustrait a la résistance   
+            - resistance_base : entier représentant la statistique de résistance des personnage, il sert à calculer les dégats subit après avoir soustrait les dégats          
+            
+            - exp : quantité d'expérience des personnage représenté par des nombres décimals
+            - level: entier signifiant le niveau des personnages
+            - inventaire : objet
         """
         self.nom = nom
         self.pv = pv
@@ -421,6 +429,9 @@ class Personnage:
         return obj.use(self)
 
     def degat_subit(self, degats):
+        """
+        calcul les dégats subit en les soustrayant a la résistance du personnage qui les subits 
+        """
         degat_restant = degats - (degats * self.resistance)
         self.pv = self.pv - degat_restant
 
@@ -430,6 +441,9 @@ class Personnage:
         return degat_restant
 
     def attaque(self, ennemi):
+        """
+        attaque lancé par le personnage ayant une faible chance d'échec, sa puissance se base sur les dégats de celui-ci
+        """
         a = randint(1, 10)
         if a >= 1:
             if self.nom=="Ventre d'Acier":
@@ -442,6 +456,9 @@ class Personnage:
             return None
 
     def attaque_lourde(self, ennemi):
+        """
+        attaque plus puissante multipliant par 2 les dégats du personnage mais elle possède une grande chance d'échouer  
+        """ 
         a = randint(1, 10)
         if a >= 7:
             heavy_attack()
@@ -464,6 +481,7 @@ class Personnage:
         return content
 
 class Monstre(Personnage):
+    """"""
     def __init__(self, nom, pv=uniform(-MONSTER_BASE_PV_RANGE/2, MONSTER_BASE_PV_RANGE/2) + MONSTER_BASE_PV, degats=uniform(-MONSTER_BASE_ATTACK_RANGE/2, MONSTER_BASE_ATTACK_RANGE/2) + MONSTER_BASE_ATTACK, resistance=uniform(-MONSTER_BASE_RESISTANCE_RANGE/2, MONSTER_BASE_RESISTANCE_RANGE/2) + MONSTER_BASE_RESISTANCE):
         super().__init__(nom, pv, degats, resistance)
         self.ennemi_display = None
@@ -503,10 +521,12 @@ class Monstre(Personnage):
         self.resistance += obj.resistance
 
 class Joueur(Personnage):
-    def __init__(self, nom, pv, degats, resistance, position:tuple, inventaire:Inventaire = Inventaire(), game = None):
+    def __init__(self, nom, pv, degats, resistance, position:tuple, inventaire:Inventaire = None, game = None):
         super().__init__(nom, pv, degats, resistance)
         self.position = position
         self.direction = (1, 0) # Direction de base vers la droite
+        if inventaire is None:
+            inventaire = Inventaire()
         self.inventaire = inventaire
         self.game = game
 
@@ -818,7 +838,7 @@ class Game:
 
     def get_maps(self, demo=False):
         """Renvoie un générateur contenant un tuple map, text"""
-        yield (self._load_map("assets/maps/start"), self._load_text("assets/maps/start"))
+        #yield (self._load_map("assets/maps/start"), self._load_text("assets/maps/start"))
         if not demo:
             base_text = {
                 (0, self.height//2): ["Vous y êtes arrivé !", "Il ne vous reste plus qu'à trouver le chemin dans ce donjon, à battre tous les ennemis sur votre chemin, à acquérir les meilleurs statistiques.", "On ne sait jamais, ce qui semble être la fin peut parfois n'être que le début d'une plus grande aventure."],
@@ -829,7 +849,7 @@ class Game:
                 (self.width - self.width//4, self.height//2): ["On dit de lui qu'il a finalement réussi à sortir de cet endroit.", "Et qu'il attend patiemment tout survivant pour ...", "On s'est compris & Comme ça il enlève le poids de ce traumatisme de leurs épaules, littéralement ..."],
                 (self.width - 1, self.height//2): ["Tu as finalement réussi à franchir tous ces obstacles.", "Tu y es ! La sortie est devant tes yeux !", "Ta détermination a payé.", "Mais à quel prix ................."]
             }
-            yield (create_one_solution_map(self.width, self.height, 4), base_text)
+            #yield (create_one_solution_map(self.width, self.height, 4), base_text)
         else:
             yield (self._load_map("assets/maps/demo"), self._load_text("assets/maps/demo"))
         yield (self._load_map("assets/maps/end"), self._load_text("assets/maps/end"))
