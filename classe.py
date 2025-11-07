@@ -654,13 +654,19 @@ class Game:
         Lance la boucle principale du jeu.
         Gère l'affichage et la logique du jeu
         """
+        start_main = time.time()
+        print(f"{start_main}s - Départ Main")
         pygame.font.init()
         MUSIQUE = True
         try:
+            print(f"{time.time() - start_main}s - Départ musique mixer init")
             pygame.mixer.init()
         except pygame.error as e:
             print(RED, "Erreur lors de l'initialisation du son (vérifier si sortie audio connectée) :", e, RESET)
             MUSIQUE = False
+            print(f"{time.time() - start_main}s - Réception erreur musique")
+        
+        print(f"{time.time() - start_main}s - Initialisation Musique")
 
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         map_size = (get_size(self.screen, 30, "height"), get_size(self.screen, 30, "height"))
@@ -678,6 +684,8 @@ class Game:
         item_choice_size = (get_size(self.screen, 40), get_size(self.screen, 40, "height"))
         item_choice_pos = (get_size(self.screen, 30), get_size(self.screen, 30, "height"))
         self.coffre = Coffre(1)
+        
+        print(f"{time.time() - start_main}s - Initialisation Affichage + map")
 
         self.combat = False
         self.clock = pygame.time.Clock()
@@ -687,11 +695,15 @@ class Game:
         debug_text_pos = (get_size(self.screen, (100 - debug_text_size[0])/2), get_size(self.screen, (100 - debug_text_size[1])/2, "height"))
         debug_text_size = (get_size(self.screen, debug_text_size[0]), get_size(self.screen, debug_text_size[1], "height"))
         debug_text = TextDisplay(self.personnage.get_stats_message(), self.screen, self.clock, background_color=(0,0,0), color=(255,255,255), pos=debug_text_pos, size=debug_text_size)
-
+        
+        print(f"{time.time() - start_main}s - Initialisation texte")
+        
         if MUSIQUE:
             self.musique = Musique("assets/sound/musique_boucle1.mp3")
 
         self.current_texts = []
+        
+        print(f"{time.time() - start_main}s - Fin initialisation attributs")
 
         running = True
         while running:
@@ -923,9 +935,13 @@ class Game:
         self.main()
 
     def _start_demo_game(self):
+        start_time = time.time()
         self.elements = self.get_maps(True)
+        print(f"{time.time() - start_time}s - Récupération des maps")
         self.map, self.texts = next(self.elements)
+        print(f"{time.time() - start_time}s - Définition des maps")
         self.personnage.__init__('nom', PLAYER_BASE_PV, PLAYER_BASE_ATTACK, PLAYER_BASE_RESISTANCE, self.map.get_start_position(), game = self)
+        print(time.time())
         self.main()
 
     def _quit_start_menu(self):
