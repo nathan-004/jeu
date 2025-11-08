@@ -4,7 +4,7 @@ from random import shuffle, randint, choice, uniform
 import json
 from typing import Optional
 
-from display import TextDisplay, get_size, RoomDisplay, MouseButton, HealthBar, EnnemiDisplay, ChestDisplay, get_dialogue_text, ItemDisplay, Credits
+from display import TextDisplay, get_size, RoomDisplay, MouseButton, HealthBar, EnnemiDisplay, ChestDisplay, get_dialogue_text, ItemDisplay, Credits, resize
 from map import create_one_solution_map, get_absolute_direction, Map
 from constants import *
 from son import *
@@ -670,7 +670,8 @@ class Game:
 
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         map_size = (get_size(self.screen, 30, "height"), get_size(self.screen, 30, "height"))
-        map_surface = pygame.Surface(map_size, pygame.SRCALPHA)
+        map_surface = pygame.Surface((self.map.width * 1, self.map.height * 1), pygame.SRCALPHA)
+        map_surface = resize(map_surface, map_size)
         map_surface.fill((0, 0, 0, 180))
         map_position = (get_size(self.screen, 100) - map_size[0], get_size(self.screen, 100, "height") - map_size[1])
 
@@ -767,6 +768,9 @@ class Game:
                 try:
                     self.map, self.texts = next(self.elements)
                     self.personnage.position = self.map.get_start_position()
+                    map_surface = pygame.Surface((self.map.width * 1, self.map.height * 1), pygame.SRCALPHA)
+                    map_surface = resize(map_surface, map_size)
+                    map_surface.fill((0, 0, 0, 180))
                     self.visited = set()
                     continue
                 except StopIteration:

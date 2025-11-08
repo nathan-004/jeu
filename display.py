@@ -298,20 +298,20 @@ class ItemDisplay:
             image = pygame.Surface((50, 50))
             image.fill((200, 0, 0))
 
-        image = self.resize(image, self.size)
+        image = resize(image, self.size)
 
         return image
 
-    def resize(self, image:pygame.Surface, size:tuple) -> pygame.Surface:   #redimensionne une image en gardant les proportions
-        iw, ih = image.get_size()
-        if iw == 0 or ih == 0:
-            target_w, target_h = size
-        else:
-            scale = min(size[0] / iw, size[1] / ih)
-            target_w = max(1, int(iw * scale))
-            target_h = max(1, int(ih * scale))
-        image = pygame.transform.scale(image, (target_w, target_h))
-        return image
+def resize(image:pygame.Surface, size:tuple) -> pygame.Surface:   #redimensionne une image en gardant les proportions
+    iw, ih = image.get_size()
+    if iw == 0 or ih == 0:
+        target_w, target_h = size
+    else:
+        scale = min(size[0] / iw, size[1] / ih)
+        target_w = max(1, int(iw * scale))
+        target_h = max(1, int(ih * scale))
+    image = pygame.transform.scale(image, (target_w, target_h))
+    return image
 
 def get_size(surface:pygame.Surface, pourcentage:float, size:str = "width") -> float:
     """Renvoie la valeur en pixel qui correspond au pourcentage de la dimension de la surface"""
