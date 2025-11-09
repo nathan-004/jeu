@@ -130,7 +130,7 @@ def get_random_monster(game):
     Si la map est celle de base, calcule les statistiques en fonction du niveau et de la position du joueur
     """
     if game.map.name == "start":
-        return Monstre("Chevalier", 30, 1, 0)
+        return Monstre("Mannequin d'entraînement", 30, 1, 0)
     elif game.map.name == "end":
         max_player_pv = game.personnage.get_max_pv()
         return Monstre("Ventre d'Acier", max_player_pv * 2.5, max_player_pv / 3, 0.75)

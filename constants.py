@@ -62,6 +62,16 @@ MONSTERS = {
             "player_death": ["Je te l'avais dit ...", "Ne reviens plus jamais !", "C'était vraiment très simple ..."]
         }
     },
+    "Mannequin d'entraînement": {
+        "image": "assets/images/monster/Training_stand.png",
+        "dialogues": {
+            "start": ["Je ne pensais pas te revoir un jour", "... Essaye de me passer sur le corps !", "Je vais pouvoir enfin utiliser ma lame", "Qui aurait cru que tu arriverais jusqu'à là"],
+            "receive_damage": ["Ouch !", "Tu ne rigoles pas", "Tu ne penses quand même pas gagner ?", "Je ne tomberai pas si facilement"],
+            "monster_death": ["Pourquoi ce sourire niarquois ?", "Si facilement ...", "Cette douleur ... Il te fera comprendre un jour ..."],
+            "miss_attack": ["Concentre toi, je n'aimes pas quand c'est trop facile.", "Regarde où tu vises"],
+            "player_death": ["Je te l'avais dit ...", "Ne reviens plus jamais !", "C'était vraiment très simple ..."]
+        }
+    },
     "Ventre d'Acier" : {
         "image": "assets/images/monster/ventre_acier.png",
         "dialogues": {
