@@ -11,7 +11,6 @@ from son import *
 
 BUTTONS = []
 
-
 def make_buttons(surface: pygame.Surface, actions: list, space_percent: int = 20, button_bloc_pos: tuple = (0, 0)) -> list:
     """
     Crée et renvoie une liste de MouseButton pour la surface donnée.
@@ -133,7 +132,8 @@ def get_random_monster(game):
     if game.map.name == "start":
         return Monstre("Chevalier", 30, 1, 0)
     elif game.map.name == "end":
-        return Monstre("Ventre d'Acier", 100, 10, 0.6)
+        max_player_pv = game.personnage.get_max_pv()
+        return Monstre("Ventre d'Acier", max_player_pv * 2.5, max_player_pv / 3, 0.75)
 
     monster_type = choice(MONSTERS_LIST)
     monster = Monstre(monster_type)
@@ -145,7 +145,7 @@ def get_random_item_stats(game, type_:str) -> tuple:
     if game.map.name == "start":
         level = 0
     elif game.map.name == "end":
-        level = 50
+        level = 30
     else:
         level = get_level(game)
 
