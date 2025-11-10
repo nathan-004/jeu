@@ -94,7 +94,7 @@ CREDITS_TEXT = [
     "Lino",
     "Génération de la map :",
     "Nathan",
-    "Barre de vie :",
+    "Barre de vie, Texte(enfin pas trop pour l'instant) :",
     "Lino",
     "Dessin, Son et recherche de musique:",
     "Abel",
