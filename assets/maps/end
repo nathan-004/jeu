@@ -79,6 +79,7 @@
         "1,2": ["Après tu n'es pas obligé d'aller plus loin", "Il y a de plus grands dangers encore."],
         "2,2": ["Je vois ...", "Si ta décision est prise."],
         "3,2": ["Voici les équipements que l'on peut trouver ici.", "Il faut bien que tu aies une chance de gagner ..."],
-        "6,2": ["Un pas de plus et ...", "N'oublie jamais que tant que tu te relèveras, il y aura de l'espoir ...", "C'est le moment où je te dis ADIEU ... je suppose ..."]
+        "6,2": ["Un pas de plus et ...", "N'oublie jamais que tant que tu te relèveras, il y aura de l'espoir ...", "C'est le moment où je te dis ADIEU ... je suppose ..."],
+        "8,2": ["Une sortie...", "Enfin..."]
     }
 }
