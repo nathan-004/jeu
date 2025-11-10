@@ -855,7 +855,7 @@ class Game:
 
     def get_maps(self, demo=False):
         """Renvoie un générateur contenant un tuple map, text"""
-        #yield (self._load_map("assets/maps/start"), self._load_text("assets/maps/start"))
+        yield (self._load_map("assets/maps/start"), self._load_text("assets/maps/start"))
         if not demo:
             base_text = {
                 (0, self.height//2): ["Vous y êtes arrivé !", "Il ne vous reste plus qu'à trouver le chemin dans ce donjon, à battre tous les ennemis sur votre chemin, à acquérir les meilleurs statistiques.", "On ne sait jamais, ce qui semble être la fin peut parfois n'être que le début d'une plus grande aventure."],
@@ -866,7 +866,7 @@ class Game:
                 (self.width - self.width//4, self.height//2): ["On dit de lui qu'il a finalement réussi à sortir de cet endroit.", "Et qu'il attend patiemment tout survivant pour ...", "On s'est compris & Comme ça il enlève le poids de ce traumatisme de leurs épaules, littéralement ..."],
                 (self.width - 1, self.height//2): ["Tu as finalement réussi à franchir tous ces obstacles.", "Tu y es ! La sortie est devant tes yeux !", "Ta détermination a payé.", "Mais à quel prix ................."]
             }
-            #  yield (create_one_solution_map(self.width, self.height, 4), base_text)
+            yield (create_one_solution_map(self.width, self.height, 4), base_text)
         else:
             yield (self._load_map("assets/maps/demo"), self._load_text("assets/maps/demo"))
         yield (self._load_map("assets/maps/end"), self._load_text("assets/maps/end"))
