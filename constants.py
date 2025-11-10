@@ -94,11 +94,12 @@ CREDITS_TEXT = [
     "Lino",
     "Génération de la map :",
     "Nathan",
-    "Rien :",
+    "Barre de vie :",
     "Lino",
-    "Dessin :",
+    "Dessin, Son et recherche de musique:",
     "Abel",
     "Items, Crédits :",
     "Hugo",
-    "Merci d'avoir joué au jeu."
+    "Merci d'avoir joué au jeu.",
+    "ça vaut bien un 20/20"
 ]

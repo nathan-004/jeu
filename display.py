@@ -330,12 +330,12 @@ def get_dialogue_text(text:str, monster, screen:pygame.Surface, clock:pygame.tim
 
 class Credits :
     MAX = 10
-    def __init__(self,text:list, fenetre:pygame.Surface, clock:pygame.time.Clock):
+    def __init__(self,text:list, fenetre:pygame.Surface, clock:pygame.time.Clock, scroll_speed = 10):
         self.texts = text
         self.fenetre = fenetre
         self.clock = clock
 
-        self.scroll_speed = 10
+        self.scroll_speed = scroll_speed
 
         self.credits_surface = pygame.Surface((get_size(self.fenetre, 100), get_size(self.fenetre, 100, "height")))
         self.credits_surface.fill((0,0,0))
@@ -399,7 +399,7 @@ if __name__ == "__main__":
         "foemifbneofbembfebo",
         "Merci d'avoir joué !"
     ]
-    credits = Credits(credits_texts, fenetre, clock)
+    credits = Credits(credits_texts, fenetre, clock,5)
     credits.add_text()  # remplit la surface interne des crédits
 
     while running:
