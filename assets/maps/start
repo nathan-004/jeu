@@ -114,7 +114,7 @@
         "0,1": ["A droite j'ai dit, tu es allé à gauche là ..."],
         "2,1": ["Je pense que tu as compris maintenant"],
         "2,3": ["Tu n'es pas tout seul dans ce donjon ...", "De nombreux monstres te voudront du mal", "Equipe toi et rappelle toi de toujours être sur tes gardes"],
-        "3,4": ["Voilà un monstre", "Tu peux l'attaquer de plusieurs manières, utiliser ...", "Ca va aller, tu sais te débrouiller"],
+        "3,4": ["Voilà un mannequin d'entraînement", "Tu peux l'attaquer de plusieurs manières, utiliser ...", "Ca va aller, tu sais te débrouiller"],
         "3,2": ["Tu es arrivé à la sortie mais il est possible que la porte soit verrouillée.", "Cherche la clé et tu pourras quitter cet endroit"]
     }
 }

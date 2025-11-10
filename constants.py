@@ -65,7 +65,7 @@ MONSTERS = {
     "Mannequin d'entraînement": {
         "image": "assets/images/monster/Training_stand.png",
         "dialogues": {
-            "start": [".............................", "...(c'est un mannequin)"],
+            "start": [".............................", "................................(c'est un mannequin)"],
             "receive_damage": ["...!!!", "....(Toujours rien).....", "?????"],
             "monster_death": ["...(ce n'était pas très dur)", "..."],
             "miss_attack": ["...(il ne bouge même pas, comment j'ai fait pour le rater?)", "....?"],
