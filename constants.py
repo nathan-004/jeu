@@ -101,5 +101,6 @@ CREDITS_TEXT = [
     "Items, Crédits :",
     "Hugo",
     "Merci d'avoir joué au jeu.",
-    "ça vaut bien un 20/20"
+    "","","","",
+    "Ça vaut bien un 20/20"
 ]
