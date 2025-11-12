@@ -75,11 +75,11 @@
         }
     },
     "texts": {
-        "0,2": ["Tu n'es toujours pas mort bien joué...", "Mais ne te dissipes pas, il te reste une dernière épreuve"],
-        "1,2": ["Mais si tu préfère", "tu peux toujours rester et errer dans ce labyrinthe."],
+        "0,2": ["Tu n'es toujours pas mort, bien joué...", "Mais ne te dissipes pas, il te reste une dernière épreuve"],
+        "1,2": ["Mais si tu préfères", "tu peux toujours rester et errer dans ce labyrinthe."],
         "2,2": ["Je vois ...", "Alors tu a pris ta décision."],
         "3,2": ["Très bien, prends ces équipements .", "Il te seront utile ..."],
-        "6,2": ["Bon... et bien c'est le moment", "on se retrouve de l'autre côté"]
+        "6,2": ["Bon... et bien c'est le moment", "on se retrouve de l'autre côté"],
         "8,2": ["Une sortie...", "Enfin..."]
     }
 }
