@@ -107,14 +107,14 @@
             "type": "key"
         }
     },
-    "texts": {
-        "0,2": ["Tu es dans un endroit nommé Endroit Test", "Pour en sortir, il faut se diriger vers la sortie", "Utilise les flèches directionnelles ou ZQSD pour ouvrir une porte", "Appuie sur E pour afficher tes stats", "Avance tout droit"],
+   "texts": {
+        "0,2": ["Bienvenue dans le labyrinthe", "Pour en sortir, tu devras surpasser ces épreuves", "Utilise les flèches directionnelles pour ouvrir une porte", "Avance tout droit"],
         "1,2": ["Dirige toi vers la gauche"],
         "1,1": ["Va à droite"],
         "0,1": ["A droite j'ai dit, tu es allé à gauche là ..."],
         "2,1": ["Je pense que tu as compris maintenant"],
-        "2,3": ["Tu n'es pas tout seul dans ce donjon ...", "De nombreux monstres te voudront du mal", "Equipe toi et rappelle toi de toujours être sur tes gardes"],
-        "3,4": ["Voilà un mannequin d'entraînement", "Tu peux l'attaquer de plusieurs manières, utiliser ...", "Ca va aller, tu sais te débrouiller"],
+        "2,3": ["Tu n'es pas tout seul dans ce donjon ...", "Equipe toi et rappelle toi de toujours être sur tes gardes"],
+        "3,4": ["Voilà un monstre", "Tu peux l'attaquer de plusieurs manières, utiliser ...", "Ca va aller, tu sais te battre"],
         "3,2": ["Tu es arrivé à la sortie mais il est possible que la porte soit verrouillée.", "Cherche la clé et tu pourras quitter cet endroit"]
     }
 }
