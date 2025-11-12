@@ -48,38 +48,38 @@ PLAYER_ITEM_LEVEL_AUGMENTATION_RES = 0.01        # résistance ajoutée par nive
 MONSTER_BASE_ITEM_SOIN = 3
 
 # Monstres
-# Linoooooooooooooooo, quand tu fais les textes dans va_texts dans la liste de tuples, si tu mets juste ("test") qui ne contient qu'un élément, c'est juste une chaîne de caractères au lieu d'être un tuple. Il faut que tu fasses ("test",) pour que ce soit considéré comme un tuple 
-va_texts = [("Je le sens", "Pour toi aussi cette épreuve à était compliqué"), ("Je ne m'arrèterais jamais de combattre",), ("On en oublie qui on est", "Et notre objectif", "Mais tu sembles différent"), ("Je vois dans tes yeux l'espoir", "Ce qui nous est enlevé dans cet endroit")]
+# Linoooooooooooooooo, quand tu fais les textes dans va_texts dans la liste de tuples, si tu mets juste ("test") qui ne contient qu'un élément, c'est juste une chaîne de caractères au lieu d'être un tuple. Il faut que tu fasses ("test",) pour que ce soit considéré comme un tuple
+va_texts = [("Je le sens", "Pour toi aussi cette épreuve à était compliqué",), ("Je ne m'arrèterais jamais de combattre",), ("Ce labyrinthe m'a tout pris", "Mes hommes et mes souvenirs", "Mais on dirait que sont pouvoir ne t'affecte pas",)]
 va_generator = (el for el in va_texts)
 MONSTERS = {
     "Chevalier" : {
         "image": "assets/images/monster/Perso_2.png",
         "dialogues": {
-            "start": ["Je ne pensais pas te revoir un jour", "... Essaye de me passer sur le corps !", "Je vais pouvoir enfin utiliser ma lame", "Qui aurait cru que tu arriverais jusqu'à là"],
-            "receive_damage": ["Ouch !", "Tu ne rigoles pas", "Tu ne penses quand même pas gagner ?", "Je ne tomberai pas si facilement"],
-            "monster_death": ["Pourquoi ce sourire niarquois ?", "Si facilement ...", "Cette douleur ... Il te fera comprendre un jour ..."],
-            "miss_attack": ["Concentre toi, je n'aimes pas quand c'est trop facile.", "Regarde où tu vises"],
-            "player_death": ["Je te l'avais dit ...", "Ne reviens plus jamais !", "C'était vraiment très simple ..."]
+            "start": ["En garde guerrier", "... Essaye de me passer sur le corps !", "Tu n'iras pas plus loin !"],
+            "receive_damage": ["Ouch !", "Pas mal pour un débutant ", "Tu ne penses quand même pas gagner aussi facilment ?"],
+            "monster_death": ["Pourquoi ce sourire niarquois ?", "Tu te moque de moi?", "Cette douleur ... Il te la fera subir !"],
+            "miss_attack": ["Concentre toi, je n'aimes pas quand c'est trop facile.", "Pathétique"],
+            "player_death": ["Je te l'avais dit ...", "c'en est fini de toi", "C'était vraiment tout ce que tu pouvais faire ?"]
         }
     },
     "Mannequin d'entraînement": {
         "image": "assets/images/monster/Training_stand.png",
         "dialogues": {
             "start": [".............................", "................................(c'est un mannequin)"],
-            "receive_damage": ["...!!!", "....(Toujours rien).....", "?????"],
+            "receive_damage": ["....(il ne se passe rien).....", "....(pourquoi t'acharne-tu??)....", "....(sa devient long)...."],
             "monster_death": ["...(ce n'était pas très dur)", "..."],
-            "miss_attack": ["...(il ne bouge même pas, comment j'ai fait pour le rater?)", "....?"],
-            "player_death": ["...(cet ennemi était vraiment redoutable)"]
+            "miss_attack": ["...(Je ne pensais pas sa possible)", "....?"],
+            "player_death": ["...(est-ce le monstre du labyrinthe?)"]
         }
     },
     "Ventre d'Acier" : {
         "image": "assets/images/monster/ventre_acier.png",
         "dialogues": {
-            "start": ["Bravo chevalier, tu a réussi a passer les épreuves de ce donjon", "Mais maintenant que tu les as tous tués", "JE VAIS LES VENGER"],
+            "start": ["Bravo gamin, tu a réussi a passer les épreuves de ce donjon", "Mais maintenant que tu les as tous tués", "JE VAIS LES VENGER"],
             "receive_damage": va_generator,
             "miss_attack": ["Test de miss", "test de miss2"],
-            "monster_death": ["Je l'ai vu en toi", "cette détermination à toute épreuve", "elle m'habitait moi aussi", "Et elle t'a permis de me battre", "Et j'ai voulu t'éliminer ..."],
-            "player_death": ["Maintenant tu comprends", "Que l'espoir est vain", "Il est préférable de mourir.", "Peut être que moi aussi un jour je pourrais y accéder ..."]
+            "monster_death": ["On dirait bien que j'ai perdu", "tu t'es battu vaillament", "tu peux être fière","...chevalier"],
+            "player_death": ["On dirait bien que tu n'es pas assez fort gamin", "Ton carnage ne t'a donc rien apportée"]
         }
     },
 }
