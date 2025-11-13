@@ -145,7 +145,7 @@ def get_random_item_stats(game, type_:str) -> tuple:
     if game.map.name == "start":
         level = 0
     elif game.map.name == "end":
-        level = 30
+        level = 20
     else:
         level = get_level(game)
 
@@ -758,7 +758,7 @@ class Game:
 
             if self.personnage.position in self.texts and self.personnage.position not in self.visited:
                 for text in self.texts[self.personnage.position]:
-                    self.current_texts.append(TextDisplay(f"V.A. - {text}", self.screen, self.clock))
+                    self.current_texts.append(TextDisplay(f"- {text}", self.screen, self.clock))
             if self.personnage.position in self.texts and not self.combat:
                 self.save()
 
