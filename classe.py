@@ -271,8 +271,8 @@ class Coffre:
         n: Nombre de tirages où l'on est sûr d'avoir le même nombre d'objets
         types: Nom des types d'objet à retourner
         """
-        self.types = types
-        self.n = n
+        self.types = types  
+        self.n = n        # Nombre de tirages avant répétition
         self.objets = []  # Contient la liste de types d'objet aléatoires
         self.item = None
 
@@ -1096,4 +1096,5 @@ def get_level(game:Game) -> int:
 
 if __name__ == "__main__":
     g = Game()
+
     g.start_menu()
