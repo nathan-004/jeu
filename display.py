@@ -76,7 +76,7 @@ class TextDisplay:
         self.time = 0
         self.x,self.y = pos if pos!=(None,None) else (10,fenetre.get_height()/1.5)
         w,h = pygame.display.get_surface().get_size()
-        self.size = (w, 1/3*h) if size is (None,None) else size
+        self.size = (w, 1/3*h) if size == (None,None) else size
         self.bloc = pygame.Rect((self.x,self.y), self.size)
 
         self.my_font = pygame.font.SysFont('Consolas', police)
@@ -433,3 +433,4 @@ if __name__ == "__main__":
         clock.tick(60)
 
     pygame.quit()
+
