@@ -66,7 +66,7 @@ class TextDisplay:
         size (tuple): La taille de la zone d'affichage.
         background_color (tuple, optional): La couleur de fond de la zone d'affichage.
     """
-    def __init__(self,txt, fenetre, clock, police=40, color=(0,0,0), pos=(None,None), size=None, background_color:Optional[tuple] = None):
+    def __init__(self,txt:str, fenetre:pygame.Surface, clock:pygame.time.Clock, police:int = 40, color:tuple = (0,0,0), pos:tuple = (None,None), size:tuple = (None,None), background_color:Optional[tuple] = None):
         self.txt = f'*{txt}*'
         self.mot = self.txt.split(' ')[0]
         self.color = color
@@ -76,7 +76,7 @@ class TextDisplay:
         self.time = 0
         self.x,self.y = pos if pos!=(None,None) else (10,fenetre.get_height()/1.5)
         w,h = pygame.display.get_surface().get_size()
-        self.size = (w, 1/3*h) if size is None else size
+        self.size = (w, 1/3*h) if size is (None,None) else size
         self.bloc = pygame.Rect((self.x,self.y), self.size)
 
         self.my_font = pygame.font.SysFont('Consolas', police)
@@ -431,4 +431,5 @@ if __name__ == "__main__":
         #test.reset() if test.end and test.time >= 1000 else None
         pygame.display.update()
         clock.tick(60)
+
     pygame.quit()
