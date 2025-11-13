@@ -65,11 +65,11 @@ MONSTERS = {
     "Mannequin d'entraînement": {
         "image": "assets/images/monster/Training_stand.png",
         "dialogues": {
-            "start": [".............................", "................................(c'est un mannequin)"],
-            "receive_damage": ["....(il ne se passe rien).....", "....(pourquoi t'acharnes-tu??)....", "....(ça devient long)...."],
-            "monster_death": ["...(ce n'était pas très dur)", "..."],
-            "miss_attack": ["...(Je ne pensais pas ça possible)", "....?"],
-            "player_death": ["...(est-ce le monstre du labyrinthe?)"]
+            "start": [".............................", "................................ & (c'est un mannequin)"],
+            "receive_damage": [".... & (il ne se passe rien).....", ".... & (pourquoi t'acharnes-tu??)....", ".... & (ça devient long)...."],
+            "monster_death": ["... & (ce n'était pas très dur)", "..."],
+            "miss_attack": ["... & (Je ne pensais pas ça possible)", "....?"],
+            "player_death": ["... & (est-ce le monstre du labyrinthe?)"]
         }
     },
     "Ventre d'Acier" : {
@@ -77,8 +77,8 @@ MONSTERS = {
         "dialogues": {
             "start": ["Bravo gamin, tu a réussi a passer les épreuves de ce donjon", "Mais maintenant que tu les as tous tués", "JE VAIS LES VENGER"],
             "receive_damage": va_generator,
-            "miss_attack": ["Test de miss", "test de miss2"],
-            "monster_death": ["On dirait bien que j'ai perdu", "tu t'es battu vaillament", "tu peux être fière","...chevalier"],
+            "miss_attack": ["Je te croyait plus fort que ça", "Concentre toi, je ne veut pas que ce soit trop facile"],
+            "monster_death": ["On dirait bien que j'ai perdu", "Tu t'es battu vaillament", "Tu peux être fière","...Chevalier & ...Je...Te...Félicite"],
             "player_death": ["On dirait bien que tu n'es pas assez fort gamin", "Ton carnage ne t'a donc rien apporté"]
         }
     },
@@ -94,7 +94,7 @@ CREDITS_TEXT = [
     "Lino",
     "Génération de la map :",
     "Nathan",
-    "Barre de vie, Texte(enfin avec des fautes) :",
+    "Barre de vie, Texte(enfin avec des fautes corrigé par Nathan et Abel) :",
     "Lino",
     "Dessin, Son et recherche de musique:",
     "Abel",
