@@ -6,6 +6,12 @@ RED = "\033[31m"
 RESET = "\033[0m"
 GREEN = "\033[32m"
 YELLOW = '\033[33m'
+
+"""
+---vvvv---
+juste pour les ancienne version de pygame qui ne change pas le clavier en azerty
+---vvvv---
+"""
 version = pygame.__version__
 if int(version.split(".")[0]) >= 2:
     INPUT_LIST = [pygame.K_z, pygame.K_q]

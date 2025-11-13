@@ -115,7 +115,7 @@ class TextDisplay:
             self.time = 0
         self.time += self.clock.get_time()
         self.end = self.frames>=len(self.txt)
-
+    
     def reset(self):    #remet le texte à zéro
         self.frames = 0
         self.time = 0
