@@ -49,7 +49,7 @@ MONSTER_BASE_ITEM_SOIN = 3
 
 # Monstres
 # Linoooooooooooooooo, quand tu fais les textes dans va_texts dans la liste de tuples, si tu mets juste ("test") qui ne contient qu'un élément, c'est juste une chaîne de caractères au lieu d'être un tuple. Il faut que tu fasses ("test",) pour que ce soit considéré comme un tuple
-va_texts = [("Je le sens", "Pour toi aussi cette épreuve à était compliqué",), ("Je ne m'arrèterais jamais de combattre",), ("Ce labyrinthe m'a tout pris", "Mes hommes et mes souvenirs", "Mais on dirait que sont pouvoir ne t'affecte pas",)]
+va_texts = [("Je le sens", "Pour toi aussi cette épreuve a été compliquée",), ("Je ne m'arrèterai jamais de combattre",), ("Ce labyrinthe m'a tout pris", "Mes hommes et mes souvenirs", "Mais on dirait que son pouvoir ne t'affecte pas",)]
 va_generator = (el for el in va_texts)
 MONSTERS = {
     "Chevalier" : {
@@ -66,9 +66,9 @@ MONSTERS = {
         "image": "assets/images/monster/Training_stand.png",
         "dialogues": {
             "start": [".............................", "................................(c'est un mannequin)"],
-            "receive_damage": ["....(il ne se passe rien).....", "....(pourquoi t'acharne-tu??)....", "....(sa devient long)...."],
+            "receive_damage": ["....(il ne se passe rien).....", "....(pourquoi t'acharnes-tu??)....", "....(ça devient long)...."],
             "monster_death": ["...(ce n'était pas très dur)", "..."],
-            "miss_attack": ["...(Je ne pensais pas sa possible)", "....?"],
+            "miss_attack": ["...(Je ne pensais pas ça possible)", "....?"],
             "player_death": ["...(est-ce le monstre du labyrinthe?)"]
         }
     },
@@ -79,7 +79,7 @@ MONSTERS = {
             "receive_damage": va_generator,
             "miss_attack": ["Test de miss", "test de miss2"],
             "monster_death": ["On dirait bien que j'ai perdu", "tu t'es battu vaillament", "tu peux être fière","...chevalier"],
-            "player_death": ["On dirait bien que tu n'es pas assez fort gamin", "Ton carnage ne t'a donc rien apportée"]
+            "player_death": ["On dirait bien que tu n'es pas assez fort gamin", "Ton carnage ne t'a donc rien apporté"]
         }
     },
 }
@@ -94,7 +94,7 @@ CREDITS_TEXT = [
     "Lino",
     "Génération de la map :",
     "Nathan",
-    "Barre de vie, Texte(enfin pas trop pour l'instant) :",
+    "Barre de vie, Texte(enfin avec des fautes) :",
     "Lino",
     "Dessin, Son et recherche de musique:",
     "Abel",
