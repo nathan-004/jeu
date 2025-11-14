@@ -11,7 +11,7 @@ from son import *
 
 BUTTONS = []
 
-def make_buttons(surface: pygame.Surface, actions: list, space_percent: int = 20, button_bloc_pos: tuple = (0, 0)) -> list:
+def make_buttons(surface: pygame.Surface, actions: list, space_percent: int = 20, button_bloc_pos: tuple = (0, 0)) -> list: # Nathan
     """
     Crée et renvoie une liste de MouseButton pour la surface donnée.
 
@@ -40,7 +40,7 @@ def make_buttons(surface: pygame.Surface, actions: list, space_percent: int = 20
 
     return buttons
 
-def make_vertical_buttons(surface: pygame.Surface, actions: list, space_percent: int = 20, button_bloc_pos: tuple = (0, 0)) -> list:
+def make_vertical_buttons(surface: pygame.Surface, actions: list, space_percent: int = 20, button_bloc_pos: tuple = (0, 0)) -> list: # Nathan
     """
     Crée et renvoie une liste de MouseButton pour la surface donnée.
 
@@ -69,7 +69,7 @@ def make_vertical_buttons(surface: pygame.Surface, actions: list, space_percent:
 
     return buttons
 
-def add_random_dialogue(monster_type:str, event:str, game):
+def add_random_dialogue(monster_type:str, event:str, game): # Nathan
     """
     Créé un dialogue aléatoire en fonction du type de monstre, de l'évènement et de la classe `Game`
     
@@ -101,7 +101,7 @@ def add_random_dialogue(monster_type:str, event:str, game):
     if txt is not None:
         game.current_texts.append(get_dialogue_text(txt, None, game.screen, game.clock))
 
-def get_random_dialogue(monster_type:str, event:str) -> Optional[str]:
+def get_random_dialogue(monster_type:str, event:str) -> Optional[str]: # Nathan
     """
     Créé un dialogue aléatoire en fonction du type de monstre, de l'évènement et de la classe `Game`
     
@@ -124,7 +124,7 @@ def get_random_dialogue(monster_type:str, event:str) -> Optional[str]:
         return choice(texts)
     return None
 
-def get_random_monster(game):
+def get_random_monster(game): # Nathan
     """
     Renvoie un monstre aléatoire en fonction de la map où se situe le joueur
     Si la map est celle de base, calcule les statistiques en fonction du niveau et de la position du joueur
@@ -140,7 +140,7 @@ def get_random_monster(game):
     monster.level_up(get_level(game))
     return monster
 
-def get_random_item_stats(game, type_:str) -> tuple:
+def get_random_item_stats(game, type_:str) -> tuple: # Nathan
     """Renvoie un tuple (soin, degats, resistance) basé sur l'avancement du joueur et son niveau"""
     if game.map.name == "start":
         level = 0
@@ -160,7 +160,7 @@ def get_random_item_stats(game, type_:str) -> tuple:
 
     return tuple([val * (1 + uniform(-0.3, 0.3)) for val in [soin, degats, resistance]])
 
-def is_better(obj1, obj2) -> int:
+def is_better(obj1, obj2) -> int: # Nathan
     """
     Renvoi si l'objet 1 est meilleur que l'objet 2
     < 0 si obj2 est meilleur
@@ -177,7 +177,7 @@ def is_better(obj1, obj2) -> int:
 
     return obj1_n - obj2_n
 
-class Objet:
+class Objet: # Hugo
     current_room = (0, 0)
 
     def __init__(self, nom, type_, soin=0, degat=0, resistance=0):
@@ -222,7 +222,7 @@ class Objet:
 
         return message
 
-class Inventaire:
+class Inventaire: # Hugo
     def __init__ (self):
         self.equipements = {}
         self.consommables = {}
@@ -244,7 +244,7 @@ class Inventaire:
             return self.equipements[type_]
         return Objet(None, None)
 
-    def get_content(self) -> dict:
+    def get_content(self) -> dict: # Nathan
         """Renvoie les informations à sauvegarder"""
         content = {
             "equipements": {
@@ -257,13 +257,13 @@ class Inventaire:
 
         return content
 
-    def load(self, content:dict):
+    def load(self, content:dict): # Nathan
         for obj_type, obj in content["equipements"].items():
             self.equipements[obj_type] = Objet(obj["nom"], obj_type, obj["soin"], obj["degat"], obj["resistance"])
         for obj_type, obj in content["consommables"].items():
             self.consommables[obj_type] = Objet(obj["nom"], obj_type, obj["soin"], obj["degat"], obj["resistance"])
 
-class Coffre:
+class Coffre: # Hugo
     """Permet de renvoyer un type d'objet aléatoire en fonction de ceux déjà renvoyés"""
 
     def __init__(self, n: int = 1, types: list = ["potion", "arme", "armure"]):
@@ -302,14 +302,14 @@ class Coffre:
         else:
             self.end = True
 
-    def open_animation(self, surface:pygame.Surface, pos:tuple, size:tuple):
+    def open_animation(self, surface:pygame.Surface, pos:tuple, size:tuple): # Nathan
         # La taille et la position correspondent à une bande au milieu de l'écran
         if self.chest_display is None:
             self.chest_display = ChestDisplay(surface, pos, size) # Initier un objet ChestDisplay dans self.chest_display
             self.chest_display.closed = False # L'ouvrir
         self.chest_display.display()
 
-    def display_item_choice(self, game, pos: tuple, size: tuple):
+    def display_item_choice(self, game, pos: tuple, size: tuple): # Hugo avec l'aide de Nathan
         """
         Affiche un objet aléatoire dans une carte, propose au joueur de l'accepter ou de le refuser.
         """
@@ -357,14 +357,14 @@ class Coffre:
 
         game.screen.blit(buttons_surface, buttons_pos)
 
-    def buttons_event(self, event):
+    def buttons_event(self, event): # Nathan
         if self.buttons is None:
             return
 
         for button in self.buttons:
             button.handle_event(event)
 
-    def accept_item(self):
+    def accept_item(self): # Nathan
         """
         Ajoute l'item au joueur, puis marque la fin de l'action.
         """
@@ -378,14 +378,14 @@ class Coffre:
         self.actions_end = True
         self.end = True
 
-    def decline_item(self):
+    def decline_item(self): # Nathan
         """
         Le joueur refuse l’objet, simplement fermer l’interface du coffre.
         """
         self.actions_end = True
         self.end = True
 
-    def reset(self):
+    def reset(self): # Nathan
         self.chest_display = None
         self.end = False
         self.actions_end = False
@@ -393,7 +393,7 @@ class Coffre:
         self.item_display = None
         self.text_display = None
 
-class Personnage:
+class Personnage: # Lino
     def __init__(self, nom, pv, degats, resistance):
         """
         Constructeur de la classe Personnage
@@ -480,7 +480,7 @@ class Personnage:
         content = f"{self.nom} & PV : {self.pv}/{self.get_max_pv()} & Degats : {self.degat} & Resistance : {self.resistance} & Exp : {self.exp}/{ BASE_EXP_LEVEL_UP * (BASE_EXP_LEVEL_UP_AUGMENTATION_COEFF**self.level)} & Level : {self.level}"
         return content
 
-class Monstre(Personnage):
+class Monstre(Personnage): # Lino
     """"""
     def __init__(self, nom, pv=uniform(-MONSTER_BASE_PV_RANGE/2, MONSTER_BASE_PV_RANGE/2) + MONSTER_BASE_PV, degats=uniform(-MONSTER_BASE_ATTACK_RANGE/2, MONSTER_BASE_ATTACK_RANGE/2) + MONSTER_BASE_ATTACK, resistance=uniform(-MONSTER_BASE_RESISTANCE_RANGE/2, MONSTER_BASE_RESISTANCE_RANGE/2) + MONSTER_BASE_RESISTANCE):
         super().__init__(nom, pv, degats, resistance)
@@ -503,7 +503,7 @@ class Monstre(Personnage):
         monster_damage()
         return super().degat_subit(degats)
 
-    def display(self, surface:pygame.Surface):
+    def display(self, surface:pygame.Surface): # Abel
         if self.ennemi_display is None:
             self.ennemi_display = EnnemiDisplay(surface, (get_size(surface, 40), 125), 0.5, MONSTERS[self.nom]["image"])
             self.health_bar = HealthBar(self, (get_size(surface, 40), get_size(surface, 5, "height")), (get_size(surface, 20), 50), surface)
@@ -520,7 +520,7 @@ class Monstre(Personnage):
         self.degat += obj.degat
         self.resistance += obj.resistance
 
-class Joueur(Personnage):
+class Joueur(Personnage): # Lino
     def __init__(self, nom, pv, degats, resistance, position:tuple, inventaire:Inventaire = None, game = None):
         super().__init__(nom, pv, degats, resistance)
         self.position = position
@@ -583,7 +583,7 @@ class Joueur(Personnage):
         self.inventaire.load(content["inventaire"])
         self.reset()
 
-class Game:
+class Game: # Nathan
     def __init__(self):
         self.height, self.width = 15, 16
         self.elements = self.get_maps()
@@ -594,7 +594,7 @@ class Game:
         self.last_moved = False
         self.end = False
 
-    def display_room(self,screen:pygame.Surface, percentage=70):
+    def display_room(self,screen:pygame.Surface, percentage=70): # Abel
         """Affiche la Salle et les portes en fonction des directions où il est possible de se diriger"""
         if self.room is None:
             self.room = RoomDisplay(screen, percentage)
@@ -952,7 +952,7 @@ class Game:
     def _quit_start_menu(self):
         self.start_running = False
 
-class Combat:
+class Combat: # Lino
     def __init__(self, joueur:Joueur, ennemi:Personnage, game: Game):
         self.joueur = joueur
         self.ennemi = ennemi
@@ -1061,7 +1061,7 @@ class Combat:
             self.game.current_texts.append(TextDisplay(f"Il vous inflige {deg:.1f} dégâts {NEW_LINE_CHARACTER} Il ne vous reste plus que {self.joueur.pv:.1f} pv", self.game.screen, self.game.clock))
         self.tour += 1
 
-    def display_buttons(self, surface:pygame.Surface, space_percent:int = 20, button_bloc_pos:tuple = (0, 0)):
+    def display_buttons(self, surface:pygame.Surface, space_percent:int = 20, button_bloc_pos:tuple = (0, 0)): # Nathan
         """
         Initie les boutons de combat
         """
@@ -1078,7 +1078,7 @@ class Combat:
             for button in self.buttons:
                 button.display()
 
-    def buttons_event(self, event):
+    def buttons_event(self, event): # Nathan
         if self.game.current_texts != []:
             return
         if self.buttons is None or self.tour % 2 != 0:
@@ -1087,7 +1087,7 @@ class Combat:
         for button in self.buttons:
             button.handle_event(event)
 
-def get_level(game:Game) -> int:
+def get_level(game:Game) -> int: # Nathan
     """
     Utilise le niveau du joueur et l'anvancée dans le jeu pour déterminer un niveau
     """
@@ -1096,5 +1096,4 @@ def get_level(game:Game) -> int:
 
 if __name__ == "__main__":
     g = Game()
-
     g.start_menu()
