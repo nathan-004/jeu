@@ -8,6 +8,7 @@ GREEN = "\033[32m"
 YELLOW = '\033[33m'
 
 """
+Abel
 ---vvvv---
 juste pour les ancienne version de pygame qui ne change pas le clavier en azerty
 ---vvvv---
@@ -18,6 +19,7 @@ if int(version.split(".")[0]) >= 2:
 else:
     INPUT_LIST = [pygame.K_w, pygame.K_a]
 
+# Nathan
 PLAYER_BASE_PV = 20
 PLAYER_BASE_ATTACK = 5 # Dégâts émis
 PLAYER_BASE_RESISTANCE = 0.050 # Dêgats réduits de 0% de l'attaque de base
@@ -53,8 +55,7 @@ PLAYER_ITEM_LEVEL_AUGMENTATION_DEGATS = 1        # dégats ajoutés par niveau
 PLAYER_ITEM_LEVEL_AUGMENTATION_RES = 0.01        # résistance ajoutée par niveau (fraction)
 MONSTER_BASE_ITEM_SOIN = 3
 
-# Monstres
-# Linoooooooooooooooo, quand tu fais les textes dans va_texts dans la liste de tuples, si tu mets juste ("test") qui ne contient qu'un élément, c'est juste une chaîne de caractères au lieu d'être un tuple. Il faut que tu fasses ("test",) pour que ce soit considéré comme un tuple
+# Monstres, Lino
 va_texts = [("Je le sens", "Pour toi aussi cette épreuve a été compliquée",), ("Je ne m'arrèterai jamais de combattre",), ("Ce labyrinthe m'a tout pris", "Mes hommes et mes souvenirs", "Mais on dirait que son pouvoir ne t'affecte pas",)]
 va_generator = (el for el in va_texts)
 MONSTERS = {
@@ -92,6 +93,7 @@ MONSTERS = {
 
 MONSTERS_LIST = ["Chevalier"]
 
+# *
 CREDITS_TEXT = [
     "Développeurs :",
     "Nathan",
