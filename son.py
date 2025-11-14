@@ -1,3 +1,4 @@
+# Fait par Abel
 import pygame
 from pygame.locals import *
 """
@@ -122,4 +123,5 @@ if __name__ == "__main__":
                     sound.pause_music()
         sound.play_music(True)
         clock.tick(10)
+
     pygame.quit()
