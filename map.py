@@ -1,3 +1,4 @@
+# Fait par Nathan
 from typing import Optional, Union
 import pygame
 import random
