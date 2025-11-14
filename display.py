@@ -4,7 +4,7 @@ from random import randint
 import pygame
 from pygame.locals import *
 
-class ChestDisplay:
+class ChestDisplay: # Nathan
     def __init__(self, surface:pygame.Surface, pos:tuple, size:tuple, closed:bool = True, clock:Optional[pygame.time.Clock] = None):
         self.surface = surface
         self.pos = pos
@@ -51,7 +51,7 @@ class ChestDisplay:
         self.chest_image = pygame.transform.scale(self.chest_image, (self.size[0], self.size[1]))
         self._last_loaded = n
 
-class TextDisplay:
+class TextDisplay: #Abel
     """
     Affiche du texte progressivement à l'écran.
 
@@ -66,7 +66,7 @@ class TextDisplay:
         size (tuple): La taille de la zone d'affichage.
         background_color (tuple, optional): La couleur de fond de la zone d'affichage.
     """
-    def __init__(self,txt:str, fenetre:pygame.Surface, clock:pygame.time.Clock, police:int = 40, color:tuple = (0,0,0), pos:tuple = (None,None), size:tuple = (None,None), background_color:Optional[tuple] = None):
+    def __init__(self,txt:str, fenetre:pygame.Surface, clock:pygame.time.Clock, police:int = 40, color:tuple = (0,0,0), pos:tuple = (None,None), size:tuple = (None,None), background_color:Optional[tuple] = None): 
         self.txt = f'*{txt}*'
         self.mot = self.txt.split(' ')[0]
         self.color = color
@@ -121,8 +121,8 @@ class TextDisplay:
         self.time = 0
         self.end = False
 
-class MouseButton:
-    def __init__(self, text, pos, size, action:Callable, screen:pygame.Surface, position:tuple = (0, 0)):
+class MouseButton: # Nathan
+    def __init__(self, text, pos, size, action:Callable, screen:pygame.Surface, position:tuple = (0, 0)): # Lino
         """
         Stocker le text, la pos, la taille, l'action et la fenêtre
         action correspond à la fonction qui doit être lancée à l'appui -> on peut l'appeler comme ça : action()
@@ -157,7 +157,7 @@ class MouseButton:
             if self.background.collidepoint(local_pos):
                 self.action()
 
-class RoomDisplay:
+class RoomDisplay: # Abel
     """
     Classe gérant l'affichage du fond de la salle, de l'ombre et de l'animation de la porte.
 
@@ -183,7 +183,7 @@ class RoomDisplay:
         self._enter_end_time = 0
         self._enter_pos = (self.w*(1-self.taille)/2, 0)
 
-    @property # Getter
+    @property # Nathan
     def enter_animation(self):  
         return self._enter_showing
 
@@ -207,7 +207,7 @@ class RoomDisplay:
         self._enter_showing = True
         self._enter_end_time = pygame.time.get_ticks() + int(duration_ms)
 
-class EnnemiDisplay:
+class EnnemiDisplay: # Abel
     """
     Classe gérant l'affichage d'un ennemi.
 
@@ -238,7 +238,7 @@ class EnnemiDisplay:
         self.ennemi_image = pygame.transform.scale(self.ennemi_image, (int(self.size * self.width), int(self.size * self.height)))
         self._last_loaded = image_path
 
-class HealthBar:
+class HealthBar: # Lino
     """Barre de vie à afficher"""
 
     def __init__(self, personnage, pos:tuple, size:tuple, surface:pygame.Surface):
@@ -260,7 +260,7 @@ class HealthBar:
         rectangle_pv = self.size[0] * self.personnage.pv / self.personnage.get_max_pv()
         pygame.draw.rect(self.surface, self.pv_color, (self.pos[0], self.pos[1], rectangle_pv, self.size[1]))
 
-class ItemDisplay:
+class ItemDisplay: # Hugo
     def __init__(self, surface: pygame.Surface, pos: tuple, size: tuple, object):
         # Initialise toutes les variables comme attributs
         self.surface = surface
@@ -282,7 +282,7 @@ class ItemDisplay:
         pygame.draw.rect(self.surface, self.background_color, self.background_rect)
         self.surface.blit(self.image, self.image_rect)
 
-    def _load_image(self, object_type):
+    def _load_image(self, object_type): # aide Nathan
         if object_type == "potion":
             image = pygame.image.load("assets/images/health_potion.png").convert_alpha()
         elif object_type == "arme":
@@ -328,7 +328,7 @@ def get_dialogue_text(text:str, monster, screen:pygame.Surface, clock:pygame.tim
     text_display = TextDisplay(text, screen, clock, pos=pos, size=size,background_color=(255, 255, 255), police=20)
     return text_display
 
-class Credits :
+class Credits : # Hugo aide de Nathan
     MAX = 10
     def __init__(self,text:list, fenetre:pygame.Surface, clock:pygame.time.Clock, scroll_speed = 10):
         self.texts = text
@@ -433,4 +433,5 @@ if __name__ == "__main__":
         clock.tick(60)
 
     pygame.quit()
+
 
